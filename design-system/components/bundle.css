@@ -13,6 +13,7 @@ body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--f
 /* display-xl drops to display-lg under 760px wide, as its usage note says; display-lg drops to display-md under 400px so headings fit a 360px phone. */
 @media (max-width: 760px) { .display-xl { font-size: 64px; line-height: 60px; } }
 @media (max-width: 400px) { .display-lg, .display-xl { font-size: 44px; line-height: 44px; font-weight: 800; } }
+@media (max-width: 400px) { .headline { font-size: 28px; line-height: 34px; } }
 .fhd-sr { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
 .fhd-link { color: var(--accent-ink); text-decoration: underline; text-decoration-thickness: var(--border-thick); text-underline-offset: 3px; }
 .fhd-link:hover { background: var(--accent); color: var(--on-accent); }
@@ -103,6 +104,17 @@ textarea.fhd-field__input { height: auto; min-height: 96px; padding: var(--space
 .fhd-check__input:disabled ~ * { opacity: var(--opacity-disabled); }
 .fhd-check__text { display: flex; flex-direction: column; }
 .fhd-check__hint { color: var(--ink-muted); }
+.fhd-check--error .fhd-check__box { border-color: var(--danger); }
+.fhd-check-field { display: flex; flex-direction: column; gap: var(--space-2); min-width: 0; }
+
+/* ---------- CheckboxGroup ---------- */
+.fhd-checkgroup { display: flex; flex-direction: column; gap: var(--space-2); min-width: 0; margin: 0; padding: 0; border: 0; }
+.fhd-checkgroup__legend { padding: 0; font-family: var(--font-sans); font-size: 14px; line-height: 20px; font-weight: 600; color: var(--ink); }
+.fhd-checkgroup__options { display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-3); padding-top: var(--space-1); }
+.fhd-checkgroup--error > .fhd-checkgroup__options > .fhd-check .fhd-check__box { border-color: var(--danger); }
+/* A nested group hangs off the box above it: a hairline at the box's centre, the boxes inset past it. */
+.fhd-checkgroup--nested { margin: calc(var(--space-1) * -1) 0 0 calc(var(--space-2) + var(--border-thin)); padding-left: var(--space-5); border-left: var(--border-thin) solid var(--line-strong); animation: fhd-appear var(--duration-overlay) var(--ease-enter); }
+.fhd-checkgroup--nested > .fhd-checkgroup__options { gap: var(--space-2); }
 
 /* ---------- Switch ---------- */
 .fhd-switch { position: relative; display: inline-flex; align-items: flex-start; gap: var(--space-3); font-size: 14px; line-height: 20px; color: var(--ink); cursor: pointer; }
@@ -137,8 +149,8 @@ textarea.fhd-field__input { height: auto; min-height: 96px; padding: var(--space
 @media (hover: hover) and (pointer: fine) {
   .fhd-product:not(.fhd-product--unavailable):hover .fhd-product__media img { transform: scale(var(--motion-scale-media)); }
 }
-/* Pressing "I'm interested" confirms with the check arriving; the button's fill changes on the feedback timing. */
-.fhd-product__foot .fhd-btn[aria-pressed="true"] .fhd-icon { animation: fhd-check-in var(--duration-overlay) var(--ease-enter); }
+/* Pressing "I'm interested" (any toggle Button) confirms with the check arriving; the fill changes on the feedback timing. */
+.fhd-btn[aria-pressed="true"] .fhd-icon { animation: fhd-check-in var(--duration-overlay) var(--ease-enter); }
 @keyframes fhd-check-in { from { opacity: 0; transform: scale(0.6); } }
 .fhd-product__badges { position: absolute; top: var(--space-3); left: var(--space-3); z-index: 1; display: flex; flex-wrap: wrap; gap: var(--space-1); }
 .fhd-product__body { flex: 1; display: flex; flex-direction: column; gap: var(--space-2); padding: var(--space-4); }
@@ -152,6 +164,32 @@ textarea.fhd-field__input { height: auto; min-height: 96px; padding: var(--space
 .fhd-product__price { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0 var(--space-2); font-family: var(--font-display); font-optical-sizing: auto; font-size: 28px; line-height: 30px; font-weight: 800; color: var(--ink); }
 .fhd-product__price-note { font-family: var(--font-sans); font-size: 12px; line-height: 16px; font-weight: 500; color: var(--ink-muted); }
 .fhd-product--unavailable .fhd-product__media img { filter: grayscale(1); opacity: 0.55; }
+
+/* ---------- RequestList ---------- */
+/* The client's picks beside the contact form: a raised card like the form it sits next to, one hairline per product. */
+.fhd-request { display: flex; flex-direction: column; gap: var(--space-4); min-width: 0; padding: var(--space-5); background: var(--bg-raised); color: var(--ink); border: var(--border-thin) solid var(--line); border-radius: var(--radius-md); }
+.fhd-request__head { display: flex; flex-direction: column; gap: var(--space-1); }
+.fhd-request__title { margin: 0; font-family: var(--font-sans); font-size: 12px; line-height: 16px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-muted); }
+.fhd-request__title:focus { outline: none; }
+.fhd-request__summary { margin: 0; font-family: var(--font-sans); font-size: 18px; line-height: 24px; font-weight: 700; color: var(--ink); animation: fhd-appear var(--duration-overlay) var(--ease-enter); }
+.fhd-request__empty { margin: 0; font-size: 14px; line-height: 20px; color: var(--ink-muted); }
+.fhd-request__list { margin: 0; padding: 0; list-style: none; border-top: var(--border-thick) solid var(--ink); }
+.fhd-request__item { display: flex; align-items: center; gap: var(--space-3); min-height: var(--control-lg); padding: var(--space-2) 0; border-bottom: var(--border-thin) solid var(--line); animation: fhd-appear var(--duration-overlay) var(--ease-enter); }
+.fhd-request__icon { flex: none; color: var(--ink-muted); }
+.fhd-request__text { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+.fhd-request__name { font-size: 14px; line-height: 20px; font-weight: 600; color: var(--ink); }
+.fhd-request__category { font-size: 12px; line-height: 16px; font-weight: 500; color: var(--ink-muted); }
+.fhd-request__remove { flex: none; }
+
+/* ---------- SpecList ---------- */
+/* Label beside value, one hairline per row, under the heavy rule the catalog's lists share. */
+.fhd-specs { margin: 0; border-top: var(--border-thick) solid var(--ink); }
+.fhd-specs__row { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 3fr); gap: var(--space-4); padding: var(--space-3) 0; border-bottom: var(--border-thin) solid var(--line); }
+.fhd-specs__label { margin: 0; font-size: 14px; line-height: 20px; font-weight: 600; color: var(--ink-muted); }
+.fhd-specs__value { margin: 0; font-size: 16px; line-height: 20px; color: var(--ink); overflow-wrap: anywhere; }
+@media (max-width: 400px) {
+  .fhd-specs__row { grid-template-columns: minmax(0, 1fr); gap: var(--space-1); }
+}
 
 /* ---------- StatCard ---------- */
 .fhd-stat { display: flex; flex-direction: column; gap: var(--space-2); min-width: 0; padding: var(--space-5); background: var(--bg-raised); color: var(--ink); border: var(--border-thin) solid var(--line); border-top: var(--border-heavy) solid var(--ink); border-radius: 0 0 var(--radius-md) var(--radius-md); }
@@ -389,6 +427,9 @@ textarea.fhd-field__input { height: auto; min-height: 96px; padding: var(--space
 /* fhd-appear: something shown in answer to the visitor, such as an Alert after sending, a field error or a status Badge that changed. */
 @keyframes fhd-appear { from { opacity: 0; transform: translateY(var(--motion-shift-sm)); } }
 .fhd-appear { animation: fhd-appear var(--duration-overlay) var(--ease-enter) both; }
+/* fhd-appear-list: the children of a list that was just replaced, such as the catalog grid after a filter, appear one after
+   another. Set --fhd-i on each child (0, 1, 2…); the wait is capped at stagger-max, so a long list never holds anything back for long. */
+.fhd-appear-list > * { animation: fhd-appear var(--duration-overlay) var(--ease-enter) both; animation-delay: min(calc(var(--fhd-i, 0) * var(--stagger-step)), var(--stagger-max)); }
 .fhd-field__error { animation: fhd-appear var(--duration-overlay) var(--ease-enter); }
 /* data-reveal: a section that fades in the first time it scrolls into view. A script marks it "pending" only when it is off screen
    and motion is allowed, then "done" when it arrives; with no script the section is never hidden. Fade only: nothing moves on scroll. */
@@ -403,7 +444,7 @@ textarea.fhd-field__input { height: auto; min-height: 96px; padding: var(--space
   .fhd-accordion[data-animate] .fhd-accordion__panel, .fhd-accordion[data-animate] .fhd-accordion__item[data-state="closed"] .fhd-accordion__panel { transition: none; }
   .fhd-btn:active { transform: none; }
   .fhd-btn__spinner { animation-duration: 2s; }
-  .fhd-enter, .fhd-appear, .fhd-field__error, [data-reveal="done"], .fhd-tab[aria-selected="true"]::after, .fhd-product__foot .fhd-btn[aria-pressed="true"] .fhd-icon { animation: none; }
+  .fhd-enter, .fhd-appear, .fhd-appear-list > *, .fhd-checkgroup--nested, .fhd-field__error, .fhd-request__summary, .fhd-request__item, [data-reveal="done"], .fhd-tab[aria-selected="true"]::after, .fhd-btn[aria-pressed="true"] .fhd-icon { animation: none; }
   [data-reveal="pending"] { opacity: 1; }
   /* Dialogs keep a 1ms animation so closing still finishes on animationend. */
   .fhd-dialog__scrim, .fhd-dialog__panel, .fhd-dialog--closing .fhd-dialog__scrim, .fhd-dialog--closing .fhd-dialog__panel { animation-duration: 1ms; }

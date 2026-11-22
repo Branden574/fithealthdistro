@@ -52,6 +52,7 @@ Three families, shipped in `fonts/`.
   - Menus, dialogs, accordions and alerts arrive on `duration-overlay`, 200ms, with `ease-enter`, and leave quicker on `duration-exit`.
   - The hero's lines rise `motion-shift` into place once on load (`fhd-enter`), staggered by `stagger-step` and never more than `stagger-max`.
   - A section fades in the first time it scrolls into view (`data-reveal`). Fade only: it does not travel.
+  - A list that is replaced in answer to the visitor, such as the catalog after a filter, appears item by item (`fhd-appear-list`), capped at `stagger-max`.
   - A product photo may lean in to `motion-scale-media` on hover, inside the card's edge, on pointer devices only.
 - Move only opacity and transform. The one exception is an accordion answer opening, which has to change the layout.
 - Content is visible without motion. An entrance must never be the only way something becomes visible, and a control never waits for an animation to finish.

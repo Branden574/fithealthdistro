@@ -112,6 +112,7 @@
 .action { font-family: var(--font-display); font-size: 17px; line-height: 20px; font-weight: 800; letter-spacing: 0.04em; }
 .action-sm { font-family: var(--font-display); font-size: 14px; line-height: 16px; font-weight: 800; letter-spacing: 0.06em; }
 .lead { font-family: var(--font-sans); font-size: 20px; line-height: 30px; font-weight: 400; }
+.headline { font-family: var(--font-sans); font-size: 36px; line-height: 42px; font-weight: 700; }
 .title { font-family: var(--font-sans); font-size: 18px; line-height: 24px; font-weight: 700; }
 .body { font-family: var(--font-sans); font-size: 16px; line-height: 24px; font-weight: 400; }
 .body-sm { font-family: var(--font-sans); font-size: 14px; line-height: 20px; font-weight: 400; }

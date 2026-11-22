@@ -1,0 +1,36 @@
+<!-- @dsCard group="Forms" height=340 -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>CheckboxGroup preview</title>
+<style>
+  .demo { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--space-8); padding: var(--space-6); }
+  .demo > * { min-width: 0; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+  var F = window.FHD, h = React.createElement;
+  function App() {
+    var a = React.useState({ machines: true }), on = a[0], setOn = a[1];
+    var b = React.useState({ combo: true }), picked = b[0], setPicked = b[1];
+    function flip(state, set, key) { return function () { var next = Object.assign({}, state); next[key] = !next[key]; set(next); }; }
+    return h('div', { className: 'demo' },
+      h(F.CheckboxGroup, { legend: 'I am interested in', hint: 'Tick everything that applies. Pick specific products if you know them.', required: true },
+        h(F.Checkbox, { label: 'Vending machines', checked: !!on.machines, onChange: flip(on, setOn, 'machines') }),
+        on.machines ? h(F.CheckboxGroup, { legend: 'Vending machines products', hideLegend: true, nested: true },
+          h(F.Checkbox, { label: 'Combo vending machine, 40 selections', checked: !!picked.combo, onChange: flip(picked, setPicked, 'combo') }),
+          h(F.Checkbox, { label: 'Glass-front drink cooler, single door', checked: !!picked.cooler, onChange: flip(picked, setPicked, 'cooler') })) : null,
+        h(F.Checkbox, { label: 'Supplements', checked: !!on.supplements, onChange: flip(on, setOn, 'supplements') }),
+        h(F.Checkbox, { label: 'Drinks', checked: !!on.drinks, onChange: flip(on, setOn, 'drinks') })),
+      h(F.CheckboxGroup, { legend: 'I am interested in', required: true, error: 'Tick at least one thing you are interested in.' },
+        h(F.Checkbox, { label: 'Vending machines' }),
+        h(F.Checkbox, { label: 'Supplements' }),
+        h(F.Checkbox, { label: 'Drinks' })));
+  }
+  ReactDOM.createRoot(document.getElementById('root')).render(h(App));
+</script>
+</body>
+</html>

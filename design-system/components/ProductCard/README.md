@@ -15,6 +15,8 @@ One product in the catalog: photo, name, price and the button a client presses t
 
 There is no checkout yet. The button reads "I'm interested" and adds the product to the request the client sends through the contact form; once pressed it turns `solid` and reads "Added". When online ordering is switched on, the same slot takes `ctaLabel="Add to cart"`.
 
+Every card's button reads the same, so the button is described by the product's name: a screen reader hears "I'm interested, Whey protein isolate", not just "I'm interested".
+
 `unavailable` fades the photo and disables the button. Pair it with an "Out of stock" badge so the reason is written down.
 
 ## Layout

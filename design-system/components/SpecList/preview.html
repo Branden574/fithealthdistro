@@ -1,0 +1,32 @@
+<!-- @dsCard group="Storefront" height=300 -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>SpecList preview</title>
+<style>
+  .demo { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-8); padding: var(--space-6); }
+  .demo > * { min-width: 0; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+  var F = window.FHD, h = React.createElement;
+  function App() {
+    return h('div', { className: 'demo' },
+      h(F.SpecList, { items: [
+        { label: 'Selections', value: '40' },
+        { label: 'Stocks', value: 'Snacks and cold drinks' },
+        { label: 'Payment', value: 'Card reader ready' },
+        { label: 'Power', value: '115 V' }] }),
+      h(F.SpecList, { items: [
+        { label: 'Flavor', value: 'Vanilla' },
+        { label: 'Size', value: '2 lb' },
+        { label: 'Protein', value: '25 g a serving' },
+        { label: 'Sold by', value: 'Case of 6' }] }));
+  }
+  ReactDOM.createRoot(document.getElementById('root')).render(h(App));
+</script>
+</body>
+</html>

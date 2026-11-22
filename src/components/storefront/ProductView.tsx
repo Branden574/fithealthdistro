@@ -1,0 +1,84 @@
+import { Badge, Icon, SpecList } from '@ds';
+import type { ProductDetail } from '@/lib/catalog';
+import { CATALOG_ID } from '@/lib/catalog/links';
+import { pick, t, type Copy } from '@/lib/copy';
+import { paragraphs } from '@/lib/text';
+import { InterestButton } from './InterestButton';
+
+/** "$4,250" or "$39.99". Matches the catalog card. */
+function dollars(amount: number): string {
+  const cents = Math.round(amount * 100) % 100 !== 0;
+  return '$' + amount.toLocaleString('en-US', { minimumFractionDigits: cents ? 2 : 0, maximumFractionDigits: 2 });
+}
+
+/** A product's own page: photo, name, price, description, the request button, and its specs. */
+export function ProductView({ copy, product }: { copy: Copy; product: ProductDetail }) {
+  const unavailable = product.stock === 'out_of_stock';
+  const hasPrice = product.price != null && product.price > 0;
+  const badges: Array<{ label: string; tone: 'danger' | 'warning' | 'neutral' }> = [];
+  if (unavailable) badges.push({ label: t(copy, 'catalog.stock.out'), tone: 'danger' });
+  else if (product.stock === 'low_stock') badges.push({ label: t(copy, 'catalog.stock.low'), tone: 'warning' });
+  if (product.isSample) badges.push({ label: t(copy, 'catalog.card.sample'), tone: 'neutral' });
+
+  return (
+    <article className="section product-page" aria-labelledby="product-title">
+      <div className="wrap">
+        <a className="product-page__back" href={`/#${CATALOG_ID}`}>
+          <Icon name="arrow-left" size={16} />
+          {t(copy, 'product.back')}
+        </a>
+        <div className="product-page__grid">
+          <div className={unavailable ? 'product-page__media product-page__media--unavailable fhd-enter' : 'product-page__media fhd-enter'}>
+            {product.imageUrl ? (
+              // The design system's photo frame: 4:3, cropped to fill. The name beside it says what it shows.
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={product.imageUrl} alt="" />
+            ) : (
+              <Icon name={product.category.icon} size={96} />
+            )}
+          </div>
+          <div className="product-page__info fhd-enter fhd-enter-1">
+            <p className="eyebrow product-page__category">{product.category.name}</p>
+            <h1 className="headline product-page__name" id="product-title">
+              {product.name}
+            </h1>
+            {badges.length ? (
+              <div className="row">
+                {badges.map((badge) => (
+                  <Badge key={badge.label} tone={badge.tone}>
+                    {badge.label}
+                  </Badge>
+                ))}
+              </div>
+            ) : null}
+            {hasPrice || product.priceNote ? (
+              <p className="product-page__price">
+                {hasPrice ? <span className="display-sm">{dollars(product.price as number)}</span> : null}
+                {product.priceNote ? <span className={hasPrice ? 'caption' : 'display-sm'}>{product.priceNote}</span> : null}
+              </p>
+            ) : null}
+            {paragraphs(product.details || product.description).map((paragraph, index) => (
+              <p key={index} className="product-page__text">
+                {paragraph}
+              </p>
+            ))}
+            <InterestButton
+              productId={product.id}
+              name={product.name}
+              unavailable={unavailable}
+              copy={pick(copy, ['catalog.card.', 'product.request.view', 'nav.cta'])}
+            />
+          </div>
+        </div>
+        {product.specs.length ? (
+          <section className="product-page__specs" aria-labelledby="specs-title">
+            <h2 className="display-sm" id="specs-title">
+              {t(copy, 'product.specs.heading')}
+            </h2>
+            <SpecList items={product.specs} />
+          </section>
+        ) : null}
+      </div>
+    </article>
+  );
+}

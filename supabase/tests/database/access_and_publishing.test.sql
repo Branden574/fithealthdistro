@@ -16,7 +16,7 @@ select is_empty($$
   select p.oid::regprocedure::text from pg_proc p join pg_namespace n on n.oid = p.pronamespace
   where n.nspname in ('public', 'private') and has_function_privilege('authenticated', p.oid, 'execute')
     and p.oid::regprocedure::text not in ('get_storefront_content()', 'get_draft_content()', 'reorder_faqs(uuid[])',
-      'publish_site()', 'private.is_admin()', 'private.publish_site()')
+      'publish_site()', 'private.is_admin()', 'private.publish_site()', 'private.slugify(text)', 'private.valid_specs(jsonb)')
 $$, 'signed-in users can execute only the admin allowlist');
 select lives_ok($$ delete from public.admins where user_id = '00000000-0000-4000-8000-000000000000' $$,
   'deleting nothing never trips the last-admin guard, even with an empty allowlist');
@@ -55,7 +55,7 @@ update public.business_settings set public_email = 'hello@example.test', notify_
 -- ---------------------------------------------------------------------------------------------------------------
 set local role service_role;
 select is(
-  public.submit_inquiry(jsonb_build_object(
+  public.submit_inquiry(jsonb_build_object('terms_accepted', true, 
     'submission_id', '00000000-0000-4000-8000-00000000e001', 'name', ' Dana Whitfield ', 'company', 'Northside',
     'email', ' Dana@Example.test ', 'phone', '', 'interest', 'Vending machines', 'message', 'Two machines, please.',
     'ip_hash', 'ip-a',
@@ -66,18 +66,18 @@ select is((select count(*)::int from public.inquiry_products ip join public.inqu
   'only visible products are attached to an inquiry');
 select is((select email from public.clients where email = 'dana@example.test'), 'dana@example.test', 'the client is created with a normalized email');
 select is(
-  public.submit_inquiry(jsonb_build_object('submission_id', '00000000-0000-4000-8000-00000000e001', 'name', 'x', 'email', 'x@example.test', 'interest', 'x'))->>'duplicate',
+  public.submit_inquiry(jsonb_build_object('terms_accepted', true, 'submission_id', '00000000-0000-4000-8000-00000000e001', 'name', 'x', 'email', 'x@example.test', 'interest', 'x'))->>'duplicate',
   'true', 'a repeated submission returns the first inquiry');
 select is((select count(*)::int from public.inquiries where submission_id = '00000000-0000-4000-8000-00000000e001'), 1, 'and creates no duplicate');
 select is((select count(*)::int from public.client_activity a join public.clients c on c.id = a.client_id where c.email = 'dana@example.test'), 1,
   'an inquiry is logged as client activity');
 -- Rate limit: five an hour from one address.
-select is(public.submit_inquiry(jsonb_build_object('submission_id', gen_random_uuid(), 'name', 'n', 'email', 'r' || g || '@example.test', 'interest', 'Drinks', 'ip_hash', 'ip-b'))->>'status', 'ok',
+select is(public.submit_inquiry(jsonb_build_object('terms_accepted', true, 'submission_id', gen_random_uuid(), 'name', 'n', 'email', 'r' || g || '@example.test', 'interest', 'Drinks', 'ip_hash', 'ip-b'))->>'status', 'ok',
   'submission ' || g || ' from one address is accepted') from generate_series(1, 5) g;
-select is(public.submit_inquiry(jsonb_build_object('submission_id', gen_random_uuid(), 'name', 'n', 'email', 'r6@example.test', 'interest', 'Drinks', 'ip_hash', 'ip-b'))->>'status',
+select is(public.submit_inquiry(jsonb_build_object('terms_accepted', true, 'submission_id', gen_random_uuid(), 'name', 'n', 'email', 'r6@example.test', 'interest', 'Drinks', 'ip_hash', 'ip-b'))->>'status',
   'rate_limited', 'the sixth submission from one address in an hour is refused');
 select is(
-  public.submit_inquiry(jsonb_build_object('submission_id', gen_random_uuid(), 'name', 'Someone Else', 'company', 'Other Co',
+  public.submit_inquiry(jsonb_build_object('terms_accepted', true, 'submission_id', gen_random_uuid(), 'name', 'Someone Else', 'company', 'Other Co',
     'email', 'DANA@example.test' || chr(8203), 'phone', '555-0100', 'interest', 'Drinks', 'ip_hash', 'ip-c'))->>'status', 'ok',
   'a second inquiry from the same address, with an invisible character in it, is accepted');
 select is((select count(*)::int from public.clients where email like 'dana@%'), 1, 'invisible characters do not create a second client');
@@ -86,14 +86,14 @@ select is((select name || ' / ' || company from public.clients where email = 'da
 select is((select phone from public.clients where email = 'dana@example.test'), '555-0100', 'it only fills details that were blank');
 select is((select name from public.inquiries where email = 'dana@example.test' order by created_at desc, name limit 1) in ('Someone Else', 'Dana Whitfield'), true,
   'what was typed is kept on the inquiry');
-select is(public.submit_inquiry(jsonb_build_object('submission_id', gen_random_uuid(), 'name', 'n', 'email', 'not-an-email', 'interest', 'Drinks', 'ip_hash', 'ip-d'))->>'status',
+select is(public.submit_inquiry(jsonb_build_object('terms_accepted', true, 'submission_id', gen_random_uuid(), 'name', 'n', 'email', 'not-an-email', 'interest', 'Drinks', 'ip_hash', 'ip-d'))->>'status',
   'invalid', 'an address without an email shape is refused');
-select is(public.submit_inquiry(jsonb_build_object('submission_id', gen_random_uuid(), 'name', E'Line\r\nInjected', 'email', 'lines@example.test', 'interest', E'Drinks\nX', 'ip_hash', 'ip-e',
+select is(public.submit_inquiry(jsonb_build_object('terms_accepted', true, 'submission_id', gen_random_uuid(), 'name', E'Line\r\nInjected', 'email', 'lines@example.test', 'interest', E'Drinks\nX', 'ip_hash', 'ip-e',
   'product_ids', jsonb_build_array(repeat('-', 36), 'ABCDEF00-0000-4000-8000-000000000000')))->>'status', 'ok',
   'malformed product ids are skipped instead of failing the inquiry');
 select is((select name || '|' || interest from public.inquiries where email = 'lines@example.test'), 'Line Injected|Drinks X',
   'line breaks are folded out of single-line fields');
-select is(public.submit_inquiry(jsonb_build_object('submission_id', gen_random_uuid(), 'name', 'n', 'email', 'noip@example.test', 'interest', 'Drinks'))->>'status', 'ok',
+select is(public.submit_inquiry(jsonb_build_object('terms_accepted', true, 'submission_id', gen_random_uuid(), 'name', 'n', 'email', 'noip@example.test', 'interest', 'Drinks'))->>'status', 'ok',
   'a submission without an address hash is not lumped into a shared bucket');
 reset role;
 

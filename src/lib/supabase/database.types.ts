@@ -146,6 +146,8 @@ export type Database = {
           first_active_at: string
           id: string
           last_active_at: string
+          marketing_opt_in: boolean
+          marketing_opt_in_at: string | null
           name: string
           phone: string
           updated_at: string
@@ -157,6 +159,8 @@ export type Database = {
           first_active_at?: string
           id?: string
           last_active_at?: string
+          marketing_opt_in?: boolean
+          marketing_opt_in_at?: string | null
           name: string
           phone?: string
           updated_at?: string
@@ -168,6 +172,8 @@ export type Database = {
           first_active_at?: string
           id?: string
           last_active_at?: string
+          marketing_opt_in?: boolean
+          marketing_opt_in_at?: string | null
           name?: string
           phone?: string
           updated_at?: string
@@ -223,10 +229,12 @@ export type Database = {
         Row: {
           client_id: string
           company: string
+          consent_text: string
           created_at: string
           email: string
           id: string
           interest: string
+          marketing_opt_in: boolean
           message: string
           name: string
           phone: string
@@ -234,14 +242,17 @@ export type Database = {
           replied_at: string | null
           status: Database["public"]["Enums"]["inquiry_status"]
           submission_id: string
+          terms_accepted_at: string | null
         }
         Insert: {
           client_id: string
           company?: string
+          consent_text?: string
           created_at?: string
           email: string
           id?: string
           interest: string
+          marketing_opt_in?: boolean
           message?: string
           name: string
           phone?: string
@@ -249,14 +260,17 @@ export type Database = {
           replied_at?: string | null
           status?: Database["public"]["Enums"]["inquiry_status"]
           submission_id: string
+          terms_accepted_at?: string | null
         }
         Update: {
           client_id?: string
           company?: string
+          consent_text?: string
           created_at?: string
           email?: string
           id?: string
           interest?: string
+          marketing_opt_in?: boolean
           message?: string
           name?: string
           phone?: string
@@ -264,6 +278,7 @@ export type Database = {
           replied_at?: string | null
           status?: Database["public"]["Enums"]["inquiry_status"]
           submission_id?: string
+          terms_accepted_at?: string | null
         }
         Relationships: [
           {
@@ -394,6 +409,7 @@ export type Database = {
           category_id: string
           created_at: string
           description: string
+          details: string
           id: string
           image_path: string | null
           is_sample: boolean
@@ -401,6 +417,8 @@ export type Database = {
           price_cents: number | null
           price_note: string
           sku: string
+          slug: string
+          specs: Json
           stock_status: Database["public"]["Enums"]["stock_status"]
           updated_at: string
           visible: boolean
@@ -409,6 +427,7 @@ export type Database = {
           category_id: string
           created_at?: string
           description?: string
+          details?: string
           id?: string
           image_path?: string | null
           is_sample?: boolean
@@ -416,6 +435,8 @@ export type Database = {
           price_cents?: number | null
           price_note?: string
           sku: string
+          slug: string
+          specs?: Json
           stock_status?: Database["public"]["Enums"]["stock_status"]
           updated_at?: string
           visible?: boolean
@@ -424,6 +445,7 @@ export type Database = {
           category_id?: string
           created_at?: string
           description?: string
+          details?: string
           id?: string
           image_path?: string | null
           is_sample?: boolean
@@ -431,6 +453,8 @@ export type Database = {
           price_cents?: number | null
           price_note?: string
           sku?: string
+          slug?: string
+          specs?: Json
           stock_status?: Database["public"]["Enums"]["stock_status"]
           updated_at?: string
           visible?: boolean

@@ -68,6 +68,8 @@ export function ProductCard(props: ProductCardProps) {
     className,
     ...rest
   } = props;
+  // Every card's button reads the same, so it is described by the product's name.
+  const nameId = React.useId();
   return (
     <article className={cx('fhd-product', unavailable && 'fhd-product--unavailable', className)} {...rest}>
       <div className="fhd-product__media">
@@ -84,7 +86,9 @@ export function ProductCard(props: ProductCardProps) {
       </div>
       <div className="fhd-product__body">
         {category ? <span className="fhd-product__category">{category}</span> : null}
-        <h3 className="fhd-product__name">{href ? <a href={href}>{name}</a> : name}</h3>
+        <h3 className="fhd-product__name" id={nameId}>
+          {href ? <a href={href}>{name}</a> : name}
+        </h3>
         {description ? <p className="fhd-product__desc">{description}</p> : null}
         <div className="fhd-product__foot">
           {price != null ? (
@@ -99,6 +103,7 @@ export function ProductCard(props: ProductCardProps) {
             iconLeft={selected ? 'check' : undefined}
             disabled={unavailable}
             aria-pressed={unavailable ? undefined : !!selected}
+            aria-describedby={nameId}
             onClick={onInterest}
           >
             {unavailable ? unavailableLabel : selected ? selectedLabel : ctaLabel}

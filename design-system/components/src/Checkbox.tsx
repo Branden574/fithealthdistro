@@ -9,18 +9,31 @@ export interface CheckboxProps extends Omit<React.InputHTMLAttributes<HTMLInputE
   hint?: React.ReactNode;
   /** Some, not all: the select-all box of a table with a partial selection. */
   indeterminate?: boolean;
+  /** Error text under the box: a required agreement that was left empty. Announced with the box. */
+  error?: React.ReactNode;
 }
 
 /** A checkbox. Checked is a volt fill with an ink tick. */
 export function Checkbox(props: CheckboxProps) {
-  const { label, hint, indeterminate = false, className, ...rest } = props;
+  const { label, hint, error, indeterminate = false, className, id, ...rest } = props;
   const ref = React.useRef<HTMLInputElement>(null);
+  const auto = React.useId();
+  const fieldId = id ?? auto;
+  const errorId = error ? `${fieldId}-error` : undefined;
   React.useEffect(() => {
     if (ref.current) ref.current.indeterminate = indeterminate;
   }, [indeterminate]);
-  return (
-    <label className={cx('fhd-check', className)}>
-      <input ref={ref} type="checkbox" className="fhd-check__input" {...rest} />
+  const box = (
+    <label className={cx('fhd-check', error ? 'fhd-check--error' : null, error ? null : className)}>
+      <input
+        ref={ref}
+        id={fieldId}
+        type="checkbox"
+        className="fhd-check__input"
+        aria-invalid={error ? true : undefined}
+        aria-describedby={errorId}
+        {...rest}
+      />
       <span className="fhd-check__box" aria-hidden="true">
         <Icon name={indeterminate ? 'minus' : 'check'} size={14} />
       </span>
@@ -31,5 +44,15 @@ export function Checkbox(props: CheckboxProps) {
         </span>
       ) : null}
     </label>
+  );
+  if (!error) return box;
+  return (
+    <div className={cx('fhd-check-field', className)}>
+      {box}
+      <p className="fhd-field__error" id={errorId}>
+        <Icon name="warning-circle" size={16} />
+        {error}
+      </p>
+    </div>
   );
 }

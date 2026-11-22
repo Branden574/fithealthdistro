@@ -10,7 +10,8 @@ import { getPublishedCopy } from '@/lib/content/storefront';
 export async function generateMetadata(): Promise<Metadata> {
   const copy = await getPublishedCopy();
   return {
-    title: { default: t(copy, 'meta.title'), template: `%s · ${t(copy, 'meta.title')}` },
+    // Other pages give only their own name; the template around it is site copy ("{name} | Fit Health Distribution").
+    title: { default: t(copy, 'meta.title'), template: t(copy, 'meta.page.title', { name: '%s' }) },
     description: t(copy, 'meta.description'),
     icons: { icon: '/favicon.svg' },
   };

@@ -9,7 +9,7 @@ A client finds a product and asks for a quote.
 - Open every page on the dark NavBar: the three categories, Contact, and one `primary` "Request a quote" Button.
 - Hero: a `data-theme="dark"` band, `space-24` tall. One `display-xl` headline with one word under the highlighter, one `lead`, two `lg` Buttons.
 - Catalog: Chips filter by category. ProductCards sit four across at full width, down to one on a phone. Vending machines come first, then supplements, then drinks.
-- Each card's button reads "I'm interested" and adds the product to the request the client is building. Show the running request beside the contact form ("3 products in your request"), not in a cart.
+- Each card's button reads "I'm interested" and adds the product to the request the client is building. Show the running request beside the contact form in a RequestList ("3 products in your request"), not in a cart.
 - Contact form: Name, Company, Email, Phone, what they are interested in, and a message, on `bg-raised` inside `container-narrow`. One `primary` `lg` Button, "Send request". After it is sent, replace the form with a `success` Alert that says what happens next.
 - Say plainly where the details go: a `caption` line with the `lock-simple` glyph beside the form.
 - When online ordering is switched on, keep the cards and set `ctaLabel` to "Add to cart". Amounts in the cart and at checkout are `data`, and the pay Button is that page's one `primary`.

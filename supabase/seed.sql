@@ -27,6 +27,21 @@ insert into public.products (id, category_id, name, sku, description, price_cent
    'Sample listing. 12 oz cans.', 1899, 'Sample price', 'in_stock', true, true)
 on conflict (id) do nothing;
 
+-- Sample product pages: the spec rows only restate what each sample's name and description already say.
+update public.products p set
+  details = 'Sample listing, to show how a product page reads. Replace it with the real product, its photo and its specs before launch.',
+  specs = s.specs
+from (values
+  ('SAMPLE-VM-01', '[{"label": "Selections", "value": "40"}, {"label": "Stocks", "value": "Snacks and cold drinks"}, {"label": "Payment", "value": "Card reader ready"}]'::jsonb),
+  ('SAMPLE-VM-02', '[{"label": "Capacity", "value": "400 cans"}, {"label": "Door", "value": "Single, self-closing"}]'::jsonb),
+  ('SAMPLE-VM-03', '[{"label": "Selections", "value": "32"}]'::jsonb),
+  ('SAMPLE-SU-01', '[{"label": "Flavor", "value": "Vanilla"}, {"label": "Size", "value": "2 lb"}, {"label": "Protein", "value": "25 g a serving"}, {"label": "Sold by", "value": "Case of 6"}]'::jsonb),
+  ('SAMPLE-SU-02', '[{"label": "Flavor", "value": "Fruit punch"}, {"label": "Servings", "value": "30 a tub"}]'::jsonb),
+  ('SAMPLE-DR-01', '[{"label": "Flavor", "value": "Citrus"}, {"label": "Bottle", "value": "16 oz"}, {"label": "Case", "value": "12 bottles"}, {"label": "Sugar", "value": "Zero"}]'::jsonb),
+  ('SAMPLE-DR-02', '[{"label": "Flavor", "value": "Lime"}, {"label": "Can", "value": "12 oz"}, {"label": "Case", "value": "24 cans"}]'::jsonb)
+) as s(sku, specs)
+where p.sku = s.sku;
+
 -- STARTER FAQ DRAFTS. Questions only, with no answers: they cover business policies that have not been approved,
 -- so they cannot be published until the owner writes the answer. Publishing never includes an entry without one.
 insert into public.faqs (id, question, answer, position, visible, is_starter) values

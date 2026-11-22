@@ -1,0 +1,33 @@
+<!-- @dsCard group="Storefront" height=420 -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>RequestList preview</title>
+<style>
+  .demo { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-5); padding: var(--space-6); background: var(--bg-subtle); }
+  .demo > * { min-width: 0; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+  var F = window.FHD, h = React.createElement;
+  var START = [
+    { id: 'combo', name: 'Combo vending machine, 40 selections', category: 'Vending machines', icon: 'lockers' },
+    { id: 'whey', name: 'Whey protein isolate, vanilla, 2 lb', category: 'Supplements', icon: 'jar-label' },
+    { id: 'lytes', name: 'Electrolyte drink, citrus, case of 12', category: 'Drinks', icon: 'drop' }
+  ];
+  function summary(count) { return count === 1 ? '1 product in your request' : count + ' products in your request'; }
+  function App() {
+    var a = React.useState(START), items = a[0], setItems = a[1];
+    function remove(id) { setItems(items.filter(function (item) { return item.id !== id; })); }
+    function name(item) { return 'Remove ' + item.name + ' from your request'; }
+    return h('div', { className: 'demo' },
+      h(F.RequestList, { title: 'Your request', summary: summary(items.length), items: items, empty: 'Nothing added yet. Press I’m interested on a product to add it here.', removeAriaLabel: name, onRemove: remove }),
+      h(F.RequestList, { title: 'Your request', summary: summary(0), items: [], empty: 'Nothing added yet. Press I’m interested on a product to add it here.' }));
+  }
+  ReactDOM.createRoot(document.getElementById('root')).render(h(App));
+</script>
+</body>
+</html>

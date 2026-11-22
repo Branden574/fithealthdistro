@@ -86,9 +86,30 @@ export interface CheckboxProps extends Omit<React.InputHTMLAttributes<HTMLInputE
     hint?: React.ReactNode;
     /** Some, not all: the select-all box of a table with a partial selection. */
     indeterminate?: boolean;
+    /** Error text under the box: a required agreement that was left empty. Announced with the box. */
+    error?: React.ReactNode;
 }
 /** A checkbox. Checked is a volt fill with an ink tick. */
 export declare function Checkbox(props: CheckboxProps): React.JSX.Element;
+
+export interface CheckboxGroupProps extends Omit<React.FieldsetHTMLAttributes<HTMLFieldSetElement>, 'title'> {
+    /** Names the group, like a field label: "I am interested in". */
+    legend: React.ReactNode;
+    /** Help under the legend: "Tick everything that applies." */
+    hint?: React.ReactNode;
+    /** Error text under the boxes: "Tick at least one." Announced with the group. */
+    error?: React.ReactNode;
+    /** Marks the group with the required asterisk. At least one box has to be ticked; say so in `hint` or `error`. */
+    required?: boolean;
+    /** Keeps the legend for screen readers only, for a nested group whose parent box already names it. */
+    hideLegend?: boolean;
+    /** Indents the group under the box that opened it, with a hairline: the products of a ticked category. */
+    nested?: boolean;
+    /** Checkboxes, and nested groups. */
+    children: React.ReactNode;
+}
+/** Several boxes answering one question, any number of them ticked. A real fieldset, so the question is read with each box. */
+export declare function CheckboxGroup(props: CheckboxGroupProps): React.JSX.Element;
 
 export interface SwitchProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'type' | 'role'> {
     /** Names the setting: "Show in catalog". Without it, pass `aria-label`. */
@@ -178,6 +199,47 @@ export interface ProductCardProps extends Omit<React.HTMLAttributes<HTMLElement>
 }
 /** One product in the catalog: photo, name, price and the button a client presses to ask about it. */
 export declare function ProductCard(props: ProductCardProps): React.JSX.Element;
+
+export interface RequestListItem {
+    id: string;
+    /** The product name, sentence case. */
+    name: string;
+    /** Shown under the name: "Vending machines". */
+    category?: string;
+    /** The category glyph beside the name. */
+    icon?: IconName;
+}
+export interface RequestListProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'> {
+    /** The heading: "Your request". */
+    title: string;
+    /** How many products it holds, written out: "3 products in your request". Shown while it has items. */
+    summary: string;
+    items: RequestListItem[];
+    /** Shown in place of the list while it is empty: what to press to add something. */
+    empty: React.ReactNode;
+    /** The remove button's visible label. Default "Remove". */
+    removeLabel?: string;
+    /** The remove button's accessible name for one item, starting with the visible label: "Remove Whey protein from your request". */
+    removeAriaLabel?: (item: RequestListItem) => string;
+    /** Called with the item's id when the client removes it. Focus moves to the next item, or to the heading once the list is empty. */
+    onRemove?: (id: string) => void;
+    /** The heading level that fits the page outline. Default 3. */
+    headingLevel?: 2 | 3 | 4 | 5 | 6;
+}
+/** The products a client has picked in the catalog, beside the contact form. Not a cart: there is nothing to pay. */
+export declare function RequestList(props: RequestListProps): React.JSX.Element;
+
+export interface SpecItem {
+    /** What is measured, sentence case: "Selections", "Power". */
+    label: string;
+    /** The figure with its unit: "40", "115 V", "72 x 39 x 35 in". */
+    value: string;
+}
+export interface SpecListProps extends React.HTMLAttributes<HTMLDListElement> {
+    items: SpecItem[];
+}
+/** A product's specifications on its page: one row per spec, label beside value, under a heavy rule. */
+export declare function SpecList(props: SpecListProps): React.JSX.Element | null;
 
 export interface StatCardDelta {
     /** The change, written out: "+4 pts", "-12", "No change". */
@@ -504,4 +566,4 @@ export interface WordmarkProps extends React.HTMLAttributes<HTMLSpanElement> {
 /** The company name set in Big Shoulders 900. Stands in for a logo until one exists. */
 export declare function Wordmark(props: WordmarkProps): React.JSX.Element;
 
-declare global { interface Window { FHD: { Button: typeof Button; Chip: typeof Chip; TextField: typeof TextField; Select: typeof Select; Checkbox: typeof Checkbox; Switch: typeof Switch; Badge: typeof Badge; Alert: typeof Alert; EmptyState: typeof EmptyState; ProductCard: typeof ProductCard; StatCard: typeof StatCard; BarChart: typeof BarChart; DataTable: typeof DataTable; InquiryCard: typeof InquiryCard; ContentField: typeof ContentField; Tabs: typeof Tabs; NavBar: typeof NavBar; Sidebar: typeof Sidebar; Panel: typeof Panel; Dialog: typeof Dialog; Accordion: typeof Accordion; Icon: typeof Icon; Wordmark: typeof Wordmark } } }
+declare global { interface Window { FHD: { Button: typeof Button; Chip: typeof Chip; TextField: typeof TextField; Select: typeof Select; Checkbox: typeof Checkbox; CheckboxGroup: typeof CheckboxGroup; Switch: typeof Switch; Badge: typeof Badge; Alert: typeof Alert; EmptyState: typeof EmptyState; ProductCard: typeof ProductCard; RequestList: typeof RequestList; SpecList: typeof SpecList; StatCard: typeof StatCard; BarChart: typeof BarChart; DataTable: typeof DataTable; InquiryCard: typeof InquiryCard; ContentField: typeof ContentField; Tabs: typeof Tabs; NavBar: typeof NavBar; Sidebar: typeof Sidebar; Panel: typeof Panel; Dialog: typeof Dialog; Accordion: typeof Accordion; Icon: typeof Icon; Wordmark: typeof Wordmark } } }
