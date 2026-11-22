@@ -1,0 +1,30 @@
+<!-- @dsCard group="Status" height=372 -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>EmptyState preview</title>
+<style>
+  .demo { display: grid; gap: var(--space-5); padding: var(--space-6); }
+  .demo > * { min-width: 0; }
+  .row { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+  var F = window.FHD, h = React.createElement;
+  function App() {
+    return h('div', { className: 'demo' },
+      h(F.Panel, null,
+        h(F.EmptyState, {
+          icon: 'tray',
+          title: 'No inquiries yet',
+          description: 'When a client sends a request from the catalog or the contact form, it shows up here.',
+          action: h(F.Button, { iconRight: 'arrow-up-right' }, 'View storefront')
+        })));
+  }
+  ReactDOM.createRoot(document.getElementById('root')).render(h(App));
+</script>
+</body>
+</html>

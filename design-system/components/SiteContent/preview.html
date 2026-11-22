@@ -1,0 +1,91 @@
+<!-- @dsCard group="Pages" height=1277 width=1280 page -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>SiteContent preview</title>
+<style>
+  .demo { display: grid; gap: var(--space-5); padding: var(--space-6); }
+  .demo > * { min-width: 0; }
+  .row { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); }
+  .app { display: grid; grid-template-columns: var(--sidebar) minmax(0, 1fr); min-height: 100vh; background: var(--bg-subtle); }
+  .main { display: grid; align-content: start; gap: var(--space-6); min-width: 0; padding: var(--space-8); }
+  .head { display: flex; align-items: flex-end; justify-content: space-between; gap: var(--space-4); }
+  .head h1 { margin: var(--space-1) 0 0; }
+  .head .eyebrow { margin: 0; color: var(--ink-muted); }
+  .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-5); align-items: start; }
+  .wide { grid-column: 1 / -1; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+  var F = window.FHD, h = React.createElement;
+  var SECTIONS = [
+    { items: [{ id: 'dashboard', label: 'Dashboard', icon: 'squares-four' }] },
+    { title: 'Catalog', items: [{ id: 'products', label: 'Products', icon: 'package', count: 42 }, { id: 'categories', label: 'Categories', icon: 'tag' }] },
+    { title: 'Clients', items: [{ id: 'inquiries', label: 'Inquiries', icon: 'tray', count: 3 }, { id: 'clients', label: 'Clients', icon: 'users-three' }, { id: 'retention', label: 'Retention', icon: 'chart-bar' }] },
+    { title: 'Website', items: [{ id: 'content', label: 'Site content', icon: 'text-aa' }] },
+    { title: 'Account', items: [{ id: 'settings', label: 'Settings', icon: 'gear' }] }
+  ];
+  var OWNER = { name: 'Ryan', role: 'Owner', onSignOut: function () {} };
+
+  var DECK = {
+    'home.hero.eyebrow': { label: 'Eyebrow', text: 'Fit Health Distribution', max: 40 },
+    'home.hero.headline': { label: 'Headline', text: 'Stock what moves.', max: 28, hint: 'Shown in capitals. Keep it to two or three words a line.' },
+    'home.hero.highlight': { label: 'Highlighted words', text: 'moves.', max: 14, hint: 'The part of the headline that takes the volt highlighter.' },
+    'home.hero.primary': { label: 'Main button', text: 'Request a quote', max: 22 },
+    'home.hero.secondary': { label: 'Second button', text: 'Browse the catalog', max: 22 },
+    'home.hero.lead': { label: 'Intro paragraph', text: 'Vending machines, fitness supplements and drinks. Tell us what you need and we will send you a quote.', max: 160, multiline: true },
+    'catalog.heading': { label: 'Heading', text: 'In the catalog', max: 28 },
+    'catalog.card.cta': { label: 'Product button', text: "I'm interested", max: 18 }
+  };
+  function originals() { var o = {}; Object.keys(DECK).forEach(function (k) { o[k] = DECK[k].text; }); return o; }
+  function field(key, location, values, published, set, extra) {
+    var slot = DECK[key];
+    return h(F.ContentField, Object.assign({
+      key: key, label: slot.label, location: location, original: slot.text, published: published[key], value: values[key],
+      maxLength: slot.max, multiline: slot.multiline, hint: slot.hint,
+      onChange: function (text) { var next = Object.assign({}, values); next[key] = text; set(next); }
+    }, extra || {}));
+  }
+
+  var PAGES = [{ id: 'home', label: 'Home' }, { id: 'catalog', label: 'Catalog' }, { id: 'contact', label: 'Contact' }, { id: 'all', label: 'All pages' }];
+  function App() {
+    var first = originals();
+    first['home.hero.lead'] = 'Vending machines, fitness supplements and drinks. Ask us for a quote.';
+    var a = React.useState(first), live = a[0], setLive = a[1];
+    var draft = Object.assign({}, first); draft['home.hero.headline'] = 'Fuel what moves.';
+    var b = React.useState(draft), values = b[0], set = b[1];
+    var changed = Object.keys(DECK).filter(function (k) { return values[k] !== live[k]; }).length;
+    var tooLong = Object.keys(DECK).some(function (k) { return values[k].length > DECK[k].max; });
+    var pages = PAGES.map(function (p) { return p.id === 'home' && changed ? Object.assign({}, p, { count: changed }) : p; });
+    var word = changed === 1 ? ' change' : ' changes';
+    return h('div', { className: 'app' },
+      h(F.Sidebar, { sections: SECTIONS, current: 'content', user: OWNER }),
+      h('main', { className: 'main' },
+        h('div', { className: 'head' },
+          h('div', null, h('p', { className: 'eyebrow' }, 'Admin'), h('h1', { className: 'display-md' }, 'Site content')),
+          h('div', { className: 'row' },
+            h(F.Button, { iconRight: 'arrow-up-right' }, 'Preview site'),
+            h(F.Button, { variant: 'primary', disabled: !changed || tooLong, onClick: function () { setLive(values); } }, changed ? 'Publish ' + changed + word : 'Published'))),
+        changed
+          ? h(F.Alert, { tone: 'warning', title: changed + ' unpublished' + word, action: h(F.Button, { size: 'sm', onClick: function () { set(live); } }, 'Discard') }, 'Clients keep seeing the published text until you publish.')
+          : h(F.Alert, { tone: 'success', title: 'Everything is published' }, 'The storefront shows exactly what is written here.'),
+        h(F.Tabs, { items: pages, defaultValue: 'home', ariaLabel: 'Pages of the site' }),
+        h(F.Panel, { title: 'Hero', description: 'The band at the top of the home page.' },
+          h('div', { className: 'grid' },
+            field('home.hero.eyebrow', 'Home · Hero', values, live, set),
+            field('home.hero.headline', 'Home · Hero', values, live, set),
+            field('home.hero.highlight', 'Home · Hero', values, live, set),
+            field('home.hero.primary', 'Home · Hero', values, live, set),
+            field('home.hero.lead', 'Home · Hero', values, live, set, { className: 'wide' }))),
+        h(F.Panel, { title: 'Catalog section', description: 'The heading above the product grid, and the button on every card.' },
+          h('div', { className: 'grid' },
+            field('catalog.heading', 'Catalog · Heading', values, live, set),
+            field('catalog.card.cta', 'Catalog · Product card', values, live, set)))));
+  }
+  ReactDOM.createRoot(document.getElementById('root')).render(h(App));
+</script>
+</body>
+</html>

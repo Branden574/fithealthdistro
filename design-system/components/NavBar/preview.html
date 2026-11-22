@@ -1,0 +1,34 @@
+<!-- @dsCard group="Navigation" height=192 width=1040 -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>NavBar preview</title>
+<style>
+  .demo { display: grid; gap: var(--space-5); padding: var(--space-6); }
+  .demo > * { min-width: 0; }
+  .row { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); }
+  .demo { gap: var(--space-4); }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+  var F = window.FHD, h = React.createElement;
+  var LINKS = [
+    { id: 'machines', label: 'Vending machines', href: '#machines' },
+    { id: 'supplements', label: 'Supplements', href: '#supplements' },
+    { id: 'drinks', label: 'Drinks', href: '#drinks' },
+    { id: 'contact', label: 'Contact', href: '#contact' }
+  ];
+  function App() {
+    var state = React.useState('machines'), at = state[0], setAt = state[1];
+    function go(link, event) { event.preventDefault(); setAt(link.id); }
+    return h('div', { className: 'demo' },
+      h(F.NavBar, { links: LINKS, current: at, onNavigate: go, brandHref: '#', actions: h(F.Button, { variant: 'primary', size: 'sm' }, 'Request a quote') }),
+      h(F.NavBar, { theme: 'light', links: LINKS, current: at, onNavigate: go, brandHref: '#', actions: h(F.Button, { variant: 'primary', size: 'sm' }, 'Request a quote') }));
+  }
+  ReactDOM.createRoot(document.getElementById('root')).render(h(App));
+</script>
+</body>
+</html>

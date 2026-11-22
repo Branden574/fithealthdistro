@@ -1,0 +1,32 @@
+<!-- @dsCard group="Foundations" height=296 -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Wordmark preview</title>
+<style>
+  .demo { display: grid; gap: var(--space-5); padding: var(--space-6); }
+  .demo > * { min-width: 0; }
+  .row { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); }
+  .tile { display: flex; align-items: center; justify-content: space-between; gap: var(--space-6); padding: var(--space-6); border: var(--border-thin) solid var(--line); border-radius: var(--radius-md); }
+  .mono { flex: none; display: inline-flex; align-items: center; justify-content: center; width: 64px; height: 64px; background: var(--accent); box-shadow: inset 0 0 0 var(--border-thick) var(--accent-ink); border-radius: var(--radius-sm); }
+  .mono .fhd-wordmark { color: var(--on-accent); }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+  var F = window.FHD, h = React.createElement;
+  function tile(theme) {
+    return h('div', { className: 'tile', 'data-theme': theme },
+      h(F.Wordmark, { size: 40 }),
+      h(F.Wordmark, { size: 28, stacked: true }),
+      h('span', { className: 'mono' }, h(F.Wordmark, { short: true, size: 28 })));
+  }
+  function App() {
+    return h('div', { className: 'demo' }, tile('light'), tile('dark'));
+  }
+  ReactDOM.createRoot(document.getElementById('root')).render(h(App));
+</script>
+</body>
+</html>

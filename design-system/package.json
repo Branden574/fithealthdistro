@@ -1,0 +1,25 @@
+{
+  "name": "@fithealthdistro/design-system",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Fit Health Distribution design system: tokens, fonts, logos, icons and React components for the storefront and the admin.",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "build:tokens": "node scripts/build.mjs tokens",
+    "build:copy": "node scripts/build.mjs copy",
+    "build:components": "node scripts/build.mjs components",
+    "icons": "node scripts/icons.mjs",
+    "check": "node scripts/check.mjs"
+  },
+  "peerDependencies": {
+    "react": ">=18",
+    "react-dom": ">=18"
+  },
+  "devDependencies": {
+    "@phosphor-icons/core": "^2.1.1",
+    "@types/react": "^18.3.0",
+    "@types/react-dom": "^18.3.0",
+    "esbuild": "^0.28.2",
+    "typescript": "~5.9.3"
+  }
+}

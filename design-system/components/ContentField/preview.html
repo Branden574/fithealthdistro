@@ -1,0 +1,57 @@
+<!-- @dsCard group="Site content" height=656 -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>ContentField preview</title>
+<style>
+  .demo { display: grid; gap: var(--space-5); padding: var(--space-6); }
+  .demo > * { min-width: 0; }
+  .row { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); }
+  .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-5); align-items: start; }
+  .wide { grid-column: 1 / -1; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+  var F = window.FHD, h = React.createElement;
+  var DECK = {
+    'home.hero.eyebrow': { label: 'Eyebrow', text: 'Fit Health Distribution', max: 40 },
+    'home.hero.headline': { label: 'Headline', text: 'Stock what moves.', max: 28, hint: 'Shown in capitals. Keep it to two or three words a line.' },
+    'home.hero.highlight': { label: 'Highlighted words', text: 'moves.', max: 14, hint: 'The part of the headline that takes the volt highlighter.' },
+    'home.hero.primary': { label: 'Main button', text: 'Request a quote', max: 22 },
+    'home.hero.secondary': { label: 'Second button', text: 'Browse the catalog', max: 22 },
+    'home.hero.lead': { label: 'Intro paragraph', text: 'Vending machines, fitness supplements and drinks. Tell us what you need and we will send you a quote.', max: 160, multiline: true },
+    'catalog.heading': { label: 'Heading', text: 'In the catalog', max: 28 },
+    'catalog.card.cta': { label: 'Product button', text: "I'm interested", max: 18 }
+  };
+  function originals() { var o = {}; Object.keys(DECK).forEach(function (k) { o[k] = DECK[k].text; }); return o; }
+  function field(key, location, values, published, set, extra) {
+    var slot = DECK[key];
+    return h(F.ContentField, Object.assign({
+      key: key, label: slot.label, location: location, original: slot.text, published: published[key], value: values[key],
+      maxLength: slot.max, multiline: slot.multiline, hint: slot.hint,
+      onChange: function (text) { var next = Object.assign({}, values); next[key] = text; set(next); }
+    }, extra || {}));
+  }
+
+  function App() {
+    var live = originals();
+    live['home.hero.lead'] = 'Vending machines, fitness supplements and drinks. Ask us for a quote.';
+    var draft = Object.assign({}, live);
+    draft['home.hero.headline'] = 'Fuel what moves.';
+    draft['home.hero.secondary'] = 'Browse the whole catalog now';
+    var state = React.useState(draft), values = state[0], set = state[1];
+    return h('div', { className: 'demo' },
+      h('div', { className: 'grid' },
+        field('home.hero.headline', 'Home · Hero', values, live, set),
+        field('home.hero.primary', 'Home · Hero', values, live, set),
+        field('home.hero.secondary', 'Home · Hero', values, live, set),
+        field('catalog.heading', 'Catalog · Heading', values, live, set),
+        field('home.hero.lead', 'Home · Hero', values, live, set, { className: 'wide' })));
+  }
+  ReactDOM.createRoot(document.getElementById('root')).render(h(App));
+</script>
+</body>
+</html>

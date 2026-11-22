@@ -1,0 +1,34 @@
+<!-- @dsCard group="Actions" height=80 -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Chip preview</title>
+<style>
+  .demo { display: grid; gap: var(--space-5); padding: var(--space-6); }
+  .demo > * { min-width: 0; }
+  .row { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+  var F = window.FHD, h = React.createElement;
+  var FILTERS = [
+    { id: 'all', label: 'All', count: 42 },
+    { id: 'machines', label: 'Vending machines', count: 12, icon: 'lockers' },
+    { id: 'supplements', label: 'Supplements', count: 18, icon: 'jar-label' },
+    { id: 'drinks', label: 'Drinks', count: 12, icon: 'drop' }
+  ];
+  function App() {
+    var state = React.useState('all'), on = state[0], setOn = state[1];
+    return h('div', { className: 'demo' },
+      h('div', { className: 'row', role: 'group', 'aria-label': 'Filter by category' },
+        FILTERS.map(function (f) {
+          return h(F.Chip, { key: f.id, selected: on === f.id, count: f.count, icon: f.icon, onClick: function () { setOn(f.id); } }, f.label);
+        })));
+  }
+  ReactDOM.createRoot(document.getElementById('root')).render(h(App));
+</script>
+</body>
+</html>

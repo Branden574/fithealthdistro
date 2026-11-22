@@ -1,0 +1,31 @@
+<!-- @dsCard group="Forms" height=406 -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>TextField preview</title>
+<style>
+  .demo { display: grid; gap: var(--space-5); padding: var(--space-6); }
+  .demo > * { min-width: 0; }
+  .row { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); }
+  .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-5); max-width: 720px; }
+  .wide { grid-column: 1 / -1; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+  var F = window.FHD, h = React.createElement;
+  function App() {
+    return h('div', { className: 'demo' },
+      h('div', { className: 'grid' },
+        h(F.TextField, { label: 'Product name', defaultValue: 'Combo vending machine, 40 selections', required: true }),
+        h(F.TextField, { label: 'Price', prefix: '$', suffix: 'per unit', defaultValue: '4,250.00', inputMode: 'decimal' }),
+        h(F.TextField, { label: 'SKU', defaultValue: 'FHD-VM-2041', error: 'This SKU is already in use.' }),
+        h(F.TextField, { label: 'Search products', placeholder: 'Name or SKU', prefix: h(F.Icon, { name: 'magnifying-glass', size: 16 }) }),
+        h(F.TextField, { className: 'wide', label: 'Description', multiline: true, rows: 3, hint: 'Shown on the product card. Two lines read best.', defaultValue: 'Snacks and cold drinks in one cabinet. Card reader ready.' })));
+  }
+  ReactDOM.createRoot(document.getElementById('root')).render(h(App));
+</script>
+</body>
+</html>

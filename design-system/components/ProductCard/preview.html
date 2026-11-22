@@ -1,0 +1,45 @@
+<!-- @dsCard group="Catalog" height=493 -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>ProductCard preview</title>
+<style>
+  .demo { display: grid; gap: var(--space-5); padding: var(--space-6); }
+  .demo > * { min-width: 0; }
+  .row { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: var(--space-6); }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+  var F = window.FHD, h = React.createElement;
+  function App() {
+    var state = React.useState({ whey: true }), picked = state[0], setPicked = state[1];
+    function toggle(id) { return function () { var next = Object.assign({}, picked); next[id] = !next[id]; setPicked(next); }; }
+    return h('div', { className: 'demo' },
+      h('div', { className: 'grid' },
+        h(F.ProductCard, {
+          name: 'Combo vending machine, 40 selections', category: 'Vending machines', icon: 'lockers',
+          description: 'Snacks and cold drinks in one cabinet. Card reader ready.',
+          price: 4250, priceNote: 'starting at', badges: [{ label: 'New', tone: 'accent' }],
+          selected: !!picked.combo, onInterest: toggle('combo')
+        }),
+        h(F.ProductCard, {
+          name: 'Whey protein isolate, vanilla, 2 lb', category: 'Supplements', icon: 'jar-label',
+          description: '25 g of protein a serving. Sold by the case of six.',
+          price: 39.99, priceNote: 'per tub',
+          selected: !!picked.whey, onInterest: toggle('whey')
+        }),
+        h(F.ProductCard, {
+          name: 'Electrolyte drink, citrus, case of 12', category: 'Drinks', icon: 'drop',
+          description: 'Zero sugar. 16 oz bottles.',
+          price: 21.5, priceNote: 'per case', badges: [{ label: 'Out of stock', tone: 'danger' }],
+          unavailable: true
+        })));
+  }
+  ReactDOM.createRoot(document.getElementById('root')).render(h(App));
+</script>
+</body>
+</html>

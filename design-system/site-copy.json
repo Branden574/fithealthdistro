@@ -1,0 +1,43 @@
+{
+  "version": 1,
+  "note": "The text the storefront ships with, one entry per editable slot. Seed the content store from this file. The admin's Site content page edits a copy of it, and Restore original puts these values back.",
+  "slots": [
+    { "key": "nav.cta", "page": "All pages", "section": "Navigation", "label": "Quote button", "text": "Request a quote", "max": 22 },
+
+    { "key": "home.hero.eyebrow", "page": "Home", "section": "Hero", "label": "Eyebrow", "text": "Fit Health Distribution", "max": 40 },
+    { "key": "home.hero.headline", "page": "Home", "section": "Hero", "label": "Headline", "text": "Stock what moves.", "max": 28, "hint": "Shown in capitals. Keep it to two or three words a line." },
+    { "key": "home.hero.highlight", "page": "Home", "section": "Hero", "label": "Highlighted words", "text": "moves.", "max": 14, "hint": "The part of the headline that takes the volt highlighter. It has to match the headline exactly. Leave it empty for none." },
+    { "key": "home.hero.lead", "page": "Home", "section": "Hero", "label": "Intro paragraph", "text": "Vending machines, fitness supplements and drinks. Tell us what you need and we will send you a quote.", "max": 160, "multiline": true },
+    { "key": "home.hero.primary", "page": "Home", "section": "Hero", "label": "Main button", "text": "Request a quote", "max": 22 },
+    { "key": "home.hero.secondary", "page": "Home", "section": "Hero", "label": "Second button", "text": "Browse the catalog", "max": 22 },
+
+    { "key": "catalog.eyebrow", "page": "Catalog", "section": "Heading", "label": "Eyebrow", "text": "Catalog", "max": 24 },
+    { "key": "catalog.heading", "page": "Catalog", "section": "Heading", "label": "Heading", "text": "In the catalog", "max": 28 },
+    { "key": "catalog.filter.all", "page": "Catalog", "section": "Filters", "label": "All filter", "text": "All", "max": 12 },
+    { "key": "catalog.card.cta", "page": "Catalog", "section": "Product card", "label": "Button", "text": "I'm interested", "max": 18 },
+    { "key": "catalog.card.added", "page": "Catalog", "section": "Product card", "label": "Button, once pressed", "text": "Added", "max": 12 },
+    { "key": "catalog.card.unavailable", "page": "Catalog", "section": "Product card", "label": "Button, out of stock", "text": "Unavailable", "max": 14 },
+    { "key": "catalog.empty.title", "page": "Catalog", "section": "No results", "label": "Title", "text": "No products match", "max": 28 },
+    { "key": "catalog.empty.body", "page": "Catalog", "section": "No results", "label": "Message", "text": "Try another category, or tell us what you are looking for.", "max": 120 },
+
+    { "key": "contact.eyebrow", "page": "Contact", "section": "Heading", "label": "Eyebrow", "text": "Contact", "max": 24 },
+    { "key": "contact.heading", "page": "Contact", "section": "Heading", "label": "Heading", "text": "Tell us what you need", "max": 28 },
+    { "key": "contact.body", "page": "Contact", "section": "Heading", "label": "Intro paragraph", "text": "Pick products in the catalog or describe what you are after. We reply with a quote.", "max": 160, "multiline": true },
+    { "key": "contact.privacy", "page": "Contact", "section": "Heading", "label": "Privacy line", "text": "Your details go to our team and nowhere else.", "max": 80 },
+    { "key": "contact.form.name", "page": "Contact", "section": "Form", "label": "Name label", "text": "Name", "max": 24 },
+    { "key": "contact.form.company", "page": "Contact", "section": "Form", "label": "Company label", "text": "Company", "max": 24 },
+    { "key": "contact.form.email", "page": "Contact", "section": "Form", "label": "Email label", "text": "Email", "max": 24 },
+    { "key": "contact.form.phone", "page": "Contact", "section": "Form", "label": "Phone label", "text": "Phone", "max": 24 },
+    { "key": "contact.form.interest", "page": "Contact", "section": "Form", "label": "Interest label", "text": "I am interested in", "max": 32 },
+    { "key": "contact.form.interest.placeholder", "page": "Contact", "section": "Form", "label": "Interest placeholder", "text": "Choose one", "max": 24 },
+    { "key": "contact.form.message", "page": "Contact", "section": "Form", "label": "Message label", "text": "Message", "max": 24 },
+    { "key": "contact.form.message.hint", "page": "Contact", "section": "Form", "label": "Message hint", "text": "How many, where they are going, and when you need them.", "max": 80 },
+    { "key": "contact.form.submit", "page": "Contact", "section": "Form", "label": "Send button", "text": "Send request", "max": 22 },
+    { "key": "contact.success.title", "page": "Contact", "section": "After sending", "label": "Confirmation title", "text": "Request sent", "max": 28 },
+    { "key": "contact.success.body", "page": "Contact", "section": "After sending", "label": "Confirmation message", "text": "Thanks. We will reply by email with a quote.", "max": 120 },
+    { "key": "contact.error.title", "page": "Contact", "section": "After sending", "label": "Error title", "text": "Your request was not sent", "max": 40 },
+    { "key": "contact.error.body", "page": "Contact", "section": "After sending", "label": "Error message", "text": "Check the fields marked below, then send it again.", "max": 120 },
+
+    { "key": "footer.copyright", "page": "All pages", "section": "Footer", "label": "Copyright line", "text": "© {year} Fit Health Distribution", "max": 60, "hint": "{year} is replaced with the current year." }
+  ]
+}

@@ -1,0 +1,29 @@
+<!-- @dsCard group="Dashboard" height=368 -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>BarChart preview</title>
+<style>
+  .demo { display: grid; gap: var(--space-5); padding: var(--space-6); }
+  .demo > * { min-width: 0; }
+  .row { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+  var F = window.FHD, h = React.createElement;
+  var RETENTION = [
+    { label: 'Jun', value: 78 }, { label: 'Jul', value: 80 }, { label: 'Aug', value: 79 },
+    { label: 'Sep', value: 83 }, { label: 'Oct', value: 82 }, { label: 'Nov', value: 86 }
+  ];
+  function App() {
+    return h('div', { className: 'demo' },
+      h(F.Panel, { title: 'Client retention', description: 'Share of last quarter’s clients still active, by month.' },
+        h(F.BarChart, { data: RETENTION, unit: '%', showValues: true, height: 160, ariaLabel: 'Client retention by month, June to November.' })));
+  }
+  ReactDOM.createRoot(document.getElementById('root')).render(h(App));
+</script>
+</body>
+</html>

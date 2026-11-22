@@ -1,0 +1,30 @@
+<!-- @dsCard group="Navigation" height=97 -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Tabs preview</title>
+<style>
+  .demo { display: grid; gap: var(--space-5); padding: var(--space-6); }
+  .demo > * { min-width: 0; }
+  .row { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+  var F = window.FHD, h = React.createElement;
+  var VIEWS = [
+    { id: 'all', label: 'All products', count: 42 },
+    { id: 'machines', label: 'Vending machines', count: 12 },
+    { id: 'supplements', label: 'Supplements', count: 18 },
+    { id: 'drinks', label: 'Drinks', count: 12 },
+    { id: 'hidden', label: 'Hidden', count: 3 }
+  ];
+  function App() {
+    return h('div', { className: 'demo' }, h(F.Tabs, { items: VIEWS, defaultValue: 'all', ariaLabel: 'Product views' }));
+  }
+  ReactDOM.createRoot(document.getElementById('root')).render(h(App));
+</script>
+</body>
+</html>

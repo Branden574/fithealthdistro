@@ -1,0 +1,40 @@
+<!-- @dsCard group="Dashboard" height=539 -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>InquiryCard preview</title>
+<style>
+  .demo { display: grid; gap: var(--space-5); padding: var(--space-6); }
+  .demo > * { min-width: 0; }
+  .row { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: var(--space-5); align-items: start; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+  var F = window.FHD, h = React.createElement;
+  var INQUIRY = {
+    name: 'Dana Whitfield', company: 'Northside Fitness Club', email: 'dana@northsidefitness.example', phone: '(555) 555-0142',
+    location: 'Springfield, IL', receivedAt: 'Today, 9:41 AM',
+    message: 'We are opening a second location in March and want two combo machines for the lobby. Can you send pricing and lead time? We would also like to stock protein drinks.',
+    interestedIn: ['Combo vending machine', 'Protein drinks']
+  };
+
+  function App() {
+    var state = React.useState('new'), status = state[0], setStatus = state[1];
+    return h('div', { className: 'demo' },
+      h('div', { className: 'grid' },
+        h(F.InquiryCard, Object.assign({}, INQUIRY, { status: status, onMarkRead: function () { setStatus('read'); }, onReply: function () { setStatus('replied'); } })),
+        h(F.InquiryCard, {
+          name: 'Marcus Lee', company: 'Lee Family Karate', email: 'marcus@leekarate.example',
+          receivedAt: 'Nov 19, 2:15 PM', status: 'replied',
+          message: 'Do you sell single cases of the electrolyte drink, or only by the pallet?',
+          interestedIn: ['Electrolyte drink']
+        })));
+  }
+  ReactDOM.createRoot(document.getElementById('root')).render(h(App));
+</script>
+</body>
+</html>

@@ -1,0 +1,116 @@
+<!-- @dsCard group="Pages" height=2274 width=1280 page -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Storefront preview</title>
+<style>
+  .demo { display: grid; gap: var(--space-5); padding: var(--space-6); }
+  .demo > * { min-width: 0; }
+  .row { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); }
+  .wrap { max-width: var(--container); margin: 0 auto; padding: 0 var(--space-8); }
+  .hero { padding: var(--space-24) 0; }
+  .hero .wrap { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 4fr); gap: var(--space-16); align-items: end; }
+  .hero .eyebrow { margin: 0 0 var(--space-5); color: var(--accent-ink); }
+  .hero h1 { margin: 0; }
+  .hero .lead { margin: var(--space-6) 0 var(--space-8); max-width: 34ch; color: var(--ink-muted); }
+  .index { margin: 0; padding: 0; list-style: none; border-top: var(--border-thick) solid var(--ink); }
+  .index a { display: flex; align-items: center; gap: var(--space-4); padding: var(--space-4) 0; color: var(--ink); text-decoration: none; border-bottom: var(--border-thin) solid var(--line); }
+  .index a:hover .display-sm { background: var(--accent); color: var(--on-accent); }
+  .index .data { color: var(--ink-faint); }
+  .index .display-sm { flex: 1; padding: 0 var(--space-1); }
+  .section { padding: var(--space-20) 0; }
+  .section-head { display: flex; align-items: flex-end; justify-content: space-between; gap: var(--space-6); margin-bottom: var(--space-8); }
+  .section-head .eyebrow { margin: 0 0 var(--space-2); color: var(--ink-muted); }
+  .section-head h2 { margin: 0; }
+  .products { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--space-6); }
+  .band { background: var(--bg-subtle); }
+  .contact { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: var(--space-16); align-items: start; }
+  .contact h2 { margin: 0 0 var(--space-4); }
+  .contact .body { margin: 0 0 var(--space-6); max-width: 40ch; color: var(--ink-muted); }
+  .private { display: flex; align-items: center; gap: var(--space-2); margin: 0; color: var(--ink-muted); }
+  .form { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-5); padding: var(--space-6); background: var(--bg-raised); border: var(--border-thin) solid var(--line); border-radius: var(--radius-md); }
+  .form .wide { grid-column: 1 / -1; }
+  .foot { padding: var(--space-12) 0; }
+  .foot .wrap { display: flex; align-items: flex-end; justify-content: space-between; gap: var(--space-6); }
+  .foot .caption { margin: 0; color: var(--ink-muted); }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+  var F = window.FHD, h = React.createElement;
+  var LINKS = [
+    { id: 'machines', label: 'Vending machines', href: '#machines' },
+    { id: 'supplements', label: 'Supplements', href: '#supplements' },
+    { id: 'drinks', label: 'Drinks', href: '#drinks' },
+    { id: 'contact', label: 'Contact', href: '#contact' }
+  ];
+  var FILTERS = [
+    { id: 'all', label: 'All', count: 42 },
+    { id: 'machines', label: 'Vending machines', count: 12, icon: 'lockers' },
+    { id: 'supplements', label: 'Supplements', count: 18, icon: 'jar-label' },
+    { id: 'drinks', label: 'Drinks', count: 12, icon: 'drop' }
+  ];
+  var INTERESTS = [
+    { value: 'machines', label: 'Vending machines' }, { value: 'supplements', label: 'Supplements' },
+    { value: 'drinks', label: 'Drinks' }, { value: 'several', label: 'More than one' }
+  ];
+  function App() {
+    var a = React.useState('all'), filter = a[0], setFilter = a[1];
+    var b = React.useState({ whey: true }), picked = b[0], setPicked = b[1];
+    function toggle(id) { return function () { var next = Object.assign({}, picked); next[id] = !next[id]; setPicked(next); }; }
+    function stay(link, event) { event.preventDefault(); }
+    return h(React.Fragment, null,
+      h(F.NavBar, { links: LINKS, onNavigate: stay, brandHref: '#', actions: h(F.Button, { variant: 'primary', size: 'sm' }, 'Request a quote') }),
+      h('section', { className: 'hero', 'data-theme': 'dark' },
+        h('div', { className: 'wrap' },
+          h('div', null,
+            h('p', { className: 'eyebrow' }, 'Fit Health Distribution'),
+            h('h1', { className: 'display-xl' }, 'Stock what ', h('span', { className: 'fhd-mark' }, 'moves.')),
+            h('p', { className: 'lead' }, 'Vending machines, fitness supplements and drinks. Tell us what you need and we will send you a quote.'),
+            h('div', { className: 'row' },
+              h(F.Button, { variant: 'primary', size: 'lg', iconRight: 'arrow-right' }, 'Request a quote'),
+              h(F.Button, { size: 'lg' }, 'Browse the catalog'))),
+          h('ul', { className: 'index' },
+            [['01', 'Vending machines'], ['02', 'Supplements'], ['03', 'Drinks']].map(function (row) {
+              return h('li', { key: row[0] }, h('a', { href: '#' },
+                h('span', { className: 'data' }, row[0]), h('span', { className: 'display-sm' }, row[1]), h(F.Icon, { name: 'arrow-right', size: 24 })));
+            })))),
+      h('section', { className: 'section' },
+        h('div', { className: 'wrap' },
+          h('div', { className: 'section-head' },
+            h('div', null, h('p', { className: 'eyebrow' }, 'Catalog'), h('h2', { className: 'display-lg' }, 'In the catalog')),
+            h('div', { className: 'row', role: 'group', 'aria-label': 'Filter by category' },
+              FILTERS.map(function (f) {
+                return h(F.Chip, { key: f.id, selected: filter === f.id, count: f.count, icon: f.icon, onClick: function () { setFilter(f.id); } }, f.label);
+              }))),
+          h('div', { className: 'products' },
+            h(F.ProductCard, { name: 'Combo vending machine, 40 selections', category: 'Vending machines', icon: 'lockers', description: 'Snacks and cold drinks in one cabinet. Card reader ready.', price: 4250, priceNote: 'starting at', badges: [{ label: 'New', tone: 'accent' }], selected: !!picked.combo, onInterest: toggle('combo') }),
+            h(F.ProductCard, { name: 'Glass-front drink cooler, single door', category: 'Vending machines', icon: 'lockers', description: 'Holds 400 cans. Self-closing door.', price: 1890, priceNote: 'starting at', selected: !!picked.cooler, onInterest: toggle('cooler') }),
+            h(F.ProductCard, { name: 'Whey protein isolate, vanilla, 2 lb', category: 'Supplements', icon: 'jar-label', description: '25 g of protein a serving. Sold by the case of six.', price: 39.99, priceNote: 'per tub', selected: !!picked.whey, onInterest: toggle('whey') }),
+            h(F.ProductCard, { name: 'Electrolyte drink, citrus, case of 12', category: 'Drinks', icon: 'drop', description: 'Zero sugar. 16 oz bottles.', price: 21.5, priceNote: 'per case', badges: [{ label: 'Out of stock', tone: 'danger' }], unavailable: true })))),
+      h('section', { className: 'section band' },
+        h('div', { className: 'wrap contact' },
+          h('div', null,
+            h('p', { className: 'eyebrow', style: { margin: '0 0 var(--space-2)', color: 'var(--ink-muted)' } }, 'Contact'),
+            h('h2', { className: 'display-lg' }, 'Tell us what you need'),
+            h('p', { className: 'body' }, 'Pick products in the catalog or describe what you are after. We reply with a quote.'),
+            h('p', { className: 'private caption' }, h(F.Icon, { name: 'lock-simple', size: 16 }), 'Your details go to our team and nowhere else.')),
+          h('form', { className: 'form', onSubmit: function (e) { e.preventDefault(); } },
+            h(F.TextField, { label: 'Name', required: true, autoComplete: 'name' }),
+            h(F.TextField, { label: 'Company', autoComplete: 'organization' }),
+            h(F.TextField, { label: 'Email', type: 'email', required: true, autoComplete: 'email' }),
+            h(F.TextField, { label: 'Phone', type: 'tel', autoComplete: 'tel' }),
+            h(F.Select, { className: 'wide', label: 'I am interested in', options: INTERESTS, placeholder: 'Choose one', required: true }),
+            h(F.TextField, { className: 'wide', label: 'Message', multiline: true, rows: 4, hint: 'How many, where they are going, and when you need them.' }),
+            h('div', { className: 'wide' }, h(F.Button, { variant: 'primary', size: 'lg', type: 'submit', iconRight: 'arrow-right' }, 'Send request'))))),
+      h('footer', { className: 'foot', 'data-theme': 'dark' },
+        h('div', { className: 'wrap' },
+          h(F.Wordmark, { size: 40, stacked: true }),
+          h('p', { className: 'caption' }, '© 2026 Fit Health Distribution'))));
+  }
+  ReactDOM.createRoot(document.getElementById('root')).render(h(App));
+</script>
+</body>
+</html>

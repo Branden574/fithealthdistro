@@ -1,0 +1,28 @@
+<!-- @dsCard group="Forms" height=134 -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Switch preview</title>
+<style>
+  .demo { display: grid; gap: var(--space-5); padding: var(--space-6); }
+  .demo > * { min-width: 0; }
+  .row { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+  var F = window.FHD, h = React.createElement;
+  function App() {
+    var state = React.useState(true), on = state[0], setOn = state[1];
+    return h('div', { className: 'demo' },
+      h(F.Switch, { label: 'Show in catalog', hint: on ? 'Clients can see this product and ask for a quote.' : 'Hidden. Only admins can see this product.', checked: on, onChange: function (e) { setOn(e.target.checked); } }),
+      h('div', { className: 'row', style: { gap: 'var(--space-8)' } },
+        h(F.Switch, { label: 'Email me new inquiries', defaultChecked: false }),
+        h(F.Switch, { label: 'Online ordering', disabled: true })));
+  }
+  ReactDOM.createRoot(document.getElementById('root')).render(h(App));
+</script>
+</body>
+</html>

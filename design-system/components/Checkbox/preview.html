@@ -1,0 +1,30 @@
+<!-- @dsCard group="Forms" height=128 -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Checkbox preview</title>
+<style>
+  .demo { display: grid; gap: var(--space-5); padding: var(--space-6); }
+  .demo > * { min-width: 0; }
+  .row { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+  var F = window.FHD, h = React.createElement;
+  function App() {
+    var state = React.useState(true), on = state[0], setOn = state[1];
+    return h('div', { className: 'demo' },
+      h('div', { className: 'row', style: { gap: 'var(--space-8)', alignItems: 'flex-start' } },
+        h(F.Checkbox, { label: 'Show in catalog', checked: on, onChange: function (e) { setOn(e.target.checked); } }),
+        h(F.Checkbox, { label: 'Featured product', defaultChecked: false }),
+        h(F.Checkbox, { label: '3 of 42 selected', indeterminate: true, defaultChecked: false }),
+        h(F.Checkbox, { label: 'Archived', disabled: true })),
+      h(F.Checkbox, { label: 'Send me a copy of my request', hint: 'We email it to the address above.', defaultChecked: true }));
+  }
+  ReactDOM.createRoot(document.getElementById('root')).render(h(App));
+</script>
+</body>
+</html>

@@ -1,0 +1,32 @@
+<!-- @dsCard group="Forms" height=144 -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Select preview</title>
+<style>
+  .demo { display: grid; gap: var(--space-5); padding: var(--space-6); }
+  .demo > * { min-width: 0; }
+  .row { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); }
+  .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-5); max-width: 720px; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+  var F = window.FHD, h = React.createElement;
+  var CATEGORIES = [
+    { value: 'machines', label: 'Vending machines' },
+    { value: 'supplements', label: 'Supplements' },
+    { value: 'drinks', label: 'Drinks' }
+  ];
+  function App() {
+    return h('div', { className: 'demo' },
+      h('div', { className: 'grid' },
+        h(F.Select, { label: 'Category', options: CATEGORIES, defaultValue: 'machines', hint: 'Decides where the product shows in the catalog.' }),
+        h(F.Select, { label: 'I am interested in', options: CATEGORIES, placeholder: 'Choose a category', required: true, error: 'Choose one so we can route your request.' })));
+  }
+  ReactDOM.createRoot(document.getElementById('root')).render(h(App));
+</script>
+</body>
+</html>

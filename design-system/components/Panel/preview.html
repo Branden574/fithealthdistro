@@ -1,0 +1,33 @@
+<!-- @dsCard group="Layout" height=269 -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Panel preview</title>
+<style>
+  .demo { display: grid; gap: var(--space-5); padding: var(--space-6); }
+  .demo > * { min-width: 0; }
+  .row { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--space-5); align-items: start; }
+  .copy { margin: 0; font-size: 14px; line-height: 20px; color: var(--ink-muted); }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+  var F = window.FHD, h = React.createElement;
+  function App() {
+    return h('div', { className: 'demo' },
+      h('div', { className: 'grid' },
+        h(F.Panel, {
+          title: 'Store details', description: 'Shown in the footer of the storefront.',
+          actions: h(F.Button, { size: 'sm', iconLeft: 'pencil-simple' }, 'Edit'),
+          footer: 'Last changed Nov 18 by Ryan'
+        }, h('p', { className: 'copy' }, 'Fit Health Distribution sells vending machines, fitness supplements and drinks.')),
+        h(F.Panel, { tone: 'inverse', title: 'Online ordering', description: 'Not switched on yet.' },
+          h('p', { className: 'copy' }, 'Clients send a request from the catalog and you reply with a quote. Payments come later.'))));
+  }
+  ReactDOM.createRoot(document.getElementById('root')).render(h(App));
+</script>
+</body>
+</html>

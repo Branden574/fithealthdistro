@@ -1,0 +1,112 @@
+<!-- @dsCard group="Pages" height=1442 width=1280 page -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>AdminDashboard preview</title>
+<style>
+  .demo { display: grid; gap: var(--space-5); padding: var(--space-6); }
+  .demo > * { min-width: 0; }
+  .row { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); }
+  .app { display: grid; grid-template-columns: var(--sidebar) minmax(0, 1fr); min-height: 100vh; background: var(--bg-subtle); }
+  .main { display: grid; align-content: start; gap: var(--space-6); min-width: 0; padding: var(--space-8); }
+  .head { display: flex; align-items: flex-end; justify-content: space-between; gap: var(--space-4); }
+  .head h1 { margin: var(--space-1) 0 0; }
+  .head .eyebrow { margin: 0; color: var(--ink-muted); }
+  .stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--space-4); }
+  .cols { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); gap: var(--space-6); align-items: start; }
+  .side-head { display: flex; align-items: center; justify-content: space-between; margin: 0 0 var(--space-3); }
+  .side-head h2 { margin: 0; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+  var F = window.FHD, h = React.createElement;
+  var SECTIONS = [
+    { items: [{ id: 'dashboard', label: 'Dashboard', icon: 'squares-four' }] },
+    { title: 'Catalog', items: [{ id: 'products', label: 'Products', icon: 'package', count: 42 }, { id: 'categories', label: 'Categories', icon: 'tag' }] },
+    { title: 'Clients', items: [{ id: 'inquiries', label: 'Inquiries', icon: 'tray', count: 3 }, { id: 'clients', label: 'Clients', icon: 'users-three' }, { id: 'retention', label: 'Retention', icon: 'chart-bar' }] },
+    { title: 'Website', items: [{ id: 'content', label: 'Site content', icon: 'text-aa' }] },
+    { title: 'Account', items: [{ id: 'settings', label: 'Settings', icon: 'gear' }] }
+  ];
+  var OWNER = { name: 'Ryan', role: 'Owner', onSignOut: function () {} };
+
+  var PRODUCTS = [
+    { id: 'vm-2041', name: 'Combo vending machine, 40 selections', sku: 'FHD-VM-2041', category: 'Vending machines', price: 4250, stock: 'in', visible: true },
+    { id: 'vm-2110', name: 'Glass-front drink cooler, single door', sku: 'FHD-VM-2110', category: 'Vending machines', price: 1890, stock: 'low', visible: true },
+    { id: 'su-0312', name: 'Whey protein isolate, vanilla, 2 lb', sku: 'FHD-SU-0312', category: 'Supplements', price: 39.99, stock: 'in', visible: true },
+    { id: 'su-0355', name: 'Pre-workout, fruit punch, 30 servings', sku: 'FHD-SU-0355', category: 'Supplements', price: 32, stock: 'out', visible: false },
+    { id: 'dr-0127', name: 'Electrolyte drink, citrus, case of 12', sku: 'FHD-DR-0127', category: 'Drinks', price: 21.5, stock: 'in', visible: true }
+  ];
+  var STOCK = { 'in': { tone: 'success', label: 'In stock' }, low: { tone: 'warning', label: 'Low stock' }, out: { tone: 'danger', label: 'Out of stock' } };
+  function money(n) { return '$' + n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+  function productColumns(rows, setRows) {
+    function setVisible(id, on) { setRows(rows.map(function (r) { return r.id === id ? Object.assign({}, r, { visible: on }) : r; })); }
+    return [
+      { key: 'name', header: 'Product', sortable: true, minWidth: 240, render: function (r) { return h('strong', null, r.name); } },
+      { key: 'sku', header: 'SKU', mono: true },
+      { key: 'category', header: 'Category', nowrap: true },
+      { key: 'price', header: 'Price', mono: true, align: 'right', sortable: true, render: function (r) { return money(r.price); } },
+      { key: 'stock', header: 'Stock', render: function (r) { return h(F.Badge, { tone: STOCK[r.stock].tone, dot: true }, STOCK[r.stock].label); } },
+      { key: 'visible', header: 'In catalog', render: function (r) { return h(F.Switch, { 'aria-label': 'Show ' + r.name + ' in catalog', checked: r.visible, onChange: function (e) { setVisible(r.id, e.target.checked); } }); } },
+      { key: 'actions', header: h('span', { className: 'fhd-sr' }, 'Actions'), align: 'right', render: function (r) {
+          return h('div', { style: { display: 'inline-flex', gap: 'var(--space-1)' } },
+            h(F.Button, { size: 'sm', variant: 'ghost', icon: 'pencil-simple', 'aria-label': 'Edit ' + r.name }),
+            h(F.Button, { size: 'sm', variant: 'ghost', icon: 'trash', 'aria-label': 'Remove ' + r.name }));
+        } }
+    ];
+  }
+  function sortRows(rows, sort) {
+    if (!sort) return rows;
+    var dir = sort.direction === 'asc' ? 1 : -1;
+    return rows.slice().sort(function (x, y) { return (x[sort.key] > y[sort.key] ? 1 : x[sort.key] < y[sort.key] ? -1 : 0) * dir; });
+  }
+
+  var INQUIRY = {
+    name: 'Dana Whitfield', company: 'Northside Fitness Club', email: 'dana@northsidefitness.example', phone: '(555) 555-0142',
+    location: 'Springfield, IL', receivedAt: 'Today, 9:41 AM',
+    message: 'We are opening a second location in March and want two combo machines for the lobby. Can you send pricing and lead time? We would also like to stock protein drinks.',
+    interestedIn: ['Combo vending machine', 'Protein drinks']
+  };
+
+  var RETENTION = [
+    { label: 'Jun', value: 78 }, { label: 'Jul', value: 80 }, { label: 'Aug', value: 79 },
+    { label: 'Sep', value: 83 }, { label: 'Oct', value: 82 }, { label: 'Nov', value: 86 }
+  ];
+  var VIEWS = [
+    { id: 'all', label: 'All products', count: 42 }, { id: 'machines', label: 'Vending machines', count: 12 },
+    { id: 'supplements', label: 'Supplements', count: 18 }, { id: 'drinks', label: 'Drinks', count: 12 }, { id: 'hidden', label: 'Hidden', count: 3 }
+  ];
+  function App() {
+    var a = React.useState(PRODUCTS), rows = a[0], setRows = a[1];
+    var b = React.useState({ key: 'name', direction: 'asc' }), sort = b[0], setSort = b[1];
+    var c = React.useState('new'), status = c[0], setStatus = c[1];
+    return h('div', { className: 'app' },
+      h(F.Sidebar, { sections: SECTIONS, current: 'dashboard', user: OWNER }),
+      h('main', { className: 'main' },
+        h('div', { className: 'head' },
+          h('div', null, h('p', { className: 'eyebrow' }, 'Admin'), h('h1', { className: 'display-md' }, 'Dashboard')),
+          h('div', { className: 'row' },
+            h(F.Button, { iconRight: 'arrow-up-right' }, 'View storefront'),
+            h(F.Button, { variant: 'primary', iconLeft: 'plus' }, 'Add product'))),
+        h('div', { className: 'stats' },
+          h(F.StatCard, { label: 'Active clients', value: 128, icon: 'users-three', delta: { label: '+6', direction: 'up' }, helper: 'vs. last quarter' }),
+          h(F.StatCard, { label: 'Client retention', value: 86, unit: '%', highlight: true, delta: { label: '+4 pts', direction: 'up' }, helper: 'vs. last quarter' }),
+          h(F.StatCard, { label: 'New inquiries', value: 14, icon: 'tray', delta: { label: '-3', direction: 'down' }, helper: 'vs. last week' }),
+          h(F.StatCard, { label: 'Products live', value: 42, icon: 'package', helper: '3 hidden' })),
+        h('div', { className: 'cols' },
+          h(F.Panel, { title: 'Client retention', description: 'Share of last quarter’s clients still active, by month.', actions: h(F.Chip, { selected: true }, '6 months') },
+            h(F.BarChart, { data: RETENTION, unit: '%', showValues: true, height: 232, ariaLabel: 'Client retention by month, June to November.' })),
+          h('div', null,
+            h('div', { className: 'side-head' }, h('h2', { className: 'display-sm' }, 'Latest inquiry'), h(F.Badge, { tone: 'accent' }, '3 new')),
+            h(F.InquiryCard, Object.assign({}, INQUIRY, { status: status, onMarkRead: function () { setStatus('read'); }, onReply: function () { setStatus('replied'); } })))),
+        h(F.Panel, { flush: true, title: 'Products', description: 'What clients can see and ask about.', footer: 'Showing 5 of 42',
+            actions: h(F.Button, { size: 'sm', variant: 'primary', iconLeft: 'plus' }, 'Add product') },
+          h(F.Tabs, { items: VIEWS, defaultValue: 'all', ariaLabel: 'Product views' }),
+          h(F.DataTable, { caption: 'Products', columns: productColumns(rows, setRows), rows: sortRows(rows, sort), rowKey: function (r) { return r.id; }, sort: sort, onSort: setSort }))));
+  }
+  ReactDOM.createRoot(document.getElementById('root')).render(h(App));
+</script>
+</body>
+</html>

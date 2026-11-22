@@ -1,0 +1,29 @@
+<!-- @dsCard group="Dashboard" height=414 -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>StatCard preview</title>
+<style>
+  .demo { display: grid; gap: var(--space-5); padding: var(--space-6); }
+  .demo > * { min-width: 0; }
+  .row { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: var(--space-4); }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+  var F = window.FHD, h = React.createElement;
+  function App() {
+    return h('div', { className: 'demo' },
+      h('div', { className: 'grid' },
+        h(F.StatCard, { label: 'Active clients', value: 128, icon: 'users-three', delta: { label: '+6', direction: 'up' }, helper: 'vs. last quarter' }),
+        h(F.StatCard, { label: 'Client retention', value: 86, unit: '%', highlight: true, delta: { label: '+4 pts', direction: 'up' }, helper: 'vs. last quarter' }),
+        h(F.StatCard, { label: 'New inquiries', value: 14, icon: 'tray', delta: { label: '-3', direction: 'down' }, helper: 'vs. last week' }),
+        h(F.StatCard, { label: 'Products live', value: 42, tone: 'inverse', trend: [30, 31, 31, 34, 36, 36, 39, 40, 42], helper: '3 hidden' })));
+  }
+  ReactDOM.createRoot(document.getElementById('root')).render(h(App));
+</script>
+</body>
+</html>

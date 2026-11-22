@@ -1,0 +1,36 @@
+<!-- @dsCard group="Actions" height=260 -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Button preview</title>
+<style>
+  .demo { display: grid; gap: var(--space-5); padding: var(--space-6); }
+  .demo > * { min-width: 0; }
+  .row { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+  var F = window.FHD, h = React.createElement;
+  function App() {
+    return h('div', { className: 'demo' },
+      h('div', { className: 'row' },
+        h(F.Button, { variant: 'primary' }, 'Request a quote'),
+        h(F.Button, { variant: 'solid' }, 'Browse catalog'),
+        h(F.Button, null, 'Contact us'),
+        h(F.Button, { variant: 'ghost' }, 'Cancel'),
+        h(F.Button, { variant: 'danger', iconLeft: 'trash' }, 'Remove product')),
+      h('div', { className: 'row' },
+        h(F.Button, { variant: 'primary', size: 'lg', iconRight: 'arrow-right' }, 'Request a quote'),
+        h(F.Button, { variant: 'primary', iconLeft: 'plus' }, 'Add product'),
+        h(F.Button, { size: 'sm', iconLeft: 'pencil-simple' }, 'Edit'),
+        h(F.Button, { size: 'sm', icon: 'trash', 'aria-label': 'Remove product' }),
+        h(F.Button, { variant: 'solid', loading: true }, 'Saving'),
+        h(F.Button, { variant: 'primary', disabled: true }, 'Unavailable')));
+  }
+  ReactDOM.createRoot(document.getElementById('root')).render(h(App));
+</script>
+</body>
+</html>

@@ -1,0 +1,62 @@
+<!-- @dsCard group="Dashboard" height=420 -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>DataTable preview</title>
+<style>
+  .demo { display: grid; gap: var(--space-5); padding: var(--space-6); }
+  .demo > * { min-width: 0; }
+  .row { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+  var F = window.FHD, h = React.createElement;
+  var PRODUCTS = [
+    { id: 'vm-2041', name: 'Combo vending machine, 40 selections', sku: 'FHD-VM-2041', category: 'Vending machines', price: 4250, stock: 'in', visible: true },
+    { id: 'vm-2110', name: 'Glass-front drink cooler, single door', sku: 'FHD-VM-2110', category: 'Vending machines', price: 1890, stock: 'low', visible: true },
+    { id: 'su-0312', name: 'Whey protein isolate, vanilla, 2 lb', sku: 'FHD-SU-0312', category: 'Supplements', price: 39.99, stock: 'in', visible: true },
+    { id: 'su-0355', name: 'Pre-workout, fruit punch, 30 servings', sku: 'FHD-SU-0355', category: 'Supplements', price: 32, stock: 'out', visible: false },
+    { id: 'dr-0127', name: 'Electrolyte drink, citrus, case of 12', sku: 'FHD-DR-0127', category: 'Drinks', price: 21.5, stock: 'in', visible: true }
+  ];
+  var STOCK = { 'in': { tone: 'success', label: 'In stock' }, low: { tone: 'warning', label: 'Low stock' }, out: { tone: 'danger', label: 'Out of stock' } };
+  function money(n) { return '$' + n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+  function productColumns(rows, setRows) {
+    function setVisible(id, on) { setRows(rows.map(function (r) { return r.id === id ? Object.assign({}, r, { visible: on }) : r; })); }
+    return [
+      { key: 'name', header: 'Product', sortable: true, minWidth: 240, render: function (r) { return h('strong', null, r.name); } },
+      { key: 'sku', header: 'SKU', mono: true },
+      { key: 'category', header: 'Category', nowrap: true },
+      { key: 'price', header: 'Price', mono: true, align: 'right', sortable: true, render: function (r) { return money(r.price); } },
+      { key: 'stock', header: 'Stock', render: function (r) { return h(F.Badge, { tone: STOCK[r.stock].tone, dot: true }, STOCK[r.stock].label); } },
+      { key: 'visible', header: 'In catalog', render: function (r) { return h(F.Switch, { 'aria-label': 'Show ' + r.name + ' in catalog', checked: r.visible, onChange: function (e) { setVisible(r.id, e.target.checked); } }); } },
+      { key: 'actions', header: h('span', { className: 'fhd-sr' }, 'Actions'), align: 'right', render: function (r) {
+          return h('div', { style: { display: 'inline-flex', gap: 'var(--space-1)' } },
+            h(F.Button, { size: 'sm', variant: 'ghost', icon: 'pencil-simple', 'aria-label': 'Edit ' + r.name }),
+            h(F.Button, { size: 'sm', variant: 'ghost', icon: 'trash', 'aria-label': 'Remove ' + r.name }));
+        } }
+    ];
+  }
+  function sortRows(rows, sort) {
+    if (!sort) return rows;
+    var dir = sort.direction === 'asc' ? 1 : -1;
+    return rows.slice().sort(function (x, y) { return (x[sort.key] > y[sort.key] ? 1 : x[sort.key] < y[sort.key] ? -1 : 0) * dir; });
+  }
+
+  function App() {
+    var a = React.useState(PRODUCTS), rows = a[0], setRows = a[1];
+    var b = React.useState({ key: 'name', direction: 'asc' }), sort = b[0], setSort = b[1];
+    var c = React.useState(['su-0312']), picked = c[0], setPicked = c[1];
+    return h('div', { className: 'demo' },
+      h(F.DataTable, {
+        caption: 'Products', columns: productColumns(rows, setRows), rows: sortRows(rows, sort),
+        rowKey: function (r) { return r.id; }, sort: sort, onSort: setSort,
+        selectable: true, selectedKeys: picked, onSelectionChange: setPicked
+      }));
+  }
+  ReactDOM.createRoot(document.getElementById('root')).render(h(App));
+</script>
+</body>
+</html>

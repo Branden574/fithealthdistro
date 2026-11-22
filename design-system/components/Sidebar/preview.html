@@ -1,0 +1,38 @@
+<!-- @dsCard group="Navigation" height=728 -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Sidebar preview</title>
+<style>
+  .demo { display: grid; gap: var(--space-5); padding: var(--space-6); }
+  .demo > * { min-width: 0; }
+  .row { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); }
+  .frame { display: flex; gap: var(--space-6); height: 680px; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+  var F = window.FHD, h = React.createElement;
+  var SECTIONS = [
+    { items: [{ id: 'dashboard', label: 'Dashboard', icon: 'squares-four' }] },
+    { title: 'Catalog', items: [{ id: 'products', label: 'Products', icon: 'package', count: 42 }, { id: 'categories', label: 'Categories', icon: 'tag' }] },
+    { title: 'Clients', items: [{ id: 'inquiries', label: 'Inquiries', icon: 'tray', count: 3 }, { id: 'clients', label: 'Clients', icon: 'users-three' }, { id: 'retention', label: 'Retention', icon: 'chart-bar' }] },
+    { title: 'Website', items: [{ id: 'content', label: 'Site content', icon: 'text-aa' }] },
+    { title: 'Account', items: [{ id: 'settings', label: 'Settings', icon: 'gear' }] }
+  ];
+  var OWNER = { name: 'Ryan', role: 'Owner', onSignOut: function () {} };
+
+  function App() {
+    var state = React.useState('products'), at = state[0], setAt = state[1];
+    var user = OWNER;
+    return h('div', { className: 'demo' },
+      h('div', { className: 'frame' },
+        h(F.Sidebar, { sections: SECTIONS, current: at, onSelect: setAt, user: user }),
+        h(F.Sidebar, { theme: 'light', sections: SECTIONS, current: at, onSelect: setAt, user: user, style: { border: 'var(--border-thin) solid var(--line)' } })));
+  }
+  ReactDOM.createRoot(document.getElementById('root')).render(h(App));
+</script>
+</body>
+</html>
