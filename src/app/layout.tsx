@@ -5,7 +5,7 @@ import '../../design-system/tokens.css';
 import '../../design-system/components/bundle.css';
 import './globals.css';
 import { t } from '@/lib/copy';
-import { getPublishedCopy } from '@/lib/copy/published';
+import { getPublishedCopy } from '@/lib/content/storefront';
 
 export async function generateMetadata(): Promise<Metadata> {
   const copy = await getPublishedCopy();

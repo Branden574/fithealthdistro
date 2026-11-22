@@ -1,5 +1,5 @@
 import { Hero } from '@/components/storefront/Hero';
-import { getPublishedCopy } from '@/lib/copy/published';
+import { getPublishedCopy } from '@/lib/content/storefront';
 
 export default async function HomePage() {
   const copy = await getPublishedCopy();

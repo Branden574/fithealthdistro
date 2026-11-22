@@ -76,3 +76,23 @@ The same system is kept as a design system in Claude, named Fit Health Distribut
 ## Licenses
 
 Big Shoulders, Archivo and Chivo Mono are under the SIL Open Font License 1.1. Phosphor Icons are under the MIT license. The texts are in `design-system/licenses/`.
+
+## Develop
+
+Needs Node 22+, Docker and the Supabase CLI.
+
+```sh
+npm install
+npm run db:start      # local Supabase on ports 553xx; copy API_URL, PUBLISHABLE_KEY and SECRET_KEY from `supabase status -o env` into .env.local
+npm run db:reset      # applies supabase/migrations, loads supabase/seed.sql and the copy slots
+npm run dev
+```
+
+- `npm run db:test` runs the database tests in `supabase/tests` (access rules and the draft/publish lifecycle).
+- `npm run verify` type-checks, lints and builds. Run it, and `npm run db:test`, before every commit.
+- `npm run db:sync-copy` loads new slots from `design-system/site-copy.json`. Add `-- --linked` for the hosted project.
+- Environment variables are listed in `.env.example`. Real values live in `.env.local` and are never committed.
+
+### How content is published
+
+Visitors read only published tables (`live_copy`, `live_faqs`) and visible products. The owner edits drafts in `site_content` and `faqs`, which visitors cannot read. `publish_site()` copies every saved draft live in one transaction, so the copy and the FAQ change together, and the storefront cache is expired by tag.

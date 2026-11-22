@@ -3,7 +3,7 @@ import { RevealObserver } from '@/components/motion/RevealObserver';
 import { SiteFooter } from '@/components/storefront/SiteFooter';
 import { SiteNav } from '@/components/storefront/SiteNav';
 import { t } from '@/lib/copy';
-import { getPublishedCopy } from '@/lib/copy/published';
+import { getPublishedCopy } from '@/lib/content/storefront';
 
 export default async function StorefrontLayout({ children }: { children: ReactNode }) {
   const copy = await getPublishedCopy();

@@ -14,7 +14,7 @@
 
     { "key": "home.hero.eyebrow", "page": "Home", "section": "Hero", "label": "Eyebrow", "text": "Fit Health Distribution", "max": 40 },
     { "key": "home.hero.headline", "page": "Home", "section": "Hero", "label": "Headline", "text": "Stock what moves.", "max": 28, "hint": "Shown in capitals. Keep it to two or three words a line." },
-    { "key": "home.hero.highlight", "page": "Home", "section": "Hero", "label": "Highlighted words", "text": "moves.", "max": 14, "hint": "The part of the headline that takes the volt highlighter. It has to match the headline exactly. Leave it empty for none." },
+    { "key": "home.hero.highlight", "page": "Home", "section": "Hero", "label": "Highlighted words", "text": "moves.", "max": 14, "hint": "The part of the headline that takes the volt highlighter. It has to match the headline exactly. Leave it empty for none.", "optional": true },
     { "key": "home.hero.lead", "page": "Home", "section": "Hero", "label": "Intro paragraph", "text": "Vending machines, fitness supplements and drinks. Tell us what you need and we will send you a quote.", "max": 160, "multiline": true },
     { "key": "home.hero.primary", "page": "Home", "section": "Hero", "label": "Main button", "text": "Request a quote", "max": 22 },
     { "key": "home.hero.secondary", "page": "Home", "section": "Hero", "label": "Second button", "text": "Browse the catalog", "max": 22 },
@@ -25,6 +25,7 @@
     { "key": "catalog.card.cta", "page": "Catalog", "section": "Product card", "label": "Button", "text": "I'm interested", "max": 18 },
     { "key": "catalog.card.added", "page": "Catalog", "section": "Product card", "label": "Button, once pressed", "text": "Added", "max": 12 },
     { "key": "catalog.card.unavailable", "page": "Catalog", "section": "Product card", "label": "Button, out of stock", "text": "Unavailable", "max": 14 },
+    { "key": "catalog.card.sample", "page": "Catalog", "section": "Product card", "label": "Sample badge", "text": "Sample", "max": 12, "hint": "Marks the example products the site was set up with. Replace them before launch." },
     { "key": "catalog.empty.title", "page": "Catalog", "section": "No results", "label": "Title", "text": "No products match", "max": 28 },
     { "key": "catalog.empty.body", "page": "Catalog", "section": "No results", "label": "Message", "text": "Try another category, or tell us what you are looking for.", "max": 120 },
     { "key": "catalog.filter.label", "page": "Catalog", "section": "Filters", "label": "Filter group, for screen readers", "text": "Filter by category", "max": 40 },

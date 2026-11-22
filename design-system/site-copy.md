@@ -30,6 +30,7 @@ The text the storefront ships with, slot by slot. The admin’s Site content pag
 | `catalog.card.cta` | Catalog · Product card · Button | I'm interested | 18 |
 | `catalog.card.added` | Catalog · Product card · Button, once pressed | Added | 12 |
 | `catalog.card.unavailable` | Catalog · Product card · Button, out of stock | Unavailable | 14 |
+| `catalog.card.sample` | Catalog · Product card · Sample badge | Sample | 12 |
 | `catalog.empty.title` | Catalog · No results · Title | No products match | 28 |
 | `catalog.empty.body` | Catalog · No results · Message | Try another category, or tell us what you are looking for. | 120 |
 | `catalog.filter.label` | Catalog · Filters · Filter group, for screen readers | Filter by category | 40 |

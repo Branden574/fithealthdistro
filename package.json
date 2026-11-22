@@ -11,15 +11,26 @@
     "typecheck": "tsc --noEmit",
     "ds:build": "npm run build -w design-system",
     "ds:check": "npm run check -w design-system",
-    "verify": "npm run typecheck && npm run lint && npm run build"
+    "verify": "npm run typecheck && npm run lint && npm run build",
+    "db:start": "supabase start",
+    "db:stop": "supabase stop",
+    "db:reset": "supabase db reset && npm run db:sync-copy",
+    "db:test": "supabase test db",
+    "db:advisors": "supabase db advisors --local --fail-on warn",
+    "db:types": "supabase gen types typescript --local --schema public > src/lib/supabase/database.types.ts",
+    "db:sync-copy": "node scripts/db/sync-site-copy.mjs",
+    "db:allow-admin": "node scripts/db/allow-admin.mjs"
   },
   "engines": {
     "node": ">=22"
   },
   "dependencies": {
+    "@supabase/ssr": "0.12.7",
+    "@supabase/supabase-js": "2.119.2",
     "next": "^16.4.6",
     "react": "^19.3.1",
-    "react-dom": "^19.3.1"
+    "react-dom": "^19.3.1",
+    "server-only": "0.0.1"
   },
   "devDependencies": {
     "@types/node": "^22.20.5",
