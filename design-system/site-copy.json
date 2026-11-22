@@ -3,6 +3,14 @@
   "note": "The text the storefront ships with, one entry per editable slot. Seed the content store from this file. The admin's Site content page edits a copy of it, and Restore original puts these values back.",
   "slots": [
     { "key": "nav.cta", "page": "All pages", "section": "Navigation", "label": "Quote button", "text": "Request a quote", "max": 22 },
+    { "key": "nav.label", "page": "All pages", "section": "Navigation", "label": "Menu name for screen readers", "text": "Main", "max": 24 },
+    { "key": "nav.contact", "page": "All pages", "section": "Navigation", "label": "Contact link", "text": "Contact", "max": 16 },
+    { "key": "nav.faq", "page": "All pages", "section": "Navigation", "label": "FAQ link", "text": "FAQ", "max": 16, "hint": "Shown only while at least one question is published." },
+    { "key": "nav.menu.open", "page": "All pages", "section": "Navigation", "label": "Open menu, for screen readers", "text": "Open menu", "max": 24 },
+    { "key": "nav.menu.close", "page": "All pages", "section": "Navigation", "label": "Close menu, for screen readers", "text": "Close menu", "max": 24 },
+    { "key": "a11y.skip", "page": "All pages", "section": "Navigation", "label": "Skip link", "text": "Skip to content", "max": 32, "hint": "The first thing a keyboard reaches on every page." },
+    { "key": "meta.title", "page": "All pages", "section": "Search results", "label": "Site title", "text": "Fit Health Distribution", "max": 60, "hint": "Shown in the browser tab and in search results." },
+    { "key": "meta.description", "page": "All pages", "section": "Search results", "label": "Site description", "text": "Vending machines, fitness supplements and drinks. Tell us what you need and we will send you a quote.", "max": 160, "multiline": true, "hint": "The line under the title in search results." },
 
     { "key": "home.hero.eyebrow", "page": "Home", "section": "Hero", "label": "Eyebrow", "text": "Fit Health Distribution", "max": 40 },
     { "key": "home.hero.headline", "page": "Home", "section": "Hero", "label": "Headline", "text": "Stock what moves.", "max": 28, "hint": "Shown in capitals. Keep it to two or three words a line." },
@@ -19,6 +27,18 @@
     { "key": "catalog.card.unavailable", "page": "Catalog", "section": "Product card", "label": "Button, out of stock", "text": "Unavailable", "max": 14 },
     { "key": "catalog.empty.title", "page": "Catalog", "section": "No results", "label": "Title", "text": "No products match", "max": 28 },
     { "key": "catalog.empty.body", "page": "Catalog", "section": "No results", "label": "Message", "text": "Try another category, or tell us what you are looking for.", "max": 120 },
+    { "key": "catalog.filter.label", "page": "Catalog", "section": "Filters", "label": "Filter group, for screen readers", "text": "Filter by category", "max": 40 },
+    { "key": "catalog.card.added.announce", "page": "Catalog", "section": "Product card", "label": "Added, for screen readers", "text": "{name} is in your request.", "max": 80, "hint": "{name} is replaced with the product name." },
+    { "key": "catalog.card.removed.announce", "page": "Catalog", "section": "Product card", "label": "Removed, for screen readers", "text": "{name} is out of your request.", "max": 80, "hint": "{name} is replaced with the product name." },
+    { "key": "request.title", "page": "Contact", "section": "Your request", "label": "Title", "text": "Your request", "max": 28 },
+    { "key": "request.count.one", "page": "Contact", "section": "Your request", "label": "Count, one product", "text": "1 product in your request", "max": 40 },
+    { "key": "request.count.other", "page": "Contact", "section": "Your request", "label": "Count, several products", "text": "{count} products in your request", "max": 40, "hint": "{count} is replaced with the number." },
+    { "key": "request.empty", "page": "Contact", "section": "Your request", "label": "Nothing added yet", "text": "Nothing added yet. Press I'm interested on a product to add it here.", "max": 120 },
+    { "key": "request.remove", "page": "Contact", "section": "Your request", "label": "Remove button", "text": "Remove", "max": 16 },
+    { "key": "request.remove.label", "page": "Contact", "section": "Your request", "label": "Remove, for screen readers", "text": "Remove {name} from your request", "max": 60, "hint": "{name} is replaced with the product name." },
+    { "key": "faq.eyebrow", "page": "Home", "section": "FAQ", "label": "Eyebrow", "text": "Questions", "max": 24 },
+    { "key": "faq.heading", "page": "Home", "section": "FAQ", "label": "Heading", "text": "Asked often", "max": 28 },
+    { "key": "faq.body", "page": "Home", "section": "FAQ", "label": "Intro paragraph", "text": "Answers to what clients ask us most. Ask anything else in the form below.", "max": 160, "multiline": true },
 
     { "key": "contact.eyebrow", "page": "Contact", "section": "Heading", "label": "Eyebrow", "text": "Contact", "max": 24 },
     { "key": "contact.heading", "page": "Contact", "section": "Heading", "label": "Heading", "text": "Tell us what you need", "max": 28 },
@@ -37,7 +57,21 @@
     { "key": "contact.success.body", "page": "Contact", "section": "After sending", "label": "Confirmation message", "text": "Thanks. We will reply by email with a quote.", "max": 120 },
     { "key": "contact.error.title", "page": "Contact", "section": "After sending", "label": "Error title", "text": "Your request was not sent", "max": 40 },
     { "key": "contact.error.body", "page": "Contact", "section": "After sending", "label": "Error message", "text": "Check the fields marked below, then send it again.", "max": 120 },
+    { "key": "contact.form.interest.several", "page": "Contact", "section": "Form", "label": "Interest option, several", "text": "More than one", "max": 32 },
+    { "key": "contact.form.trap", "page": "Contact", "section": "Form", "label": "Spam trap label, never seen", "text": "Leave this field empty", "max": 40, "hint": "Hidden from visitors. It catches automated form fillers." },
+    { "key": "contact.form.submitting", "page": "Contact", "section": "Form", "label": "Send button, while sending", "text": "Sending", "max": 22 },
+    { "key": "contact.error.name", "page": "Contact", "section": "Errors", "label": "Name missing", "text": "Enter your name.", "max": 80 },
+    { "key": "contact.error.email", "page": "Contact", "section": "Errors", "label": "Email missing or wrong", "text": "Enter an email address we can reply to.", "max": 80 },
+    { "key": "contact.error.phone", "page": "Contact", "section": "Errors", "label": "Phone wrong", "text": "Enter a phone number, or leave it empty.", "max": 80 },
+    { "key": "contact.error.interest", "page": "Contact", "section": "Errors", "label": "Interest missing", "text": "Choose what you are interested in.", "max": 80 },
+    { "key": "contact.error.long", "page": "Contact", "section": "Errors", "label": "Field too long", "text": "Keep this to {max} characters or fewer.", "max": 80, "hint": "{max} is replaced with the limit." },
+    { "key": "contact.error.rate.title", "page": "Contact", "section": "Errors", "label": "Too many requests, title", "text": "Too many requests", "max": 40 },
+    { "key": "contact.error.rate.body", "page": "Contact", "section": "Errors", "label": "Too many requests, message", "text": "Wait a few minutes, then send it again.", "max": 120 },
+    { "key": "contact.error.server.title", "page": "Contact", "section": "Errors", "label": "Server problem, title", "text": "We could not send your request", "max": 40 },
+    { "key": "contact.error.server.body", "page": "Contact", "section": "Errors", "label": "Server problem, message", "text": "Nothing you did. Wait a minute, then send it again.", "max": 120 },
 
-    { "key": "footer.copyright", "page": "All pages", "section": "Footer", "label": "Copyright line", "text": "© {year} Fit Health Distribution", "max": 60, "hint": "{year} is replaced with the current year." }
+    { "key": "footer.copyright", "page": "All pages", "section": "Footer", "label": "Copyright line", "text": "© {year} Fit Health Distribution", "max": 60, "hint": "{year} is replaced with the current year." },
+    { "key": "footer.email", "page": "All pages", "section": "Footer", "label": "Email label", "text": "Email", "max": 16 },
+    { "key": "footer.phone", "page": "All pages", "section": "Footer", "label": "Phone label", "text": "Phone", "max": 16 }
   ]
 }

@@ -20,6 +20,7 @@ export { NavBar } from './NavBar';
 export { Sidebar } from './Sidebar';
 export { Panel } from './Panel';
 export { Dialog } from './Dialog';
+export { Accordion } from './Accordion';
 export { Icon } from './Icon';
 export { Wordmark } from './Wordmark';
 
@@ -43,6 +44,7 @@ export type { NavBarProps, NavLink } from './NavBar';
 export type { SidebarProps, SidebarItem, SidebarSection, SidebarUser } from './Sidebar';
 export type { PanelProps } from './Panel';
 export type { DialogProps } from './Dialog';
+export type { AccordionProps, AccordionItem } from './Accordion';
 export type { IconProps } from './Icon';
 export type { WordmarkProps } from './Wordmark';
 export type { IconName } from './icons';

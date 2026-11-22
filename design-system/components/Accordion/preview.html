@@ -1,0 +1,29 @@
+<!-- @dsCard group="Content" height=420 -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Accordion preview</title>
+<style>
+  .demo { display: grid; gap: var(--space-5); padding: var(--space-6); }
+  .demo > * { min-width: 0; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+  var F = window.FHD, h = React.createElement;
+  var ITEMS = [
+    { id: 'quote', title: 'How do I ask for a quote?', content: [
+      h('p', { key: 1 }, 'Press I’m interested on each product you want, then send the form at the bottom of the page.'),
+      h('p', { key: 2 }, 'We reply by email with a quote.')] },
+    { id: 'mix', title: 'Can I ask about machines and supplements together?', content: h('p', null, 'Yes. Add both to your request and say how you want them stocked.') },
+    { id: 'none', title: 'What if I do not see what I need?', content: h('p', null, 'Describe it in the message. We will tell you what we can source.') }
+  ];
+  function App() {
+    return h('div', { className: 'demo' }, h(F.Accordion, { items: ITEMS, defaultOpen: ['quote'] }));
+  }
+  ReactDOM.createRoot(document.getElementById('root')).render(h(App));
+</script>
+</body>
+</html>

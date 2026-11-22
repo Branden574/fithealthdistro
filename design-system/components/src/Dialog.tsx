@@ -31,6 +31,37 @@ export function Dialog(props: DialogProps) {
   const close = React.useRef(onClose);
   close.current = onClose;
   const titleId = React.useId();
+  // Stay mounted while the closing animation plays. Focus returns and input stops the moment `open` turns false.
+  const [mounted, setMounted] = React.useState(open);
+  const [closing, setClosing] = React.useState(false);
+  if (open && !mounted) setMounted(true);
+  if (open && closing) setClosing(false);
+  if (!open && mounted && !closing) setClosing(true);
+  const finish = React.useCallback(() => {
+    setMounted(false);
+    setClosing(false);
+  }, []);
+
+  React.useEffect(() => {
+    if (!closing) return;
+    // animationend is the normal path; this covers a browser that skips the animation.
+    const timer = window.setTimeout(finish, 400);
+    return () => window.clearTimeout(timer);
+  }, [closing, finish]);
+
+  React.useEffect(() => {
+    if (!open || contained) return;
+    // Keep the page behind still, without letting it jump sideways when the scrollbar goes.
+    const root = document.documentElement;
+    const gap = window.innerWidth - root.clientWidth;
+    const before = { overflow: root.style.overflow, paddingRight: document.body.style.paddingRight };
+    root.style.overflow = 'hidden';
+    if (gap > 0) document.body.style.paddingRight = `${gap}px`;
+    return () => {
+      root.style.overflow = before.overflow;
+      document.body.style.paddingRight = before.paddingRight;
+    };
+  }, [open, contained]);
 
   React.useEffect(() => {
     if (!open || contained) return;
@@ -65,12 +96,18 @@ export function Dialog(props: DialogProps) {
     };
   }, [open, contained]);
 
-  if (!open) return null;
+  if (!mounted) return null;
   return (
-    <div className={cx('fhd-dialog', size !== 'md' && `fhd-dialog--${size}`, contained && 'fhd-dialog--contained', className)}>
-      <div className="fhd-dialog__scrim" onClick={onClose} />
+    <div
+      className={cx('fhd-dialog', size !== 'md' && `fhd-dialog--${size}`, contained && 'fhd-dialog--contained', closing && 'fhd-dialog--closing', className)}
+      inert={closing || undefined}
+    >
+      <div className="fhd-dialog__scrim" onClick={closing ? undefined : onClose} />
       <div
         ref={panel}
+        onAnimationEnd={(event) => {
+          if (closing && event.target === event.currentTarget) finish();
+        }}
         className="fhd-dialog__panel"
         role="dialog"
         aria-modal={contained ? undefined : true}

@@ -370,6 +370,9 @@ export interface NavBarProps extends React.HTMLAttributes<HTMLElement> {
     onNavigate?: (link: NavLink, event: React.MouseEvent<HTMLAnchorElement>) => void;
     /** Accessible name of the navigation landmark. */
     label?: string;
+    /** Accessible names of the phone menu button, closed and open. */
+    openMenuLabel?: string;
+    closeMenuLabel?: string;
 }
 /** The storefront's top bar: wordmark, section links, and the quote button. Collapses to a menu under 760px. */
 export declare function NavBar(props: NavBarProps): React.JSX.Element;
@@ -451,6 +454,31 @@ export interface DialogProps {
 /** A modal for one decision or one short form: confirm a removal, add a product. */
 export declare function Dialog(props: DialogProps): React.JSX.Element | null;
 
+export interface AccordionItem {
+    id: string;
+    /** The question, sentence case. It is the button's label. */
+    title: React.ReactNode;
+    /** The answer. Pass paragraphs as <p> elements; they are spaced for you. */
+    content: React.ReactNode;
+}
+export interface AccordionProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange'> {
+    items: AccordionItem[];
+    /** Ids open at first. Leave `open` out to let the accordion keep its own state. */
+    defaultOpen?: string[];
+    /** Ids open now, for a controlled accordion. */
+    open?: string[];
+    /** Called with every id that is open after a question is pressed. */
+    onOpenChange?: (open: string[]) => void;
+    /** The heading level of each question, to fit the page outline. Default 3. */
+    headingLevel?: 2 | 3 | 4 | 5 | 6;
+}
+/**
+ * Questions that open to show their answers: the FAQ. Any number can be open at once, so visitors can compare.
+ * Each question is a real button with aria-expanded, tied to its answer. Until the accordion runs in the browser,
+ * every answer shows, so the text never depends on a script loading.
+ */
+export declare function Accordion(props: AccordionProps): React.JSX.Element;
+
 export interface IconProps extends Omit<React.SVGAttributes<SVGSVGElement>, 'name'> {
     /** Glyph name from the Phosphor Bold subset in `assets/Icons`. */
     name: IconName;
@@ -476,4 +504,4 @@ export interface WordmarkProps extends React.HTMLAttributes<HTMLSpanElement> {
 /** The company name set in Big Shoulders 900. Stands in for a logo until one exists. */
 export declare function Wordmark(props: WordmarkProps): React.JSX.Element;
 
-declare global { interface Window { FHD: { Button: typeof Button; Chip: typeof Chip; TextField: typeof TextField; Select: typeof Select; Checkbox: typeof Checkbox; Switch: typeof Switch; Badge: typeof Badge; Alert: typeof Alert; EmptyState: typeof EmptyState; ProductCard: typeof ProductCard; StatCard: typeof StatCard; BarChart: typeof BarChart; DataTable: typeof DataTable; InquiryCard: typeof InquiryCard; ContentField: typeof ContentField; Tabs: typeof Tabs; NavBar: typeof NavBar; Sidebar: typeof Sidebar; Panel: typeof Panel; Dialog: typeof Dialog; Icon: typeof Icon; Wordmark: typeof Wordmark } } }
+declare global { interface Window { FHD: { Button: typeof Button; Chip: typeof Chip; TextField: typeof TextField; Select: typeof Select; Checkbox: typeof Checkbox; Switch: typeof Switch; Badge: typeof Badge; Alert: typeof Alert; EmptyState: typeof EmptyState; ProductCard: typeof ProductCard; StatCard: typeof StatCard; BarChart: typeof BarChart; DataTable: typeof DataTable; InquiryCard: typeof InquiryCard; ContentField: typeof ContentField; Tabs: typeof Tabs; NavBar: typeof NavBar; Sidebar: typeof Sidebar; Panel: typeof Panel; Dialog: typeof Dialog; Accordion: typeof Accordion; Icon: typeof Icon; Wordmark: typeof Wordmark } } }

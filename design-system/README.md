@@ -47,7 +47,16 @@ Three families, shipped in `fonts/`.
 
 - Hover deepens or inverts: an outline Button fills with `ink`, volt goes to `accent-hover`, a card's edge goes from `line` to `ink`.
 - Disabled is the whole control at `opacity-disabled`, with no change of hue.
-- Motion is short and plain: 120ms ease-out on color and position. Nothing bounces and nothing moves on scroll. Honor `prefers-reduced-motion`.
+- Motion is short and plain, and every value is a `motion` token. Nothing bounces, nothing loops for decoration, and nothing is tied to the scroll position.
+  - Feedback (hover, press, selection) is `duration-feedback`, 120ms, on `ease-out`.
+  - Menus, dialogs, accordions and alerts arrive on `duration-overlay`, 200ms, with `ease-enter`, and leave quicker on `duration-exit`.
+  - The hero's lines rise `motion-shift` into place once on load (`fhd-enter`), staggered by `stagger-step` and never more than `stagger-max`.
+  - A section fades in the first time it scrolls into view (`data-reveal`). Fade only: it does not travel.
+  - A product photo may lean in to `motion-scale-media` on hover, inside the card's edge, on pointer devices only.
+- Move only opacity and transform. The one exception is an accordion answer opening, which has to change the layout.
+- Content is visible without motion. An entrance must never be the only way something becomes visible, and a control never waits for an animation to finish.
+- Keyboard focus shows at once, with no transition on the ring.
+- Honor `prefers-reduced-motion`: distance, scale and stagger fall to zero and entrances are skipped. State changes still show.
 
 ## Imagery
 
