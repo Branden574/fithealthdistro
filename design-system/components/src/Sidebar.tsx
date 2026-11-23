@@ -41,72 +41,110 @@ export interface SidebarProps extends Omit<React.HTMLAttributes<HTMLElement>, 'o
   theme?: 'dark' | 'light' | 'inherit';
   /** Accessible name of the navigation landmark. */
   label?: string;
+  /** Text of the button that opens the full list on a phone. */
+  menuLabel?: string;
 }
 
-/** The admin's navigation rail. The current page is a volt block. */
+/** The admin's navigation rail. The current page is a volt block. On a phone it folds into a Menu button. */
 export function Sidebar(props: SidebarProps) {
-  const { sections, current, onSelect, brand, user, theme = 'dark', label = 'Admin', className, ...rest } = props;
+  const { sections, current, onSelect, brand, user, theme = 'dark', label = 'Admin', menuLabel = 'Menu', className, ...rest } = props;
+  const [open, setOpen] = React.useState(false);
+  const panelId = React.useId();
+  const toggle = React.useRef<HTMLButtonElement>(null);
+  const select = (id: string, event: React.MouseEvent<HTMLElement>) => {
+    // Choosing a page closes the phone menu, so the page is not left under it.
+    setOpen(false);
+    if (onSelect) onSelect(id, event);
+  };
+  const onKeyDown = (event: React.KeyboardEvent<HTMLElement>) => {
+    if (rest.onKeyDown) rest.onKeyDown(event);
+    // Escape closes the open menu and puts focus back on its button.
+    if (event.key === 'Escape' && open) {
+      setOpen(false);
+      if (toggle.current) toggle.current.focus();
+    }
+  };
   return (
-    <aside className={cx('fhd-side', className)} data-theme={theme === 'inherit' ? undefined : theme} {...rest}>
-      <div className="fhd-side__brand">{brand ?? <Wordmark size={20} stacked />}</div>
-      <nav className="fhd-side__nav" aria-label={label}>
-        {sections.map((section, index) => (
-          <div key={section.title ?? index}>
-            {section.title ? <p className="fhd-side__title">{section.title}</p> : null}
-            <ul className="fhd-side__list">
-              {section.items.map((item) => {
-                const active = item.id === current;
-                const inner = (
-                  <>
-                    {item.icon ? <Icon name={item.icon} size={20} /> : null}
-                    <span className="fhd-side__label">{item.label}</span>
-                    {item.count != null ? <span className="fhd-side__count">{item.count}</span> : null}
-                  </>
-                );
-                return (
-                  <li key={item.id}>
-                    {item.href != null ? (
-                      <a
-                        className="fhd-side__item"
-                        href={item.href}
-                        aria-current={active ? 'page' : undefined}
-                        onClick={onSelect ? (event) => onSelect(item.id, event) : undefined}
-                      >
-                        {inner}
-                      </a>
-                    ) : (
-                      <button
-                        type="button"
-                        className="fhd-side__item"
-                        aria-current={active ? 'page' : undefined}
-                        onClick={onSelect ? (event) => onSelect(item.id, event) : undefined}
-                      >
-                        {inner}
-                      </button>
-                    )}
-                  </li>
-                );
-              })}
-            </ul>
+    <aside
+      className={cx('fhd-side', open && 'fhd-side--open', className)}
+      data-theme={theme === 'inherit' ? undefined : theme}
+      {...rest}
+      onKeyDown={onKeyDown}
+    >
+      <div className="fhd-side__brand">
+        {brand ?? <Wordmark size={20} stacked />}
+        <button
+          ref={toggle}
+          type="button"
+          className="fhd-side__toggle"
+          aria-expanded={open}
+          aria-controls={panelId}
+          onClick={() => setOpen(!open)}
+        >
+          <Icon name={open ? 'x' : 'list'} size={20} />
+          <span>{menuLabel}</span>
+        </button>
+      </div>
+      <div className="fhd-side__panel" id={panelId}>
+        <nav className="fhd-side__nav" aria-label={label}>
+          {sections.map((section, index) => (
+            <div key={section.title ?? index}>
+              {section.title ? <p className="fhd-side__title">{section.title}</p> : null}
+              <ul className="fhd-side__list">
+                {section.items.map((item) => {
+                  const active = item.id === current;
+                  const inner = (
+                    <>
+                      {item.icon ? <Icon name={item.icon} size={20} /> : null}
+                      <span className="fhd-side__label">{item.label}</span>
+                      {item.count != null ? <span className="fhd-side__count">{item.count}</span> : null}
+                    </>
+                  );
+                  return (
+                    <li key={item.id}>
+                      {item.href != null ? (
+                        <a
+                          className="fhd-side__item"
+                          href={item.href}
+                          aria-current={active ? 'page' : undefined}
+                          onClick={(event) => select(item.id, event)}
+                        >
+                          {inner}
+                        </a>
+                      ) : (
+                        <button
+                          type="button"
+                          className="fhd-side__item"
+                          aria-current={active ? 'page' : undefined}
+                          onClick={(event) => select(item.id, event)}
+                        >
+                          {inner}
+                        </button>
+                      )}
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          ))}
+        </nav>
+        {user ? (
+          <div className="fhd-side__user">
+            <span className="fhd-side__avatar" aria-hidden="true">
+              {initials(user.name)}
+            </span>
+            <span className="fhd-side__who">
+              <span className="fhd-side__name">{user.name}</span>
+              {user.role ? <span className="fhd-side__role">{user.role}</span> : null}
+            </span>
+            {user.onSignOut ? (
+              <button type="button" className="fhd-side__signout" aria-label="Sign out" onClick={user.onSignOut}>
+                <Icon name="sign-out" size={20} />
+              </button>
+            ) : null}
           </div>
-        ))}
-      </nav>
-      {user ? (
-        <div className="fhd-side__user">
-          <span className="fhd-side__avatar" aria-hidden="true">
-            {initials(user.name)}
-          </span>
-          <span className="fhd-side__who">
-            <span className="fhd-side__name">{user.name}</span>
-            {user.role ? <span className="fhd-side__role">{user.role}</span> : null}
-          </span>
-          {user.onSignOut ? (
-            <button type="button" className="fhd-side__signout" aria-label="Sign out" onClick={user.onSignOut}>
-              <Icon name="sign-out" size={20} />
-            </button>
-          ) : null}
-        </div>
-      ) : null}
+        ) : null}
+      </div>
     </aside>
   );
 }

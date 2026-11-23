@@ -22,7 +22,7 @@
     "db:allow-admin": "node scripts/db/allow-admin.mjs"
   },
   "engines": {
-    "node": ">=22"
+    "node": ">=22 <25"
   },
   "dependencies": {
     "@supabase/ssr": "0.12.7",

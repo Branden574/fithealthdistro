@@ -552,8 +552,10 @@ export interface SidebarProps extends Omit<React.HTMLAttributes<HTMLElement>, 'o
     theme?: 'dark' | 'light' | 'inherit';
     /** Accessible name of the navigation landmark. */
     label?: string;
+    /** Text of the button that opens the full list on a phone. */
+    menuLabel?: string;
 }
-/** The admin's navigation rail. The current page is a volt block. */
+/** The admin's navigation rail. The current page is a volt block. On a phone it folds into a Menu button. */
 export declare function Sidebar(props: SidebarProps): React.JSX.Element;
 
 export interface PanelProps extends Omit<React.HTMLAttributes<HTMLElement>, 'title'> {

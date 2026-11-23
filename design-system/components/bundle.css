@@ -365,6 +365,9 @@ textarea.fhd-field__input { height: auto; min-height: 96px; padding: var(--space
 /* ---------- Sidebar ---------- */
 .fhd-side { display: flex; flex-direction: column; width: var(--sidebar); max-width: 100%; height: 100%; min-height: 0; background: var(--bg); color: var(--ink); border-right: var(--border-thin) solid var(--line); }
 .fhd-side__brand { flex: none; display: flex; align-items: center; min-height: 72px; padding: 0 var(--space-5); border-bottom: var(--border-thin) solid var(--line); }
+.fhd-side__toggle { display: none; align-items: center; gap: var(--space-2); height: var(--control-md); margin-left: auto; padding: 0 var(--space-4); font-family: var(--font-sans); font-size: 14px; line-height: 20px; font-weight: 600; color: var(--ink); background: none; border: var(--border-thick) solid var(--ink); border-radius: var(--radius-sm); cursor: pointer; }
+.fhd-side__toggle:focus-visible { outline: none; box-shadow: var(--focus-ring); }
+.fhd-side__panel { flex: 1; min-height: 0; display: flex; flex-direction: column; }
 .fhd-side__nav { flex: 1; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; gap: var(--space-5); padding: var(--space-4) var(--space-3); }
 .fhd-side__title { margin: 0 0 var(--space-2); padding: 0 var(--space-3); font-size: 12px; line-height: 16px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-faint); }
 .fhd-side__list { display: flex; flex-direction: column; gap: var(--space-1); margin: 0; padding: 0; list-style: none; }
@@ -384,17 +387,18 @@ textarea.fhd-field__input { height: auto; min-height: 96px; padding: var(--space
 .fhd-side__signout { flex: none; display: inline-flex; align-items: center; justify-content: center; width: var(--control-sm); height: var(--control-sm); padding: 0; color: var(--ink-muted); background: none; border: 0; border-radius: var(--radius-sm); cursor: pointer; }
 .fhd-side__signout:hover { background: var(--line); color: var(--ink); }
 .fhd-side__signout:focus-visible { outline: none; box-shadow: var(--focus-ring); }
-/* Under 900px the rail becomes a bar across the top: the sections run in one row that scrolls sideways, without titles. */
+/* Under 900px the rail becomes a bar across the top: the brand and a Menu button. The button opens the full list, sections
+   and all, with the signed-in admin under it; the page moves down to make room rather than being covered. */
 @media (max-width: 899px) {
   .fhd-side { width: 100%; height: auto; border-right: 0; border-bottom: var(--border-thin) solid var(--line); }
-  .fhd-side__brand { min-height: 56px; }
-  .fhd-side__nav { flex-direction: row; gap: var(--space-1); overflow-x: auto; padding: var(--space-2) var(--space-3); }
-  .fhd-side__nav > div { display: contents; }
-  .fhd-side__title { display: none; }
-  .fhd-side__list { flex-direction: row; }
-  .fhd-side__item { width: auto; white-space: nowrap; }
-  .fhd-side__label { overflow: visible; }
-  .fhd-side__user { padding: var(--space-2) var(--space-5); }
+  .fhd-side__brand { min-height: 64px; padding: 0 var(--space-4); }
+  .fhd-side__toggle { display: inline-flex; }
+  .fhd-side__panel { display: none; opacity: 0; transform: translateY(calc(var(--motion-shift-sm) * -1)); transition: opacity var(--duration-exit) var(--ease-exit), transform var(--duration-exit) var(--ease-exit), display var(--duration-exit) allow-discrete; }
+  .fhd-side--open .fhd-side__panel { display: flex; opacity: 1; transform: none; transition-duration: var(--duration-overlay); transition-timing-function: var(--ease-enter); }
+  @starting-style { .fhd-side--open .fhd-side__panel { opacity: 0; transform: translateY(calc(var(--motion-shift-sm) * -1)); } }
+  .fhd-side__nav { overflow: visible; padding: var(--space-3); }
+  .fhd-side__item { height: var(--control-lg); }
+  .fhd-side__user { padding: var(--space-3) var(--space-4); }
 }
 
 /* ---------- EmptyState ---------- */
@@ -470,7 +474,7 @@ textarea.fhd-field__input { height: auto; min-height: 96px; padding: var(--space
 /* Movement, scale and stagger stop; state changes (color, open and closed, selected) still show at once. */
 @media (prefers-reduced-motion: reduce) {
   :root { --motion-shift: 0px; --motion-shift-sm: 0px; --motion-scale-media: 1; --stagger-step: 0ms; --stagger-max: 0ms; }
-  .fhd-btn, .fhd-chip, .fhd-tab, .fhd-field__control, .fhd-check__box, .fhd-switch__track, .fhd-switch__thumb, .fhd-product, .fhd-nav__link, .fhd-side__item, .fhd-accordion__mark, .fhd-accordion__mark .fhd-icon, .fhd-product__media img, .fhd-nav__menu { transition: none; }
+  .fhd-btn, .fhd-chip, .fhd-tab, .fhd-field__control, .fhd-check__box, .fhd-switch__track, .fhd-switch__thumb, .fhd-product, .fhd-nav__link, .fhd-side__item, .fhd-accordion__mark, .fhd-accordion__mark .fhd-icon, .fhd-product__media img, .fhd-nav__menu, .fhd-side__panel { transition: none; }
   .fhd-accordion[data-animate] .fhd-accordion__panel, .fhd-accordion[data-animate] .fhd-accordion__item[data-state="closed"] .fhd-accordion__panel { transition: none; }
   .fhd-btn:active { transform: none; }
   .fhd-chart__bar, .fhd-chart__lift, .fhd-chart__val { animation: none; transition: none; }
