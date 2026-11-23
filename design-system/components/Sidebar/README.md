@@ -22,6 +22,8 @@ A count says how many are waiting (new inquiries) or how many exist (products). 
 
 Give it the full height of the window: place it in the first column of a two-column grid, with the page in the second.
 
+Under 900px wide, stack the grid to one column with the Sidebar first. It becomes a bar across the top: the brand, then every item in one row that scrolls sideways (section titles drop out), then the signed-in admin.
+
 ## Don't
 
 - Don't nest items. Two levels are sections and items.

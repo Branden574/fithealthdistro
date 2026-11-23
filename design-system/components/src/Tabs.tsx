@@ -17,12 +17,21 @@ export interface TabsProps {
   onChange?: (id: string) => void;
   /** Names the tab list for screen readers: "Product views". */
   ariaLabel?: string;
+  /**
+   * The id of the element the tabs control. Give it `role="tabpanel"` and `aria-labelledby` set to the selected tab's id,
+   * which is `${panelId}-tab-${item.id}`. Every tab points at it, so one panel can show each view in turn.
+   */
+  panelId?: string;
   className?: string;
+}
+
+function tabId(panelId: string, itemId: string): string {
+  return `${panelId}-tab-${itemId}`;
 }
 
 /** Switches between views of one thing. The selected tab carries the heavy rule. */
 export function Tabs(props: TabsProps) {
-  const { items, value, defaultValue, onChange, ariaLabel, className } = props;
+  const { items, value, defaultValue, onChange, ariaLabel, panelId, className } = props;
   const [inner, setInner] = React.useState(defaultValue ?? (items[0] ? items[0].id : ''));
   const current = value ?? inner;
   const select = (id: string) => {
@@ -51,6 +60,8 @@ export function Tabs(props: TabsProps) {
             key={item.id}
             type="button"
             role="tab"
+            id={panelId ? tabId(panelId, item.id) : undefined}
+            aria-controls={panelId}
             className="fhd-tab"
             aria-selected={selected}
             tabIndex={selected ? 0 : -1}

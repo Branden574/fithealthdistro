@@ -1,38 +1,12 @@
 'use server';
 
-import { createHmac, randomUUID } from 'node:crypto';
-import { headers } from 'next/headers';
+import { randomUUID } from 'node:crypto';
 import { getCatalog } from '@/lib/catalog';
 import { t, type Copy } from '@/lib/copy';
 import { getPublishedCopy } from '@/lib/content/storefront';
+import { addressHash } from '@/lib/net/address';
 import { createServiceClient } from '@/lib/supabase/service';
 import { readContactForm, validateContact, type ContactInput, type ContactState, type ContactValues } from './form';
-
-/**
- * The key for hashing addresses. RATE_LIMIT_SALT when it is set; otherwise one derived from the server's secret key, so
- * the per-address limit never silently switches off (without it, one script could spend the site-wide cap for everyone).
- * Never a plain hash: every IPv4 address can be hashed in minutes, so an unkeyed hash would not hide anything.
- */
-function addressKey(): string | undefined {
-  const salt = process.env.RATE_LIMIT_SALT;
-  if (salt) return salt;
-  const secret = process.env.SUPABASE_SECRET_KEY;
-  return secret ? createHmac('sha256', secret).update('fhd.rate-limit.v1').digest('hex') : undefined;
-}
-
-/**
- * A keyed hash of the visitor's address, for the per-address rate limit. The address itself is never stored.
- * On Vercel these headers are set by the platform and cannot be supplied by the visitor. Behind another proxy, check
- * which header it sets before relying on this.
- */
-async function addressHash(): Promise<string | undefined> {
-  const salt = addressKey();
-  if (!salt) return undefined;
-  const list = await headers();
-  const first = (name: string) => list.get(name)?.split(',')[0]?.trim() || undefined;
-  const address = first('x-vercel-forwarded-for') ?? first('x-real-ip') ?? first('x-forwarded-for');
-  return address ? createHmac('sha256', salt).update(address).digest('hex') : undefined;
-}
 
 function valuesOf(input: ContactInput): ContactValues {
   return {

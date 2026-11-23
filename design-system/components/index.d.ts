@@ -241,6 +241,39 @@ export interface SpecListProps extends React.HTMLAttributes<HTMLDListElement> {
 /** A product's specifications on its page: one row per spec, label beside value, under a heavy rule. */
 export declare function SpecList(props: SpecListProps): React.JSX.Element | null;
 
+export interface PhotoFieldProps {
+    /** Names the photo: "Photo". */
+    label: React.ReactNode;
+    /** What to pick: "JPEG, PNG or WebP, up to 5 MB. Shown at 4:3." */
+    hint?: React.ReactNode;
+    /** What went wrong and how to fix it. Turns the frame's edge to `danger`. */
+    error?: React.ReactNode;
+    /** The photo shown now: the saved one, or the one just chosen. None shows an empty frame. */
+    src?: string | null;
+    /** Describes the photo for screen readers. Leave empty when the product's name is already beside it. */
+    alt?: string;
+    /** File types the picker offers: "image/jpeg,image/png,image/webp". */
+    accept?: string;
+    /** Called with the file the admin picked. Check its type and size here; the picker's filter is only a convenience. */
+    onSelect: (file: File) => void;
+    /** Shows a remove button while there is a photo. */
+    onRemove?: () => void;
+    /** While the photo uploads: the buttons wait and the frame says so. */
+    busy?: boolean;
+    /** The button with no photo yet. */
+    chooseLabel?: string;
+    /** The button once there is a photo. */
+    replaceLabel?: string;
+    removeLabel?: string;
+    /** Said while `busy`. */
+    busyLabel?: string;
+    disabled?: boolean;
+    id?: string;
+    className?: string;
+}
+/** Choose, replace or remove one photo, with a 4:3 preview in the same frame the catalog uses. */
+export declare function PhotoField(props: PhotoFieldProps): React.JSX.Element;
+
 export interface StatCardDelta {
     /** The change, written out: "+4 pts", "-12", "No change". */
     label: string;
@@ -407,6 +440,11 @@ export interface TabsProps {
     onChange?: (id: string) => void;
     /** Names the tab list for screen readers: "Product views". */
     ariaLabel?: string;
+    /**
+     * The id of the element the tabs control. Give it `role="tabpanel"` and `aria-labelledby` set to the selected tab's id,
+     * which is `${panelId}-tab-${item.id}`. Every tab points at it, so one panel can show each view in turn.
+     */
+    panelId?: string;
     className?: string;
 }
 /** Switches between views of one thing. The selected tab carries the heavy rule. */
@@ -566,4 +604,4 @@ export interface WordmarkProps extends React.HTMLAttributes<HTMLSpanElement> {
 /** The company name set in Big Shoulders 900. Stands in for a logo until one exists. */
 export declare function Wordmark(props: WordmarkProps): React.JSX.Element;
 
-declare global { interface Window { FHD: { Button: typeof Button; Chip: typeof Chip; TextField: typeof TextField; Select: typeof Select; Checkbox: typeof Checkbox; CheckboxGroup: typeof CheckboxGroup; Switch: typeof Switch; Badge: typeof Badge; Alert: typeof Alert; EmptyState: typeof EmptyState; ProductCard: typeof ProductCard; RequestList: typeof RequestList; SpecList: typeof SpecList; StatCard: typeof StatCard; BarChart: typeof BarChart; DataTable: typeof DataTable; InquiryCard: typeof InquiryCard; ContentField: typeof ContentField; Tabs: typeof Tabs; NavBar: typeof NavBar; Sidebar: typeof Sidebar; Panel: typeof Panel; Dialog: typeof Dialog; Accordion: typeof Accordion; Icon: typeof Icon; Wordmark: typeof Wordmark } } }
+declare global { interface Window { FHD: { Button: typeof Button; Chip: typeof Chip; TextField: typeof TextField; Select: typeof Select; Checkbox: typeof Checkbox; CheckboxGroup: typeof CheckboxGroup; Switch: typeof Switch; Badge: typeof Badge; Alert: typeof Alert; EmptyState: typeof EmptyState; ProductCard: typeof ProductCard; RequestList: typeof RequestList; SpecList: typeof SpecList; PhotoField: typeof PhotoField; StatCard: typeof StatCard; BarChart: typeof BarChart; DataTable: typeof DataTable; InquiryCard: typeof InquiryCard; ContentField: typeof ContentField; Tabs: typeof Tabs; NavBar: typeof NavBar; Sidebar: typeof Sidebar; Panel: typeof Panel; Dialog: typeof Dialog; Accordion: typeof Accordion; Icon: typeof Icon; Wordmark: typeof Wordmark } } }

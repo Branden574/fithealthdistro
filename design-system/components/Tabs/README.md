@@ -8,6 +8,8 @@ Labels are uppercase Big Shoulders in `ink-muted`; the selected one is `ink` ove
 
 `items` (`id`, `label`, optional `count`), and either `value` with `onChange` or `defaultValue`. You render what the selected tab shows. `ariaLabel` names the set. Left and right arrows, Home and End move between tabs.
 
+Give `panelId` and wrap what the tabs show in an element with that id, `role="tabpanel"` and `aria-labelledby` set to the selected tab's id, which is `` `${panelId}-tab-${selectedId}` ``. Screen readers then announce which view the panel is showing.
+
 ## Use it for
 
 - Views of the product list: All products, each category, Hidden.

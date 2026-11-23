@@ -94,6 +94,15 @@ textarea.fhd-field__input { height: auto; min-height: 96px; padding: var(--space
 .fhd-field--disabled .fhd-field__control, .fhd-field--disabled .fhd-field__input { cursor: not-allowed; }
 .fhd-field--disabled .fhd-field__control:hover { border-color: var(--line-strong); }
 
+/* ---------- PhotoField ---------- */
+.fhd-photo__body { display: flex; flex-wrap: wrap; align-items: flex-start; gap: var(--space-4); }
+.fhd-photo__frame { position: relative; flex: none; display: flex; align-items: center; justify-content: center; width: 160px; max-width: 100%; aspect-ratio: 4 / 3; overflow: hidden; background: var(--bg-subtle); color: var(--line-strong); border: var(--border-thin) solid var(--line-strong); border-radius: var(--radius-sm); }
+.fhd-photo__frame img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.fhd-photo__busy { position: absolute; inset: auto 0 0; padding: var(--space-1) var(--space-2); font-size: 12px; line-height: 16px; font-weight: 600; color: var(--bg); background: var(--ink); }
+.fhd-photo__side { flex: 1 1 180px; min-width: 0; display: flex; flex-direction: column; gap: var(--space-2); }
+.fhd-photo__actions { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.fhd-photo--error .fhd-photo__frame { border-color: var(--danger); box-shadow: inset 0 0 0 var(--border-thin) var(--danger); }
+
 /* ---------- Checkbox ---------- */
 .fhd-check { position: relative; display: inline-flex; align-items: flex-start; gap: var(--space-2); font-size: 14px; line-height: 20px; color: var(--ink); cursor: pointer; }
 .fhd-check__input { position: absolute; top: 0; left: 0; width: 20px; height: 20px; margin: 0; opacity: 0; cursor: inherit; }
@@ -366,6 +375,18 @@ textarea.fhd-field__input { height: auto; min-height: 96px; padding: var(--space
 .fhd-side__signout { flex: none; display: inline-flex; align-items: center; justify-content: center; width: var(--control-sm); height: var(--control-sm); padding: 0; color: var(--ink-muted); background: none; border: 0; border-radius: var(--radius-sm); cursor: pointer; }
 .fhd-side__signout:hover { background: var(--line); color: var(--ink); }
 .fhd-side__signout:focus-visible { outline: none; box-shadow: var(--focus-ring); }
+/* Under 900px the rail becomes a bar across the top: the sections run in one row that scrolls sideways, without titles. */
+@media (max-width: 899px) {
+  .fhd-side { width: 100%; height: auto; border-right: 0; border-bottom: var(--border-thin) solid var(--line); }
+  .fhd-side__brand { min-height: 56px; }
+  .fhd-side__nav { flex-direction: row; gap: var(--space-1); overflow-x: auto; padding: var(--space-2) var(--space-3); }
+  .fhd-side__nav > div { display: contents; }
+  .fhd-side__title { display: none; }
+  .fhd-side__list { flex-direction: row; }
+  .fhd-side__item { width: auto; white-space: nowrap; }
+  .fhd-side__label { overflow: visible; }
+  .fhd-side__user { padding: var(--space-2) var(--space-5); }
+}
 
 /* ---------- EmptyState ---------- */
 .fhd-empty { display: flex; flex-direction: column; align-items: center; gap: var(--space-3); padding: var(--space-10) var(--space-6); text-align: center; color: var(--ink); }
