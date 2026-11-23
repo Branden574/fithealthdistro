@@ -100,7 +100,7 @@
             h(F.BarChart, { data: RETENTION, unit: '%', showValues: true, height: 232, ariaLabel: 'Client retention by month, June to November.' })),
           h('div', null,
             h('div', { className: 'side-head' }, h('h2', { className: 'display-sm' }, 'Latest inquiry'), h(F.Badge, { tone: 'accent' }, '3 new')),
-            h(F.InquiryCard, Object.assign({}, INQUIRY, { status: status, onMarkRead: function () { setStatus('read'); }, onReply: function () { setStatus('replied'); } })))),
+            h(F.InquiryCard, Object.assign({}, INQUIRY, { status: status, onMarkRead: function () { setStatus('read'); }, onMarkReplied: function () { setStatus('replied'); }, replyHref: 'mailto:' + INQUIRY.email + '?subject=Your%20quote%20request' })))),
         h(F.Panel, { flush: true, title: 'Products', description: 'What clients can see and ask about.', footer: 'Showing 5 of 42',
             actions: h(F.Button, { size: 'sm', variant: 'primary', iconLeft: 'plus' }, 'Add product') },
           h(F.Tabs, { items: VIEWS, defaultValue: 'all', ariaLabel: 'Product views' }),

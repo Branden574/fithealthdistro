@@ -20,10 +20,21 @@ export interface InquiryCardProps extends Omit<React.HTMLAttributes<HTMLElement>
   interestedIn?: string[];
   /** `new` has not been opened, `read` has, `replied` is done. */
   status?: 'new' | 'read' | 'replied';
-  /** Called by the Reply button. Without it, Reply opens a mail to `email`. */
+  /** Called by the Reply button. Without it, Reply opens a mail to `email`. With `replyHref`, it runs as the mail opens. */
   onReply?: () => void;
+  /** Where Reply goes: a `mailto:` with a subject, say. Reply then stays a link, so the mail opens however `onReply` is set. */
+  replyHref?: string;
   /** Called by Mark as read, which shows only while `status` is `new`. */
   onMarkRead?: () => void;
+  /**
+   * Called by Mark as replied, which shows until `status` is `replied`. Opening a mail is not replying: the admin says so
+   * here once the mail has gone.
+   */
+  onMarkReplied?: () => void;
+  /** The inquiry's own page. The client's name links to it. */
+  href?: string;
+  /** While a change is being saved: the buttons wait. */
+  busy?: boolean;
   /** The footer line that tells the admin who can see this. Pass `false` to hide it. */
   privacyNote?: string | false;
 }
@@ -47,12 +58,18 @@ export function InquiryCard(props: InquiryCardProps) {
     interestedIn,
     status = 'new',
     onReply,
+    replyHref,
     onMarkRead,
+    onMarkReplied,
+    href,
+    busy = false,
     privacyNote = 'Visible to admins only',
     className,
     ...rest
   } = props;
   const state = STATUS[status];
+  // Every card has the same buttons; naming the client as their description tells them apart for screen readers.
+  const nameId = React.useId();
   return (
     <article className={cx('fhd-inquiry', status === 'new' && 'fhd-inquiry--new', className)} {...rest}>
       <header className="fhd-inquiry__head">
@@ -60,7 +77,7 @@ export function InquiryCard(props: InquiryCardProps) {
           {initials(name)}
         </span>
         <div className="fhd-inquiry__who">
-          <h3 className="fhd-inquiry__name">{name}</h3>
+          <h3 className="fhd-inquiry__name" id={nameId}>{href ? <a href={href}>{name}</a> : name}</h3>
           <p className="fhd-inquiry__meta">{[company, receivedAt].filter(Boolean).join(' · ')}</p>
         </div>
         <Badge tone={state.tone} dot={status === 'new'}>
@@ -109,16 +126,21 @@ export function InquiryCard(props: InquiryCardProps) {
         )}
         <div className="fhd-inquiry__actions">
           {status === 'new' && onMarkRead ? (
-            <Button size="sm" variant="outline" onClick={onMarkRead}>
+            <Button size="sm" variant="outline" onClick={onMarkRead} disabled={busy} aria-describedby={nameId}>
               Mark as read
             </Button>
           ) : null}
-          {onReply ? (
-            <Button size="sm" variant="primary" iconLeft="envelope-simple" onClick={onReply}>
+          {status !== 'replied' && onMarkReplied ? (
+            <Button size="sm" variant="outline" iconLeft="check" onClick={onMarkReplied} disabled={busy} aria-describedby={nameId}>
+              Mark as replied
+            </Button>
+          ) : null}
+          {replyHref || (!onReply && email) ? (
+            <Button size="sm" variant="primary" iconLeft="envelope-simple" href={replyHref ?? `mailto:${email}`} onClick={onReply} aria-describedby={nameId}>
               Reply
             </Button>
-          ) : email ? (
-            <Button size="sm" variant="primary" iconLeft="envelope-simple" href={`mailto:${email}`}>
+          ) : onReply ? (
+            <Button size="sm" variant="primary" iconLeft="envelope-simple" onClick={onReply} disabled={busy} aria-describedby={nameId}>
               Reply
             </Button>
           ) : null}

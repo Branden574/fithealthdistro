@@ -1,7 +1,10 @@
 import { redirect } from 'next/navigation';
-import { PRODUCTS_PATH } from '@/lib/admin/paths';
+import { INQUIRIES_PATH } from '@/lib/admin/paths';
 
-/** The dashboard comes in a later stage. Until then the admin opens on the products. */
+/** It only ever redirects, so there is no page here to check for instant navigation. */
+export const instant = false;
+
+/** The dashboard comes in a later stage. Until then the admin opens on the inquiries, where new work arrives. */
 export default function AdminHome() {
-  redirect(PRODUCTS_PATH);
+  redirect(INQUIRIES_PATH);
 }

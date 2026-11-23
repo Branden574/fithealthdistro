@@ -5,6 +5,7 @@ import { refresh, updateTag } from 'next/cache';
 import { CATALOG_TAG, productImageUrl } from '@/lib/catalog';
 import { adminClient } from './auth';
 import { readCategoryForm, type CategoryFormState } from './category-form';
+import type { QuickResult } from './results';
 import { isPhotoPathFor, PHOTO_MAX_BYTES, photoEnding, readProductForm, UUID, type ProductFormState } from './product-form';
 
 const BUCKET = 'product-photos';
@@ -85,8 +86,6 @@ export async function saveProduct(previous: ProductFormState, form: FormData): P
     return { status: 'error', attempt };
   }
 }
-
-export type QuickResult = { ok: true } | { ok: false; reason: 'signed-out' | 'missing' | 'error' };
 
 /** The In catalog switch: shows or hides a product at once, keeping everything about it. */
 export async function setProductVisible(id: string, visible: boolean): Promise<QuickResult> {

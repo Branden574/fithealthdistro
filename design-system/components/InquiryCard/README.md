@@ -11,6 +11,14 @@ It shows who wrote, how to reach them, what they wrote and which products they a
 - `interestedIn`: the names of the products they picked in the catalog.
 - `status`: `new` (an `ink` outline and a volt New badge), `read`, or `replied` (a `success` badge).
 - `onReply` and `onMarkRead`. Without `onReply`, Reply opens a mail to `email`. Mark as read shows only while the status is `new`.
+- `replyHref` to choose where Reply goes, such as a `mailto:` with a subject. Reply stays a link, and `onReply` runs as the mail opens (to mark the inquiry read, say).
+- `onMarkReplied` for Mark as replied, shown until the status is `replied`.
+- `href`: the inquiry's own page. The client's name links to it.
+- `busy` while a change is saving.
+
+## Replied means sent
+
+Opening a mail is not replying: the admin may close it unsent. Never set `replied` from Reply. Offer Mark as replied, and let the admin press it once the mail has gone.
 
 ## Privacy
 

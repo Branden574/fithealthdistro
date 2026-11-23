@@ -12,6 +12,8 @@ export interface Notice {
   body?: string;
   /** Offers to sign in again, back to this page. */
   signIn?: boolean;
+  /** One button beside the message: "Undo", "Mark as replied". */
+  action?: { label: string; run: () => void };
 }
 
 /** Why a quick change did not go through, worded for the admin. */
@@ -25,23 +27,46 @@ export function problemNotice(reason: 'signed-out' | 'missing' | 'error', thing:
 export function NoticeBar({ notice, onDismiss }: { notice: Notice | null; onDismiss: () => void }) {
   const pathname = usePathname();
   if (!notice) return null;
+  const action = notice.signIn ? (
+    <Button size="sm" variant="outline" href={`${SIGN_IN_PATH}?next=${encodeURIComponent(pathname)}`}>
+      Sign in
+    </Button>
+  ) : notice.action ? (
+    <Button size="sm" variant="outline" onClick={notice.action.run}>
+      {notice.action.label}
+    </Button>
+  ) : undefined;
   return (
-    <Alert
-      key={notice.id}
-      className="fhd-appear"
-      tone={notice.tone}
-      title={notice.title}
-      onDismiss={onDismiss}
-      dismissLabel="Dismiss"
-      action={
-        notice.signIn ? (
-          <Button size="sm" variant="outline" href={`${SIGN_IN_PATH}?next=${encodeURIComponent(pathname)}`}>
-            Sign in
-          </Button>
-        ) : undefined
-      }
-    >
+    <Alert key={notice.id} className="fhd-appear" tone={notice.tone} title={notice.title} onDismiss={onDismiss} dismissLabel="Dismiss" action={action}>
       {notice.body}
     </Alert>
   );
+}
+
+const LEFT = 'fhd_notice';
+type LeftNotice = Pick<Notice, 'tone' | 'title' | 'body'>;
+
+/** Leaves a notice for the next admin page to show: after a removal, which sends the admin back to the list. */
+export function leaveNotice(notice: LeftNotice) {
+  try {
+    window.sessionStorage.setItem(LEFT, JSON.stringify(notice));
+  } catch {
+    // Without storage the admin simply lands on the list, which no longer shows what was removed.
+  }
+}
+
+/** The notice the last page left, once. */
+export function takeNotice(): LeftNotice | null {
+  try {
+    const raw = window.sessionStorage.getItem(LEFT);
+    if (!raw) return null;
+    window.sessionStorage.removeItem(LEFT);
+    const value: unknown = JSON.parse(raw);
+    if (!value || typeof value !== 'object') return null;
+    const { tone, title, body } = value as Record<string, unknown>;
+    if ((tone !== 'success' && tone !== 'info') || typeof title !== 'string') return null;
+    return { tone, title: title.slice(0, 200), body: typeof body === 'string' ? body.slice(0, 400) : undefined };
+  } catch {
+    return null;
+  }
 }

@@ -259,6 +259,9 @@ textarea.fhd-field__input { height: auto; min-height: 96px; padding: var(--space
 .fhd-inquiry__avatar { flex: none; display: flex; align-items: center; justify-content: center; width: var(--control-md); height: var(--control-md); font-family: var(--font-display); font-optical-sizing: auto; font-size: 17px; font-weight: 800; letter-spacing: 0.04em; color: var(--bg); background: var(--ink); border-radius: var(--radius-sm); }
 .fhd-inquiry__who { flex: 1; min-width: 0; }
 .fhd-inquiry__name { margin: 0; font-family: var(--font-sans); font-size: 18px; line-height: 24px; font-weight: 700; }
+.fhd-inquiry__name a { color: inherit; text-decoration: underline; text-decoration-thickness: var(--border-thin); text-underline-offset: 3px; border-radius: var(--radius-sm); }
+.fhd-inquiry__name a:hover { text-decoration-thickness: var(--border-thick); }
+.fhd-inquiry__name a:focus-visible { outline: none; box-shadow: var(--focus-ring); }
 .fhd-inquiry__meta { margin: 0; font-size: 12px; line-height: 16px; font-weight: 500; color: var(--ink-muted); }
 .fhd-inquiry__contact { display: flex; flex-wrap: wrap; gap: var(--space-2) var(--space-5); margin: 0; padding: 0; list-style: none; font-family: var(--font-mono); font-size: 14px; line-height: 20px; font-weight: 500; }
 .fhd-inquiry__contact li { display: inline-flex; align-items: center; gap: var(--space-2); min-width: 0; }
@@ -270,7 +273,7 @@ textarea.fhd-field__input { height: auto; min-height: 96px; padding: var(--space
 .fhd-inquiry__interest-label { margin-right: var(--space-1); font-size: 12px; line-height: 16px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-muted); }
 .fhd-inquiry__foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-3); padding-top: var(--space-4); border-top: var(--border-thin) solid var(--line); }
 .fhd-inquiry__private { display: inline-flex; align-items: center; gap: var(--space-2); font-size: 12px; line-height: 16px; font-weight: 500; color: var(--ink-muted); }
-.fhd-inquiry__actions { display: flex; gap: var(--space-2); }
+.fhd-inquiry__actions { display: flex; flex-wrap: wrap; gap: var(--space-2); min-width: 0; }
 
 /* ---------- ContentField ---------- */
 .fhd-content { display: flex; flex-direction: column; gap: var(--space-2); min-width: 0; }

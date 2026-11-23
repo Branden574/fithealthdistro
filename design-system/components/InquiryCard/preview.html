@@ -26,7 +26,7 @@
     var state = React.useState('new'), status = state[0], setStatus = state[1];
     return h('div', { className: 'demo' },
       h('div', { className: 'grid' },
-        h(F.InquiryCard, Object.assign({}, INQUIRY, { status: status, onMarkRead: function () { setStatus('read'); }, onReply: function () { setStatus('replied'); } })),
+        h(F.InquiryCard, Object.assign({}, INQUIRY, { status: status, onMarkRead: function () { setStatus('read'); }, onMarkReplied: function () { setStatus('replied'); }, replyHref: 'mailto:' + INQUIRY.email + '?subject=Your%20quote%20request', onReply: function () { if (status === 'new') setStatus('read'); } })),
         h(F.InquiryCard, {
           name: 'Marcus Lee', company: 'Lee Family Karate', email: 'marcus@leekarate.example',
           receivedAt: 'Nov 19, 2:15 PM', status: 'replied',

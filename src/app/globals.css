@@ -167,6 +167,43 @@ main:focus, section[tabindex="-1"]:focus { outline: none; }
   .admin__main { padding: var(--space-6) var(--space-4); }
 }
 
+/* ---------- admin: inquiries and clients ---------- */
+.admin-link { color: var(--ink); font-weight: 600; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+.admin-link:hover { text-decoration-thickness: 2px; }
+.admin-link:focus-visible { outline: none; box-shadow: var(--focus-ring); border-radius: var(--radius-sm); }
+.admin-cell-stack { display: grid; gap: var(--space-1); }
+.admin-note { margin: 0; }
+.admin-stack { display: grid; justify-items: start; gap: var(--space-4); }
+.admin-tabs { padding: 0 var(--space-5); background: var(--bg-raised); border: var(--border-thin) solid var(--line); border-radius: var(--radius-md); }
+.admin-tabs > .fhd-tabs { border-bottom: 0; }
+.admin-inquiry-panel { display: grid; gap: var(--space-5); min-width: 0; }
+.admin-inquiry-panel[aria-busy="true"] { opacity: 0.6; transition: opacity var(--duration-feedback) var(--ease-out); }
+.admin-inquiries { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 400px), 1fr)); align-items: start; gap: var(--space-5); margin: 0; padding: 0; list-style: none; }
+.admin-inquiries > li { min-width: 0; }
+.admin-inquiry-empty { background: var(--bg-raised); border: var(--border-thin) solid var(--line); border-radius: var(--radius-md); }
+.admin-pager { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-3); width: 100%; }
+.admin-toolbar { padding: var(--space-4) var(--space-5); border-top: var(--border-thin) solid var(--line); }
+.admin-search { display: flex; align-items: flex-start; gap: var(--space-2); max-width: 480px; }
+.admin-search > .fhd-field { flex: 1 1 auto; min-width: 0; }
+.admin-search > .fhd-btn { flex: none; }
+.admin-detail { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); align-items: start; gap: var(--space-6); }
+.admin-detail__main, .admin-detail__side { display: grid; gap: var(--space-6); min-width: 0; }
+.admin-facts { display: grid; gap: var(--space-4); margin: 0; }
+.admin-facts > div { display: grid; gap: var(--space-1); }
+.admin-facts dt { color: var(--ink-muted); }
+.admin-facts dd { margin: 0; overflow-wrap: anywhere; }
+.admin-facts__lead { display: grid; gap: var(--space-1); margin: 0; }
+.admin-quote { margin: 0; padding-left: var(--space-4); border-left: var(--border-thick) solid var(--line-strong); white-space: pre-line; }
+.admin-detail__side .admin-note { margin-top: var(--space-4); }
+.admin-detail__side .admin-stack .admin-note { margin-top: 0; }
+/* A client's details come first in reading order, and sit on the right while there are two columns. */
+.admin-detail--side-first > .admin-detail__side { grid-column: 2; grid-row: 1; }
+.admin-detail--side-first > .admin-detail__main { grid-column: 1; grid-row: 1; }
+@media (max-width: 1099px) {
+  .admin-detail { grid-template-columns: minmax(0, 1fr); }
+  .admin-detail--side-first > .admin-detail__side, .admin-detail--side-first > .admin-detail__main { grid-column: auto; grid-row: auto; }
+}
+
 /* ---------- admin: forms in dialogs ---------- */
 .admin-form { display: grid; gap: var(--space-5); }
 .admin-form > div[tabindex="-1"]:focus { outline: none; }

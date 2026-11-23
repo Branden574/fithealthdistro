@@ -3,17 +3,19 @@
 import { Sidebar, type SidebarSection } from '@ds';
 import { usePathname, useRouter } from 'next/navigation';
 import { useTransition, type MouseEvent } from 'react';
-import { CATEGORIES_PATH, PRODUCTS_PATH } from '@/lib/admin/paths';
+import { CATEGORIES_PATH, CLIENTS_PATH, INQUIRIES_PATH, PRODUCTS_PATH } from '@/lib/admin/paths';
 import { signOut } from '@/lib/admin/session-actions';
 
 interface AdminSidebarProps {
   name: string;
   /** How many products exist, shown beside Products. */
   productCount?: number;
+  /** How many inquiries nobody has opened yet, shown beside Inquiries while there are any. */
+  newInquiries?: number;
 }
 
 /** The admin's rail. Items are real links; with the script they move between pages without a full reload. */
-export function AdminSidebar({ name, productCount }: AdminSidebarProps) {
+export function AdminSidebar({ name, productCount, newInquiries }: AdminSidebarProps) {
   const pathname = usePathname();
   const router = useRouter();
   const [, startTransition] = useTransition();
@@ -24,6 +26,13 @@ export function AdminSidebar({ name, productCount }: AdminSidebarProps) {
       items: [
         { id: PRODUCTS_PATH, label: 'Products', icon: 'package', href: PRODUCTS_PATH, count: productCount },
         { id: CATEGORIES_PATH, label: 'Categories', icon: 'tag', href: CATEGORIES_PATH },
+      ],
+    },
+    {
+      title: 'Clients',
+      items: [
+        { id: INQUIRIES_PATH, label: 'Inquiries', icon: 'tray', href: INQUIRIES_PATH, count: newInquiries ? newInquiries : undefined },
+        { id: CLIENTS_PATH, label: 'Clients', icon: 'users-three', href: CLIENTS_PATH },
       ],
     },
   ];

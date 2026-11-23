@@ -148,6 +148,7 @@ export type Database = {
           last_active_at: string
           marketing_opt_in: boolean
           marketing_opt_in_at: string | null
+          marketing_opt_out_at: string | null
           name: string
           phone: string
           updated_at: string
@@ -161,6 +162,7 @@ export type Database = {
           last_active_at?: string
           marketing_opt_in?: boolean
           marketing_opt_in_at?: string | null
+          marketing_opt_out_at?: string | null
           name: string
           phone?: string
           updated_at?: string
@@ -174,6 +176,7 @@ export type Database = {
           last_active_at?: string
           marketing_opt_in?: boolean
           marketing_opt_in_at?: string | null
+          marketing_opt_out_at?: string | null
           name?: string
           phone?: string
           updated_at?: string

@@ -387,10 +387,21 @@ export interface InquiryCardProps extends Omit<React.HTMLAttributes<HTMLElement>
     interestedIn?: string[];
     /** `new` has not been opened, `read` has, `replied` is done. */
     status?: 'new' | 'read' | 'replied';
-    /** Called by the Reply button. Without it, Reply opens a mail to `email`. */
+    /** Called by the Reply button. Without it, Reply opens a mail to `email`. With `replyHref`, it runs as the mail opens. */
     onReply?: () => void;
+    /** Where Reply goes: a `mailto:` with a subject, say. Reply then stays a link, so the mail opens however `onReply` is set. */
+    replyHref?: string;
     /** Called by Mark as read, which shows only while `status` is `new`. */
     onMarkRead?: () => void;
+    /**
+     * Called by Mark as replied, which shows until `status` is `replied`. Opening a mail is not replying: the admin says so
+     * here once the mail has gone.
+     */
+    onMarkReplied?: () => void;
+    /** The inquiry's own page. The client's name links to it. */
+    href?: string;
+    /** While a change is being saved: the buttons wait. */
+    busy?: boolean;
     /** The footer line that tells the admin who can see this. Pass `false` to hide it. */
     privacyNote?: string | false;
 }

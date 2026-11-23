@@ -3,6 +3,34 @@ export const ADMIN_HOME = '/admin';
 export const SIGN_IN_PATH = '/admin/sign-in';
 export const PRODUCTS_PATH = '/admin/products';
 export const CATEGORIES_PATH = '/admin/categories';
+export const INQUIRIES_PATH = '/admin/inquiries';
+export const CLIENTS_PATH = '/admin/clients';
+
+export const inquiryPath = (id: string) => `${INQUIRIES_PATH}/${id}`;
+
+/** One tab and page of the inquiry list: New is the plain address. */
+export function inquiriesPath(status: 'new' | 'read' | 'replied', page = 1): string {
+  const query = new URLSearchParams();
+  if (status !== 'new') query.set('status', status);
+  if (page > 1) query.set('page', String(page));
+  const search = query.toString();
+  return search ? `${INQUIRIES_PATH}?${search}` : INQUIRIES_PATH;
+}
+
+/** One page of the client list, with the search that narrowed it. */
+export function clientsPath(search = '', page = 1): string {
+  const query = new URLSearchParams();
+  if (search) query.set('q', search);
+  if (page > 1) query.set('page', String(page));
+  const value = query.toString();
+  return value ? `${CLIENTS_PATH}?${value}` : CLIENTS_PATH;
+}
+export const clientPath = (id: string) => `${CLIENTS_PATH}/${id}`;
+
+/** A page number from the address: 1 when it is missing or odd. */
+export function pageNumber(raw: unknown): number {
+  return typeof raw === 'string' && /^[1-9][0-9]{0,4}$/.test(raw) ? Number(raw) : 1;
+}
 
 /**
  * Where to go after signing in: an admin page the visitor was sent away from, or the admin home. Anything else (another
