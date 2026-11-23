@@ -240,15 +240,20 @@ export type Database = {
           email: string
           id: string
           interest: string
+          landing_path: string
           marketing_opt_in: boolean
           message: string
           name: string
           phone: string
           read_at: string | null
+          referrer_host: string
           replied_at: string | null
           status: Database["public"]["Enums"]["inquiry_status"]
           submission_id: string
           terms_accepted_at: string | null
+          utm_campaign: string
+          utm_medium: string
+          utm_source: string
         }
         Insert: {
           client_id: string
@@ -258,15 +263,20 @@ export type Database = {
           email: string
           id?: string
           interest: string
+          landing_path?: string
           marketing_opt_in?: boolean
           message?: string
           name: string
           phone?: string
           read_at?: string | null
+          referrer_host?: string
           replied_at?: string | null
           status?: Database["public"]["Enums"]["inquiry_status"]
           submission_id: string
           terms_accepted_at?: string | null
+          utm_campaign?: string
+          utm_medium?: string
+          utm_source?: string
         }
         Update: {
           client_id?: string
@@ -276,15 +286,20 @@ export type Database = {
           email?: string
           id?: string
           interest?: string
+          landing_path?: string
           marketing_opt_in?: boolean
           message?: string
           name?: string
           phone?: string
           read_at?: string | null
+          referrer_host?: string
           replied_at?: string | null
           status?: Database["public"]["Enums"]["inquiry_status"]
           submission_id?: string
           terms_accepted_at?: string | null
+          utm_campaign?: string
+          utm_medium?: string
+          utm_source?: string
         }
         Relationships: [
           {
@@ -602,6 +617,10 @@ export type Database = {
       find_user_id: { Args: { p_email: string }; Returns: string }
       get_draft_content: { Args: never; Returns: Json }
       get_storefront_content: { Args: never; Returns: Json }
+      inquiry_sources: {
+        Args: { p_now?: string; p_tz?: string }
+        Returns: Json
+      }
       publish_site: {
         Args: never
         Returns: {

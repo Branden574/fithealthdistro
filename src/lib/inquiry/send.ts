@@ -83,6 +83,13 @@ async function record(input: ContactInput, attempt: number): Promise<ContactStat
       marketing_opt_in: input.marketing,
       consent_text: consentText(copy, input.marketing),
       ip_hash: (await addressHash()) ?? null,
+      source: {
+        referrer_host: input.source.referrerHost,
+        utm_source: input.source.utmSource,
+        utm_medium: input.source.utmMedium,
+        utm_campaign: input.source.utmCampaign,
+        landing_path: input.source.landingPath,
+      },
     },
   });
 

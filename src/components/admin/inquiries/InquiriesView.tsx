@@ -1,13 +1,13 @@
 'use client';
 
-import { EmptyState, InquiryCard, Tabs } from '@ds';
+import { Button, EmptyState, InquiryCard, Tabs } from '@ds';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState, useTransition } from 'react';
 import { AdminPageHead } from '@/components/admin/AdminPageHead';
 import { Pager, useAdminLinks } from '@/components/admin/links';
 import { NoticeBar, takeNotice, type Notice } from '@/components/admin/Notice';
 import type { AdminInquiry, InquiryStatus } from '@/lib/admin/inquiries';
-import { inquiriesPath, inquiryPath } from '@/lib/admin/paths';
+import { exportPath, inquiriesPath, inquiryPath } from '@/lib/admin/paths';
 import { STATUS_LABELS, useInquiryStatus } from './useInquiryStatus';
 
 export type InquiryItem = AdminInquiry & { replyHref: string };
@@ -57,7 +57,15 @@ export function InquiriesView({ status, counts, inquiries, page, perPage, total 
 
   return (
     <>
-      <AdminPageHead eyebrow="Clients" title="Inquiries" />
+      <AdminPageHead
+        eyebrow="Clients"
+        title="Inquiries"
+        actions={
+          <Button iconLeft="download-simple" href={exportPath('inquiries')}>
+            Download CSV
+          </Button>
+        }
+      />
       <NoticeBar notice={notice} onDismiss={() => setNotice(null)} />
       <div className="admin-tabs">
         <Tabs

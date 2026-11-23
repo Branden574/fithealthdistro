@@ -1,4 +1,4 @@
-// Fit Health Distribution components. Generated from components/src by scripts/build.mjs.
+// Fit Health Distributing components. Generated from components/src by scripts/build.mjs.
 import type * as React from 'react';
 
 /** Tones shared by Badge, Alert and the deltas on a StatCard. */
@@ -8,7 +8,7 @@ export type Tone = 'neutral' | 'accent' | 'success' | 'warning' | 'danger' | 'in
 export type IconName = 'lockers' | 'jar-label' | 'drop' | 'package' | 'storefront' | 'shopping-cart-simple' | 'tag' | 'truck' | 'barbell' | 'pill' | 'lightning' | 'squares-four' | 'chart-bar' | 'chart-line-up' | 'users-three' | 'user' | 'tray' | 'envelope-simple' | 'chat-text' | 'phone' | 'map-pin' | 'buildings' | 'gear' | 'sign-out' | 'lock-simple' | 'shield-check' | 'bell' | 'text-aa' | 'plus' | 'minus' | 'x' | 'check' | 'trash' | 'pencil-simple' | 'magnifying-glass' | 'funnel-simple' | 'eye' | 'eye-slash' | 'copy-simple' | 'upload-simple' | 'download-simple' | 'arrows-clockwise' | 'dots-three' | 'list' | 'link-simple' | 'caret-down' | 'caret-up' | 'caret-left' | 'caret-right' | 'caret-up-down' | 'arrow-right' | 'arrow-left' | 'arrow-up-right' | 'trend-up' | 'trend-down' | 'warning' | 'warning-circle' | 'info' | 'check-circle' | 'x-circle' | 'clock' | 'calendar-blank' | 'image' | 'star' | 'currency-dollar' | 'receipt' | 'question';
 
 export interface ButtonProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'type'> {
-    /** `primary` is the volt fill: the one call to action in a view. `solid` is ink. `outline` (default) and `ghost` are for everything else. `danger` deletes. */
+    /** `primary` is the orange fill: the one call to action in a view. `solid` is ink. `outline` (default) and `ghost` are for everything else. `danger` deletes. */
     variant?: 'primary' | 'solid' | 'outline' | 'ghost' | 'danger';
     /** `sm` 32px for table rows and filters, `md` 40px, `lg` 48px for the storefront. */
     size?: 'sm' | 'md' | 'lg';
@@ -96,7 +96,7 @@ export interface CheckboxProps extends Omit<React.InputHTMLAttributes<HTMLInputE
     /** Error text under the box: a required agreement that was left empty. Announced with the box. */
     error?: React.ReactNode;
 }
-/** A checkbox. Checked is a volt fill with an ink tick. */
+/** A checkbox. Checked is an orange fill with an ink tick. */
 export declare function Checkbox(props: CheckboxProps): React.JSX.Element;
 
 export interface CheckboxGroupProps extends Omit<React.FieldsetHTMLAttributes<HTMLFieldSetElement>, 'title'> {
@@ -128,7 +128,7 @@ export interface SwitchProps extends Omit<React.InputHTMLAttributes<HTMLInputEle
 export declare function Switch(props: SwitchProps): React.JSX.Element;
 
 export interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
-    /** What the badge means. `accent` is volt (New, Featured), `solid` is ink, the rest are status tones. */
+    /** What the badge means. `accent` is orange (New, Featured), `solid` is ink, the rest are status tones. */
     tone?: Tone | 'solid';
     /** Leading status dot. */
     dot?: boolean;
@@ -300,13 +300,13 @@ export interface StatCardProps extends React.HTMLAttributes<HTMLDivElement> {
     delta?: StatCardDelta;
     /** Names the comparison period: "vs. previous 90 days". */
     helper?: string;
-    /** Puts the volt highlighter behind the number. One per row of cards. */
+    /** Puts the orange highlighter behind the number. One per row of cards. */
     highlight?: boolean;
     /** A glyph in the top corner. */
     icon?: IconName;
-    /** `inverse` paints the card near-black with a volt rule, to single out one figure on a light page. */
+    /** `inverse` paints the card near-black with an orange rule, to single out one figure on a light page. */
     tone?: 'default' | 'inverse';
-    /** Up to 12 recent values drawn as small bars; the last is volt. */
+    /** Up to 12 recent values drawn as small bars; the last is orange. */
     trend?: number[];
 }
 /** One business figure for the admin dashboard, with its change and comparison period. */
@@ -330,7 +330,7 @@ export interface BarChartProps extends Omit<React.HTMLAttributes<HTMLDivElement>
     format?: (value: number) => string;
     /** Read out for a null value. */
     emptyLabel?: string;
-    /** Index of the bar drawn in volt. Defaults to the last bar; pass -1 for none. */
+    /** Index of the bar drawn in orange. Defaults to the last bar; pass -1 for none. */
     highlight?: number;
     /** Plot height in px. */
     height?: number;
@@ -338,7 +338,7 @@ export interface BarChartProps extends Omit<React.HTMLAttributes<HTMLDivElement>
     showValues?: boolean;
 }
 /**
- * Vertical bars over time: retention by month, inquiries by week. Ink bars, one volt bar for the period that matters.
+ * Vertical bars over time: retention by month, inquiries by week. Ink bars, one orange bar for the period that matters.
  * Bars rise into place when the chart first shows and move to new heights when the data changes; under reduced motion
  * they are simply there.
  */
@@ -500,7 +500,7 @@ export interface NavBarProps extends React.HTMLAttributes<HTMLElement> {
     links: NavLink[];
     /** The `id` of the link for the page being shown. */
     current?: string;
-    /** Replaces the wordmark: a logo image once there is one. */
+    /** Replaces the logo. */
     brand?: React.ReactNode;
     brandHref?: string;
     /** Buttons at the far right. At most one of them `primary`. */
@@ -544,7 +544,7 @@ export interface SidebarProps extends Omit<React.HTMLAttributes<HTMLElement>, 'o
     /** The `id` of the item for the page being shown. */
     current?: string;
     onSelect?: (id: string, event: React.MouseEvent<HTMLElement>) => void;
-    /** Replaces the wordmark at the top. */
+    /** Replaces the logo at the top. */
     brand?: React.ReactNode;
     /** The signed-in admin, shown at the bottom. */
     user?: SidebarUser;
@@ -555,7 +555,7 @@ export interface SidebarProps extends Omit<React.HTMLAttributes<HTMLElement>, 'o
     /** Text of the button that opens the full list on a phone. */
     menuLabel?: string;
 }
-/** The admin's navigation rail. The current page is a volt block. On a phone it folds into a Menu button. */
+/** The admin's navigation rail. The current page is an orange block. On a phone it folds into a Menu button. */
 export declare function Sidebar(props: SidebarProps): React.JSX.Element;
 
 export interface PanelProps extends Omit<React.HTMLAttributes<HTMLElement>, 'title'> {
@@ -636,15 +636,18 @@ export declare namespace Icon {
     var names: IconName[];
 }
 
-export interface WordmarkProps extends React.HTMLAttributes<HTMLSpanElement> {
-    /** Two lines, FIT HEALTH over DISTRIBUTION, for narrow columns. */
-    stacked?: boolean;
-    /** Font size in px. 24 in the nav bar, 20 in the sidebar. */
-    size?: number;
-    /** The short form, FHD, for spots too tight for the full name. */
-    short?: boolean;
+export interface LogoProps extends Omit<React.SVGAttributes<SVGSVGElement>, 'height' | 'width'> {
+    /** `full`: FHD over FIT HEALTH over DISTRIBUTING, with its speed lines. `mark`: FHD alone, for spots too tight for the rest. */
+    variant?: 'full' | 'mark';
+    /** Height in px; the width follows the logo's proportions. 40 in the NavBar, 36 in the Sidebar, 64 in the footer. */
+    height?: number;
+    /** Its accessible name. Pass '' when the name is written out beside it, so it is not read twice. */
+    title?: string;
 }
-/** The company name set in Big Shoulders 900. Stands in for a logo until one exists. */
-export declare function Wordmark(props: WordmarkProps): React.JSX.Element;
+/**
+ * The company logo. The letters take the current text color, so they are ink on light and near-white on a dark band;
+ * the D and the speed lines are the brand orange.
+ */
+export declare function Logo(props: LogoProps): React.JSX.Element;
 
-declare global { interface Window { FHD: { Button: typeof Button; Chip: typeof Chip; TextField: typeof TextField; Select: typeof Select; Checkbox: typeof Checkbox; CheckboxGroup: typeof CheckboxGroup; Switch: typeof Switch; Badge: typeof Badge; Alert: typeof Alert; EmptyState: typeof EmptyState; ProductCard: typeof ProductCard; RequestList: typeof RequestList; SpecList: typeof SpecList; PhotoField: typeof PhotoField; StatCard: typeof StatCard; BarChart: typeof BarChart; CountUp: typeof CountUp; DataTable: typeof DataTable; InquiryCard: typeof InquiryCard; ContentField: typeof ContentField; Tabs: typeof Tabs; NavBar: typeof NavBar; Sidebar: typeof Sidebar; Panel: typeof Panel; Dialog: typeof Dialog; Accordion: typeof Accordion; Icon: typeof Icon; Wordmark: typeof Wordmark } } }
+declare global { interface Window { FHD: { Button: typeof Button; Chip: typeof Chip; TextField: typeof TextField; Select: typeof Select; Checkbox: typeof Checkbox; CheckboxGroup: typeof CheckboxGroup; Switch: typeof Switch; Badge: typeof Badge; Alert: typeof Alert; EmptyState: typeof EmptyState; ProductCard: typeof ProductCard; RequestList: typeof RequestList; SpecList: typeof SpecList; PhotoField: typeof PhotoField; StatCard: typeof StatCard; BarChart: typeof BarChart; CountUp: typeof CountUp; DataTable: typeof DataTable; InquiryCard: typeof InquiryCard; ContentField: typeof ContentField; Tabs: typeof Tabs; NavBar: typeof NavBar; Sidebar: typeof Sidebar; Panel: typeof Panel; Dialog: typeof Dialog; Accordion: typeof Accordion; Icon: typeof Icon; Logo: typeof Logo } } }

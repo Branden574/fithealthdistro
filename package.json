@@ -2,7 +2,7 @@
   "name": "fithealthdistro",
   "version": "0.1.0",
   "private": true,
-  "description": "Fit Health Distribution storefront and admin.",
+  "description": "Fit Health Distributing storefront and admin.",
   "scripts": {
     "dev": "next dev",
     "build": "next build",

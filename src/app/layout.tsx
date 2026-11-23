@@ -6,14 +6,19 @@ import '../../design-system/components/bundle.css';
 import './globals.css';
 import { t } from '@/lib/copy';
 import { getPublishedCopy } from '@/lib/content/storefront';
+import { shareMetadata, siteUrl } from '@/lib/site';
 
+// The icons are files beside this layout (icon.svg, favicon.ico, apple-icon.png), which Next.js links on its own.
 export async function generateMetadata(): Promise<Metadata> {
   const copy = await getPublishedCopy();
+  const title = t(copy, 'meta.title');
+  const description = t(copy, 'meta.description');
   return {
-    // Other pages give only their own name; the template around it is site copy ("{name} | Fit Health Distribution").
-    title: { default: t(copy, 'meta.title'), template: t(copy, 'meta.page.title', { name: '%s' }) },
-    description: t(copy, 'meta.description'),
-    icons: { icon: '/favicon.svg' },
+    metadataBase: siteUrl(),
+    // Other pages give only their own name; the template around it is site copy ("{name} | Fit Health Distributing").
+    title: { default: title, template: t(copy, 'meta.page.title', { name: '%s' }) },
+    description,
+    ...shareMetadata({ title, description }),
   };
 }
 

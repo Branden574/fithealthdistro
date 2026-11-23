@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import { LiveRegion } from '@/components/a11y/LiveRegion';
+import { VisitSource } from '@/components/storefront/VisitSource';
 
 /** Each storefront page renders its own shell from its own content (see StorefrontShell), so a draft preview can reuse it. */
 export default function StorefrontLayout({ children }: { children: ReactNode }) {
@@ -7,6 +8,7 @@ export default function StorefrontLayout({ children }: { children: ReactNode }) 
     <>
       {children}
       <LiveRegion />
+      <VisitSource />
     </>
   );
 }

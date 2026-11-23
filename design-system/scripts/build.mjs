@@ -1,4 +1,4 @@
-// Fit Health Distribution design system: build script.
+// Fit Health Distributing design system: build script.
 //   node scripts/build.mjs              tokens.css, site-copy.md, components/bundle.js, components/index.d.ts
 //   node scripts/build.mjs tokens       tokens.css only
 //   node scripts/build.mjs copy         site-copy.md only
@@ -230,7 +230,7 @@ async function buildComponents() {
     )
     .join('\n\n');
   const dts = [
-    `// Fit Health Distribution components. Generated from components/src by scripts/build.mjs.`,
+    `// Fit Health Distributing components. Generated from components/src by scripts/build.mjs.`,
     `import type * as React from 'react';`,
     '',
     body,

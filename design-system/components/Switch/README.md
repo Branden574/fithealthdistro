@@ -2,7 +2,7 @@
 
 An on/off setting that takes effect at once.
 
-Its main job here is "Show in catalog": hiding a product from clients without removing it. On is a volt track (`accent`) with an ink thumb and an `accent-ink` edge. Off is a `line-strong` track.
+Its main job here is "Show in catalog": hiding a product from clients without removing it. On is an orange track (`accent`) with an ink thumb and an `accent-ink` edge. Off is a `line-strong` track.
 
 ## You provide
 

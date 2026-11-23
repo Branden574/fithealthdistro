@@ -4,10 +4,12 @@ import { StorefrontShell } from '@/components/storefront/StorefrontShell';
 import { t } from '@/lib/copy';
 import { getStorefrontPageData } from '@/lib/content/page-data';
 import { getPublishedCopy } from '@/lib/content/storefront';
+import { shareMetadata } from '@/lib/site';
 
 export async function generateMetadata(): Promise<Metadata> {
   const copy = await getPublishedCopy();
-  return { title: t(copy, 'privacy.title') };
+  const title = t(copy, 'privacy.title');
+  return { title, ...shareMetadata({ title, path: '/privacy' }) };
 }
 
 /** The Privacy page. Its wording is site copy, edited and published in the admin like the rest of the site. */

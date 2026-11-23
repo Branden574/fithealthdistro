@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Icon } from './Icon';
 import { type IconName } from './icons';
-import { Wordmark } from './Wordmark';
+import { Logo } from './Logo';
 import { cx, initials } from './util';
 
 export interface SidebarItem {
@@ -33,7 +33,7 @@ export interface SidebarProps extends Omit<React.HTMLAttributes<HTMLElement>, 'o
   /** The `id` of the item for the page being shown. */
   current?: string;
   onSelect?: (id: string, event: React.MouseEvent<HTMLElement>) => void;
-  /** Replaces the wordmark at the top. */
+  /** Replaces the logo at the top. */
   brand?: React.ReactNode;
   /** The signed-in admin, shown at the bottom. */
   user?: SidebarUser;
@@ -45,7 +45,7 @@ export interface SidebarProps extends Omit<React.HTMLAttributes<HTMLElement>, 'o
   menuLabel?: string;
 }
 
-/** The admin's navigation rail. The current page is a volt block. On a phone it folds into a Menu button. */
+/** The admin's navigation rail. The current page is an orange block. On a phone it folds into a Menu button. */
 export function Sidebar(props: SidebarProps) {
   const { sections, current, onSelect, brand, user, theme = 'dark', label = 'Admin', menuLabel = 'Menu', className, ...rest } = props;
   const [open, setOpen] = React.useState(false);
@@ -72,7 +72,7 @@ export function Sidebar(props: SidebarProps) {
       onKeyDown={onKeyDown}
     >
       <div className="fhd-side__brand">
-        {brand ?? <Wordmark size={20} stacked />}
+        {brand ?? <Logo height={36} />}
         <button
           ref={toggle}
           type="button"

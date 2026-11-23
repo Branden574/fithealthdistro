@@ -6,6 +6,7 @@ import { useEffect, useRef, useState, useTransition } from 'react';
 import { AdminPageHead } from '@/components/admin/AdminPageHead';
 import { useAdminLinks } from '@/components/admin/links';
 import { leaveNotice, NoticeBar, problemNotice, type Notice } from '@/components/admin/Notice';
+import { channelOf, DIRECT } from '@/lib/admin/channels';
 import { removeInquiry, setInquiryStatus } from '@/lib/admin/inquiry-actions';
 import { clientPath, inquiriesPath } from '@/lib/admin/paths';
 import type { InquiryItem } from './InquiriesView';
@@ -24,6 +25,9 @@ export function InquiryDetail({ inquiry }: { inquiry: InquiryItem }) {
   const say = (next: Omit<Notice, 'id'>) => setNotice({ ...next, id: ++noticeId.current });
   const { shown, busy, move, replying } = useInquiryStatus([inquiry], say);
   const current = shown[0] ?? inquiry;
+  const { source } = inquiry;
+  const channel = channelOf(source);
+  const tags = [source.utmSource, source.utmMedium, source.utmCampaign].filter(Boolean);
 
   // Opening it is reading it. Once per inquiry, and never over Read or Replied.
   useEffect(() => {
@@ -114,6 +118,47 @@ export function InquiryDetail({ inquiry }: { inquiry: InquiryItem }) {
               </div>
             </dl>
             <p className="admin-muted admin-note">Whether they get marketing email now is on the client page: they may have said no since.</p>
+          </Panel>
+          <Panel title="How they found you" description="As their browser noted it when they arrived.">
+            <dl className="admin-facts">
+              <div>
+                <dt className="label">Came from</dt>
+                <dd>{channel.label}</dd>
+              </div>
+              {source.referrerHost && channel.label !== source.referrerHost ? (
+                <div>
+                  <dt className="label">Website</dt>
+                  <dd>{source.referrerHost}</dd>
+                </div>
+              ) : null}
+              {tags.length ? (
+                <div>
+                  <dt className="label">Link tags</dt>
+                  <dd>
+                    {[
+                      source.utmSource && `Source: ${source.utmSource}`,
+                      source.utmMedium && `Medium: ${source.utmMedium}`,
+                      source.utmCampaign && `Campaign: ${source.utmCampaign}`,
+                    ]
+                      .filter(Boolean)
+                      .join('. ')}
+                  </dd>
+                </div>
+              ) : null}
+              {source.landingPath ? (
+                <div>
+                  <dt className="label">First page</dt>
+                  <dd>
+                    <code className="data">{source.landingPath}</code>
+                  </dd>
+                </div>
+              ) : null}
+            </dl>
+            {channel.key === DIRECT.key ? (
+              <p className="admin-muted admin-note">
+                They typed the address or used a bookmark, their app did not say where the link came from, or the inquiry came in before this was noted.
+              </p>
+            ) : null}
           </Panel>
           <Panel title="History">
             <dl className="admin-facts">

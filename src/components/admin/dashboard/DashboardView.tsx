@@ -1,27 +1,33 @@
 'use client';
 
-import { Badge, BarChart, Button, CountUp, EmptyState, InquiryCard, Panel, StatCard, Tabs } from '@ds';
+import { Badge, BarChart, Button, CountUp, DataTable, EmptyState, InquiryCard, Panel, StatCard, Tabs, type DataTableColumn } from '@ds';
 import { useRef, useState } from 'react';
 import { AdminPageHead } from '@/components/admin/AdminPageHead';
 import { NoticeBar, type Notice } from '@/components/admin/Notice';
 import { useInquiryStatus } from '@/components/admin/inquiries/useInquiryStatus';
 import type { DashboardStats, SalesPeriod } from '@/lib/admin/dashboard';
 import { countChange, percentChange, pointsChange, rate } from '@/lib/admin/dashboard-math';
+import type { ChannelCount } from '@/lib/admin/channels';
 import type { AdminInquiry } from '@/lib/admin/inquiries';
 import { formatDollars, formatWholeDollars } from '@/lib/admin/money';
 import { CLIENTS_PATH, INQUIRIES_PATH, inquiryPath, RETENTION_PATH } from '@/lib/admin/paths';
+import type { SourcePeriod } from '@/lib/admin/sources';
 import { RETENTION_DEFINITION, RetentionChart } from './RetentionChart';
 
 interface DashboardViewProps {
   stats: DashboardStats;
   latest: (AdminInquiry & { replyHref: string }) | null;
+  sources: SourcePeriod[];
+  /** An example of a tagged link to this site, for the tip under the sources. */
+  tagLink: string;
 }
 
 const BOARD_ID = 'sales-board';
+const SOURCES_ID = 'sources-board';
 const percent = (value: number) => `${Math.round(value)}`;
 
 /** The admin's home. The figures show as they are; switching the sales period moves them to the new values. */
-export function DashboardView({ stats, latest }: DashboardViewProps) {
+export function DashboardView({ stats, latest, sources, tagLink }: DashboardViewProps) {
   const [notice, setNotice] = useState<Notice | null>(null);
   const noticeId = useRef(0);
   const say = (next: Omit<Notice, 'id'>) => setNotice({ ...next, id: ++noticeId.current });
@@ -127,6 +133,7 @@ export function DashboardView({ stats, latest }: DashboardViewProps) {
       </div>
 
       <SalesBoard periods={stats.periods} ordersRecorded={stats.ordersRecorded} />
+      <SourcesBoard periods={sources} ordersRecorded={stats.ordersRecorded} tagLink={tagLink} />
     </>
   );
 }
@@ -220,6 +227,85 @@ function SalesBoard({ periods, ordersRecorded }: { periods: SalesPeriod[]; order
             />
             <p className="admin-muted body-sm dash-chart__note">Each bar is {period.sliceDays} days, ending on the day under it.</p>
           </div>
+        </div>
+      </div>
+    </Panel>
+  );
+}
+
+/** Inquiries over the last 30, 60 or 90 days by the site or tagged link they arrived from, with how many converted. */
+function SourcesBoard({ periods, ordersRecorded, tagLink }: { periods: SourcePeriod[]; ordersRecorded: number; tagLink: string }) {
+  const [days, setDays] = useState(periods[0]?.days ?? 30);
+  const period = periods.find((item) => item.days === days) ?? periods[0];
+  if (!period) return null;
+
+  const share = (count: number) => `${rate(count, period.inquiries) ?? 0}%`;
+  const columns: Array<DataTableColumn<ChannelCount>> = [
+    {
+      key: 'label',
+      header: 'Source',
+      minWidth: 120,
+      render: (row) => (
+        <span className="dash-source">
+          <span>{row.label}</span>
+          {row.campaigns.length ? (
+            <span className="admin-muted body-sm">
+              {`${row.campaigns.length === 1 ? 'Campaign' : 'Campaigns'}: ${row.campaigns
+                .map((campaign) => (row.campaigns.length === 1 ? campaign.name : `${campaign.name} (${campaign.inquiries})`))
+                .join(', ')}`}
+            </span>
+          ) : null}
+        </span>
+      ),
+    },
+    { key: 'inquiries', header: 'Inquiries', align: 'right', mono: true, nowrap: true },
+    { key: 'share', header: 'Share', align: 'right', mono: true, nowrap: true, render: (row) => share(row.inquiries) },
+  ];
+  // Until orders are recorded, every source would read 0 converted, which says nothing.
+  if (ordersRecorded) {
+    columns.push({
+      key: 'converted',
+      header: 'Converted',
+      align: 'right',
+      mono: true,
+      nowrap: true,
+      render: (row) => `${row.converted} (${rate(row.converted, row.inquiries) ?? 0}%)`,
+    });
+  }
+
+  return (
+    <Panel
+      title="Where inquiries come from"
+      description={
+        ordersRecorded
+          ? 'The site or tagged link each visitor arrived from. Converted uses the same test as above.'
+          : 'The site or tagged link each visitor arrived from. Once you record orders, this shows which sources turn into sales.'
+      }
+    >
+      <div className="dash-board">
+        <Tabs
+          items={periods.map((item) => ({ id: String(item.days), label: `${item.days} days` }))}
+          value={String(days)}
+          onChange={(id) => setDays(Number(id))}
+          ariaLabel="Sources period"
+          panelId={SOURCES_ID}
+        />
+        <div id={SOURCES_ID} role="tabpanel" aria-labelledby={`${SOURCES_ID}-tab-${days}`} className="dash-board__panel">
+          {period.inquiries ? (
+            <DataTable
+              caption={`Inquiries from the last ${days} days by source`}
+              columns={columns}
+              rows={period.channels}
+              rowKey={(row) => row.key}
+              dense
+            />
+          ) : (
+            <EmptyState compact icon="tray" title={`No inquiries in the last ${days} days`} description="Each one shows here under the site or link it came from." />
+          )}
+          <p className="admin-muted body-sm">
+            To see a flyer, a post or an ad on its own line, add <code className="data">?utm_source=</code> and a name to the link you share, like{' '}
+            <code className="data">{tagLink}</code>. Inquiries from people without a site or tag to go on count as direct or unknown.
+          </p>
         </div>
       </div>
     </Panel>

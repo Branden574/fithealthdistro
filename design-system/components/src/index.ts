@@ -1,5 +1,5 @@
 'use client';
-// Fit Health Distribution components. The order here is the order the design system lists them in.
+// Fit Health Distributing components. The order here is the order the design system lists them in.
 export { Button } from './Button';
 export { Chip } from './Chip';
 export { TextField } from './TextField';
@@ -27,7 +27,7 @@ export { Panel } from './Panel';
 export { Dialog } from './Dialog';
 export { Accordion } from './Accordion';
 export { Icon } from './Icon';
-export { Wordmark } from './Wordmark';
+export { Logo } from './Logo';
 
 export type { ButtonProps } from './Button';
 export type { ChipProps } from './Chip';
@@ -56,6 +56,6 @@ export type { PanelProps } from './Panel';
 export type { DialogProps } from './Dialog';
 export type { AccordionProps, AccordionItem } from './Accordion';
 export type { IconProps } from './Icon';
-export type { WordmarkProps } from './Wordmark';
+export type { LogoProps } from './Logo';
 export type { IconName } from './icons';
 export type { Tone } from './types';

@@ -1,4 +1,4 @@
-import { Wordmark } from '@ds';
+import { Logo } from '@ds';
 import type { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 import { SignInForm } from '@/components/admin/SignInForm';
@@ -22,10 +22,10 @@ export default async function SignInPage({ searchParams }: SignInPageProps) {
   return (
     <main className="sign-in">
       <div className="sign-in__card">
-        <Wordmark size={24} />
+        <Logo height={48} />
         <div>
           <h1 className="display-md sign-in__title">Sign in</h1>
-          <p className="sign-in__lead">For Fit Health Distribution admins.</p>
+          <p className="sign-in__lead">For Fit Health Distributing admins.</p>
         </div>
         <SignInForm next={typeof next === 'string' ? destination : undefined} />
       </div>

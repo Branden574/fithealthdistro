@@ -10,12 +10,12 @@ The card carries a `border-heavy` `ink` rule along the top. The number is set in
 - `value`, and `unit` where there is one ("%").
 - `delta`: the change, written out ("+4 pts", "-3"), with a `direction`. Up is drawn as `success` and down as `danger`; set `tone` yourself when down is the good direction.
 - `helper`: the comparison period ("vs. last quarter"). A delta without one means nothing.
-- `trend`: up to 12 recent values, drawn as small bars with the last in volt.
+- `trend`: up to 12 recent values, drawn as small bars with the last in orange.
 
 ## Emphasis
 
-- `highlight` puts the volt highlighter behind the number. One per row: the figure the owner checks first, which here is client retention.
-- `tone="inverse"` paints the card near-black with a volt rule. At most one per page.
+- `highlight` puts the orange highlighter behind the number. One per row: the figure the owner checks first, which here is client retention.
+- `tone="inverse"` paints the card near-black with an orange rule. At most one per page.
 
 ## Layout
 

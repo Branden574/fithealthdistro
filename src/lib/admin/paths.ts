@@ -14,6 +14,9 @@ export const PREVIEW_PATH = '/preview';
 
 export const inquiryPath = (id: string) => `${INQUIRIES_PATH}/${id}`;
 
+/** A spreadsheet download. See app/admin/export. */
+export const exportPath = (kind: 'inquiries' | 'clients' | 'orders' | 'marketing') => `/admin/export/${kind}`;
+
 /** One tab and page of the inquiry list: New is the plain address. */
 export function inquiriesPath(status: 'new' | 'read' | 'replied', page = 1): string {
   const query = new URLSearchParams();

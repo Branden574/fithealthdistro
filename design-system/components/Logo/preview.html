@@ -1,0 +1,29 @@
+<!-- @dsCard group="Foundations" height=296 -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Logo preview</title>
+<style>
+  .demo { display: grid; gap: var(--space-5); padding: var(--space-6); }
+  .demo > * { min-width: 0; }
+  .tile { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-6); padding: var(--space-6); background: var(--bg); border: var(--border-thin) solid var(--line); border-radius: var(--radius-md); }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+  var F = window.FHD, h = React.createElement;
+  function tile(theme) {
+    return h('div', { className: 'tile', 'data-theme': theme },
+      h(F.Logo, { height: 64 }),
+      h(F.Logo, { height: 40 }),
+      h(F.Logo, { variant: 'mark', height: 32 }));
+  }
+  function App() {
+    return h('div', { className: 'demo' }, tile('light'), tile('dark'));
+  }
+  ReactDOM.createRoot(document.getElementById('root')).render(h(App));
+</script>
+</body>
+</html>

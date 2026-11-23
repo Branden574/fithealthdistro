@@ -23,13 +23,13 @@ export interface StatCardProps extends React.HTMLAttributes<HTMLDivElement> {
   delta?: StatCardDelta;
   /** Names the comparison period: "vs. previous 90 days". */
   helper?: string;
-  /** Puts the volt highlighter behind the number. One per row of cards. */
+  /** Puts the orange highlighter behind the number. One per row of cards. */
   highlight?: boolean;
   /** A glyph in the top corner. */
   icon?: IconName;
-  /** `inverse` paints the card near-black with a volt rule, to single out one figure on a light page. */
+  /** `inverse` paints the card near-black with an orange rule, to single out one figure on a light page. */
   tone?: 'default' | 'inverse';
-  /** Up to 12 recent values drawn as small bars; the last is volt. */
+  /** Up to 12 recent values drawn as small bars; the last is orange. */
   trend?: number[];
 }
 

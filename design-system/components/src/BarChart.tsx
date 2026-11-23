@@ -20,7 +20,7 @@ export interface BarChartProps extends Omit<React.HTMLAttributes<HTMLDivElement>
   format?: (value: number) => string;
   /** Read out for a null value. */
   emptyLabel?: string;
-  /** Index of the bar drawn in volt. Defaults to the last bar; pass -1 for none. */
+  /** Index of the bar drawn in orange. Defaults to the last bar; pass -1 for none. */
   highlight?: number;
   /** Plot height in px. */
   height?: number;
@@ -36,7 +36,7 @@ function cleanMax(value: number): number {
 }
 
 /**
- * Vertical bars over time: retention by month, inquiries by week. Ink bars, one volt bar for the period that matters.
+ * Vertical bars over time: retention by month, inquiries by week. Ink bars, one orange bar for the period that matters.
  * Bars rise into place when the chart first shows and move to new heights when the data changes; under reduced motion
  * they are simply there.
  */

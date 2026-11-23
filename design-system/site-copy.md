@@ -17,10 +17,10 @@ The text the storefront ships with, slot by slot. The admin’s Site content pag
 | `nav.menu.close` | All pages · Navigation · Close menu, for screen readers | Close menu | 24 |
 | `a11y.skip` | All pages · Navigation · Skip link | Skip to content | 32 |
 | `a11y.newtab` | All pages · Navigation · New tab, for screen readers | (opens in a new tab) | 32 |
-| `meta.title` | All pages · Search results · Site title | Fit Health Distribution | 60 |
+| `meta.title` | All pages · Search results · Site title | Fit Health Distributing | 60 |
 | `meta.description` | All pages · Search results · Site description | Vending machines, fitness supplements and drinks. Tell us what you need and we will send you a quote. | 160 |
-| `meta.page.title` | All pages · Search results · Title of other pages | {name} \| Fit Health Distribution | 80 |
-| `home.hero.eyebrow` | Home · Hero · Eyebrow | Fit Health Distribution | 40 |
+| `meta.page.title` | All pages · Search results · Title of other pages | {name} \| Fit Health Distributing | 80 |
+| `home.hero.eyebrow` | Home · Hero · Eyebrow | Fit Health Distributing | 40 |
 | `home.hero.headline` | Home · Hero · Headline | Stock what moves. | 28 |
 | `home.hero.highlight` | Home · Hero · Highlighted words | moves. | 14 |
 | `home.hero.lead` | Home · Hero · Intro paragraph | Vending machines, fitness supplements and drinks. Tell us what you need and we will send you a quote. | 160 |
@@ -42,6 +42,15 @@ The text the storefront ships with, slot by slot. The admin’s Site content pag
 | `catalog.results.other` | Catalog · Filters · Results, for screen readers | {count} products shown. | 40 |
 | `catalog.card.added.announce` | Catalog · Product card · Added, for screen readers | {name} is in your request. | 80 |
 | `catalog.card.removed.announce` | Catalog · Product card · Removed, for screen readers | {name} is out of your request. | 80 |
+| `catalog.search.label` | Catalog · Search · Search box, for screen readers | Search the catalog | 40 |
+| `catalog.search.placeholder` | Catalog · Search · Search box placeholder | Search by name, size or spec | 40 |
+| `catalog.search.clear` | Catalog · Search · Clear button | Clear search | 24 |
+| `catalog.search.none.title` | Catalog · Search · Nothing found, title | Nothing matches “{query}” | 60 |
+| `catalog.search.none.body` | Catalog · Search · Nothing found, message | Tell us what you are looking for and we will reply by email. | 120 |
+| `catalog.search.none.action` | Catalog · Search · Nothing found, button | Ask about it | 24 |
+| `catalog.search.ask.message` | Catalog · Search · Message it starts | I am looking for: {query} | 80 |
+| `catalog.search.elsewhere.title` | Catalog · Search · Not in this category, title | Nothing in {category} matches “{query}” | 80 |
+| `catalog.search.elsewhere.action` | Catalog · Search · Not in this category, button | Search all categories | 30 |
 | `request.title` | Contact · Your request · Title | Your request | 28 |
 | `request.count.one` | Contact · Your request · Count, one product | 1 product in your request | 40 |
 | `request.count.other` | Contact · Your request · Count, several products | {count} products in your request | 40 |
@@ -67,7 +76,7 @@ The text the storefront ships with, slot by slot. The admin’s Site content pag
 | `contact.form.terms` | Contact · Form · Terms agreement | I agree to the {terms} and the {privacy}. | 120 |
 | `contact.form.terms.link` | Contact · Form · Terms link | Terms of Use | 32 |
 | `contact.form.privacy.link` | Contact · Form · Privacy link | Privacy Policy | 32 |
-| `contact.form.marketing` | Contact · Form · Marketing email opt-in | Email me about products and offers from Fit Health Distribution. | 120 |
+| `contact.form.marketing` | Contact · Form · Marketing email opt-in | Email me about products and offers from Fit Health Distributing. | 120 |
 | `contact.form.marketing.hint` | Contact · Form · Marketing opt-in note | Optional. You can stop these emails at any time. | 80 |
 | `contact.form.submit` | Contact · Form · Send button | Send request | 22 |
 | `contact.success.title` | Contact · After sending · Confirmation title | Request sent | 28 |
@@ -86,7 +95,7 @@ The text the storefront ships with, slot by slot. The admin’s Site content pag
 | `contact.error.rate.body` | Contact · Errors · Too many requests, message | Wait a few minutes, then send it again. | 120 |
 | `contact.error.server.title` | Contact · Errors · Server problem, title | We could not send your request | 40 |
 | `contact.error.server.body` | Contact · Errors · Server problem, message | Nothing you did. Wait a minute, then send it again. | 120 |
-| `footer.copyright` | All pages · Footer · Copyright line | © {year} Fit Health Distribution | 60 |
+| `footer.copyright` | All pages · Footer · Copyright line | © {year} Fit Health Distributing | 60 |
 | `footer.email` | All pages · Footer · Email label | Email | 16 |
 | `footer.phone` | All pages · Footer · Phone label | Phone | 16 |
 | `footer.legal.label` | All pages · Footer · Legal links, for screen readers | Legal | 24 |
@@ -99,7 +108,7 @@ The text the storefront ships with, slot by slot. The admin’s Site content pag
 | `product.missing.body` | Product · Not found · Message | This product is no longer listed. Browse what we have now. | 120 |
 | `terms.title` | Terms · Page · Title | Terms of Use | 40 |
 | `terms.updated` | Terms · Page · Last updated | Last updated November 22, 2026 | 60 |
-| `terms.intro` | Terms · Page · Introduction | These terms cover your use of the Fit Health Distribution website. By using the site or sending us a request, you agree to them. If you do not agree, do not use the site. | 600 |
+| `terms.intro` | Terms · Page · Introduction | These terms cover your use of the Fit Health Distributing website. By using the site or sending us a request, you agree to them. If you do not agree, do not use the site. | 600 |
 | `terms.s1.heading` | Terms · Part 1 · Heading | Quotes, not orders | 60 |
 | `terms.s1.body` | Terms · Part 1 · Text | Nothing on this site is an offer to sell, and sending a request does not place an order. A request asks us for a quote. It does not commit you to buy or us to supply.
 
@@ -111,7 +120,7 @@ We describe supplements and drinks by what they contain. Nothing on this site is
 | `terms.s3.heading` | Terms · Part 3 · Heading | Using the site | 60 |
 | `terms.s3.body` | Terms · Part 3 · Text | Use the site lawfully and give us accurate details. Do not try to disrupt the site, get around its security, collect data from it automatically, or send requests in someone else's name. | 2000 |
 | `terms.s4.heading` | Terms · Part 4 · Heading | Our content | 60 |
-| `terms.s4.body` | Terms · Part 4 · Text | The text, photos and design of this site belong to Fit Health Distribution or are used with permission. Do not copy or reuse them commercially without our written permission. | 2000 |
+| `terms.s4.body` | Terms · Part 4 · Text | The text, photos and design of this site belong to Fit Health Distributing or are used with permission. Do not copy or reuse them commercially without our written permission. | 2000 |
 | `terms.s5.heading` | Terms · Part 5 · Heading | Liability | 60 |
 | `terms.s5.body` | Terms · Part 5 · Text | The site is provided as it is and as available. To the extent the law allows, we are not liable for any loss that comes from relying on information on the site or from the site being unavailable. Nothing in these terms limits any right you have by law. | 2000 |
 | `terms.s6.heading` | Terms · Part 6 · Heading | Your details | 60 |
@@ -122,9 +131,9 @@ We describe supplements and drinks by what they contain. Nothing on this site is
 | `terms.s8.body` | Terms · Part 8 · Text | Questions about these terms? Use the contact details at the bottom of this page, or send us a message through the form on our home page. | 2000 |
 | `privacy.title` | Privacy · Page · Title | Privacy Policy | 40 |
 | `privacy.updated` | Privacy · Page · Last updated | Last updated November 22, 2026 | 60 |
-| `privacy.intro` | Privacy · Page · Introduction | This policy explains what Fit Health Distribution collects through this website, why we collect it, and the choices you have. | 600 |
+| `privacy.intro` | Privacy · Page · Introduction | This policy explains what Fit Health Distributing collects through this website, why we collect it, and the choices you have. | 600 |
 | `privacy.s1.heading` | Privacy · Part 1 · Heading | What we collect | 60 |
-| `privacy.s1.body` | Privacy · Part 1 · Text | When you send a request we receive your name, your email address and what you are interested in, plus anything else you choose to give us: your company, phone number, message and the products you picked. We also record that you agreed to our terms and whether you asked for marketing emails, with the time and the wording you saw.
+| `privacy.s1.body` | Privacy · Part 1 · Text | When you send a request we receive your name, your email address and what you are interested in, plus anything else you choose to give us: your company, phone number, message and the products you picked. We also record that you agreed to our terms and whether you asked for marketing emails, with the time and the wording you saw. We also note how you found the site: the website that sent you here, if any, the tags in the link you followed, such as the campaign or ad it came from, and the first page you opened.
 
 To block spam we keep a scrambled code made from your internet address, not the address itself, and use it only to stop repeated requests. | 2000 |
 | `privacy.s2.heading` | Privacy · Part 2 · Heading | How we use it | 60 |
@@ -136,7 +145,7 @@ If you tick the box for marketing emails, we may also email you about our produc
 
 Service providers run the site for us and handle data only on our behalf. Vercel hosts the website and, like any web host, keeps short-lived technical logs of visits, including internet addresses, to run and protect it. Supabase stores our database in the United States. | 2000 |
 | `privacy.s4.heading` | Privacy · Part 4 · Heading | Cookies and your browser | 60 |
-| `privacy.s4.body` | Privacy · Part 4 · Text | This site does not use advertising or tracking cookies. The products you pick are kept in your own browser, not on our servers, so they are still there when you come back. Sending your request clears them. | 2000 |
+| `privacy.s4.body` | Privacy · Part 4 · Text | This site does not use advertising or tracking cookies. The products you pick are kept in your own browser, not on our servers, so they are still there when you come back. Sending your request clears them. How you found the site is kept in your browser too, only until you close the tab, and reaches us only with a request. | 2000 |
 | `privacy.s5.heading` | Privacy · Part 5 · Heading | How long we keep it | 60 |
 | `privacy.s5.body` | Privacy · Part 5 · Text | We keep your request and contact details for as long as we need them to work with you and to keep our business records. Ask us and we will delete them, unless the law requires us to keep them. | 2000 |
 | `privacy.s6.heading` | Privacy · Part 6 · Heading | Your choices | 60 |

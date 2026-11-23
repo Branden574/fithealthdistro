@@ -14,7 +14,7 @@ One or two words of status. The word carries the meaning; the tone backs it up.
 | `neutral` (default) | Plain facts | Hidden, Read, a product name |
 | `solid` | Emphasis with no status | Admin |
 
-The status tones are a soft fill with the status color as text and edge. `accent` is volt with ink text and an `accent-ink` edge.
+The status tones are a soft fill with the status color as text and edge. `accent` is orange with ink text and an `accent-ink` edge.
 
 ## You provide
 

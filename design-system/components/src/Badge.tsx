@@ -5,7 +5,7 @@ import { type Tone } from './types';
 import { cx } from './util';
 
 export interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
-  /** What the badge means. `accent` is volt (New, Featured), `solid` is ink, the rest are status tones. */
+  /** What the badge means. `accent` is orange (New, Featured), `solid` is ink, the rest are status tones. */
   tone?: Tone | 'solid';
   /** Leading status dot. */
   dot?: boolean;

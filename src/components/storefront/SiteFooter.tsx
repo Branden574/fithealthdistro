@@ -1,4 +1,4 @@
-import { Wordmark } from '@ds';
+import { Logo } from '@ds';
 import type { PublicSettings } from '@/lib/catalog';
 import { t, type Copy } from '@/lib/copy';
 import { currentYear } from '@/lib/content/year';
@@ -14,7 +14,7 @@ export async function SiteFooter({ copy, settings, linkBase = '' }: { copy: Copy
   return (
     <footer className="site-footer" data-theme="dark">
       <div className="wrap site-footer__inner">
-        <Wordmark size={40} stacked />
+        <Logo height={64} />
         <div className="site-footer__end">
           {email || phone ? (
             <dl className="site-footer__contact">

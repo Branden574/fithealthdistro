@@ -7,7 +7,7 @@ import { AdminPageHead } from '@/components/admin/AdminPageHead';
 import { Pager, useAdminLinks } from '@/components/admin/links';
 import { NoticeBar, takeNotice, type Notice } from '@/components/admin/Notice';
 import type { AdminClientRow } from '@/lib/admin/clients';
-import { CLIENTS_PATH, clientPath, clientsPath } from '@/lib/admin/paths';
+import { CLIENTS_PATH, clientPath, clientsPath, exportPath } from '@/lib/admin/paths';
 
 interface ClientsViewProps {
   clients: AdminClientRow[];
@@ -72,7 +72,15 @@ export function ClientsView({ clients, search, page, perPage, total }: ClientsVi
 
   return (
     <>
-      <AdminPageHead eyebrow="Clients" title="Clients" />
+      <AdminPageHead
+        eyebrow="Clients"
+        title="Clients"
+        actions={
+          <Button iconLeft="download-simple" href={exportPath('clients')}>
+            Download CSV
+          </Button>
+        }
+      />
       <NoticeBar notice={notice} onDismiss={() => setNotice(null)} />
       <Panel
         flush

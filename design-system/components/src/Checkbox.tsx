@@ -13,7 +13,7 @@ export interface CheckboxProps extends Omit<React.InputHTMLAttributes<HTMLInputE
   error?: React.ReactNode;
 }
 
-/** A checkbox. Checked is a volt fill with an ink tick. */
+/** A checkbox. Checked is an orange fill with an ink tick. */
 export function Checkbox(props: CheckboxProps) {
   const { label, hint, error, indeterminate = false, className, id, ...rest } = props;
   const ref = React.useRef<HTMLInputElement>(null);

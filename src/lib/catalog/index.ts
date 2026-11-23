@@ -2,6 +2,7 @@ import 'server-only';
 import { cacheLife, cacheTag } from 'next/cache';
 import { createPublicClient } from '@/lib/supabase/public';
 import { supabaseUrl } from '@/lib/supabase/env';
+import { searchable } from './search';
 
 /** Cache tag for categories, visible products and the public contact details. Any product or category change expires it. */
 export const CATALOG_TAG = 'catalog';
@@ -29,6 +30,8 @@ export interface CatalogProduct {
   stock: StockStatus;
   imageUrl: string | null;
   isSample: boolean;
+  /** What the catalog search looks through, prepared on the server: name, description, category, price note, specs and details. */
+  search: string;
 }
 
 export interface Catalog {
@@ -45,6 +48,9 @@ export interface PublicSettings {
 
 const ICONS: readonly CategoryIcon[] = ['lockers', 'jar-label', 'drop', 'package', 'barbell', 'pill'];
 
+/** How much of a product's long description the catalog search looks through. */
+const SEARCH_DETAILS = 600;
+
 /** The public URL of a product photo in the product-photos bucket. */
 export function productImageUrl(path: string): string {
   return `${supabaseUrl()}/storage/v1/object/public/product-photos/${path.split('/').map(encodeURIComponent).join('/')}`;
@@ -60,13 +66,14 @@ export async function getCatalog(): Promise<Catalog> {
     db.from('categories').select('id, slug, name, icon, position').order('position').order('name'),
     db
       .from('products')
-      .select('id, slug, category_id, name, description, price_cents, price_note, stock_status, image_path, is_sample')
+      .select('id, slug, category_id, name, description, price_cents, price_note, stock_status, image_path, is_sample, specs, details')
       .order('name'),
   ]);
   if (categories.error) throw new Error(`Could not load categories: ${categories.error.message}`);
   if (products.error) throw new Error(`Could not load products: ${products.error.message}`);
 
   const order = new Map(categories.data.map((category, index) => [category.id, index]));
+  const categoryName = new Map(categories.data.map((category) => [category.id, category.name]));
   const list: CatalogProduct[] = products.data
     .filter((row) => order.has(row.category_id))
     .map((row) => ({
@@ -80,6 +87,17 @@ export async function getCatalog(): Promise<Catalog> {
       stock: row.stock_status,
       imageUrl: row.image_path ? productImageUrl(row.image_path) : null,
       isSample: row.is_sample,
+      search: searchable(
+        [
+          row.name,
+          row.description,
+          categoryName.get(row.category_id) ?? '',
+          row.price_note,
+          ...toSpecs(row.specs).flatMap((spec) => [spec.label, spec.value]),
+          // Enough of the long description to find a feature it mentions, without sending all of it to every visitor.
+          row.details.slice(0, SEARCH_DETAILS),
+        ].join(' '),
+      ),
     }))
     .sort((a, b) => (order.get(a.categoryId) ?? 0) - (order.get(b.categoryId) ?? 0));
 

@@ -4,7 +4,7 @@ The action control: an uppercase Big Shoulders label inside a 2px edge with 2px 
 
 ## Variants
 
-- `primary` is the volt fill (`accent`, label `on-accent`, edge `accent-ink`). One per view, for the thing the page is for: "Request a quote", "Add product", "Send request".
+- `primary` is the orange fill (`accent`, label `on-accent`, edge `accent-ink`). One per view, for the thing the page is for: "Request a quote", "Add product", "Send request".
 - `solid` is `ink` with a `bg` label. A second strong action beside a primary.
 - `outline` is the default. Everything that is not the main action.
 - `ghost` has no edge. Cancel, and the icon-only row actions in a table.

@@ -1,4 +1,4 @@
-/* Fit Health Distribution: component styles. Load after tokens.css. Every color, size and space is a token. */
+/* Fit Health Distributing: component styles. Load after tokens.css. Every color, size and space is a token. */
 
 /* ---------- base ---------- */
 *, *::before, *::after { box-sizing: border-box; }
@@ -18,15 +18,17 @@ body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--f
 .fhd-link { color: var(--accent-ink); text-decoration: underline; text-decoration-thickness: var(--border-thick); text-underline-offset: 3px; }
 .fhd-link:hover { background: var(--accent); color: var(--on-accent); }
 .fhd-link:focus-visible { outline: none; box-shadow: var(--focus-ring); border-radius: var(--radius-sm); }
-/* The highlighter: volt behind ink, for one key word or number in a headline. */
+/* The highlighter: orange behind ink, for one key word or number in a headline. */
 .fhd-mark { display: inline-block; padding: 0 0.1em; line-height: 0.92; background: var(--accent); color: var(--on-accent); }
 
 /* ---------- Icon ---------- */
 .fhd-icon { display: inline-block; flex: none; vertical-align: middle; }
 
-/* ---------- Wordmark ---------- */
-.fhd-wordmark { display: inline-block; font-family: var(--font-display); font-optical-sizing: auto; font-weight: 900; font-size: 24px; line-height: 0.92; letter-spacing: 0.01em; text-transform: uppercase; white-space: nowrap; color: var(--ink); }
-.fhd-wordmark__line { display: block; }
+/* ---------- Logo ---------- */
+/* The letters follow the text color (ink, or near-white on a dark band); the D and the speed lines are the brand orange. */
+.fhd-logo { display: block; flex: none; max-width: 100%; height: auto; color: var(--ink); }
+.fhd-logo__letters { fill: currentColor; }
+.fhd-logo__accent { fill: var(--accent); }
 
 /* ---------- Button ---------- */
 .fhd-btn { --_bg: transparent; --_fg: var(--ink); --_bd: var(--ink); display: inline-flex; align-items: center; justify-content: center; gap: var(--space-2); height: var(--control-md); padding: 0 var(--space-5); font-family: var(--font-display); font-optical-sizing: auto; font-size: 17px; line-height: 20px; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase; text-decoration: none; white-space: nowrap; color: var(--_fg); background: var(--_bg); border: var(--border-thick) solid var(--_bd); border-radius: var(--radius-sm); cursor: pointer; user-select: none; -webkit-user-select: none; transition: background-color var(--duration-feedback) var(--ease-out), border-color var(--duration-feedback) var(--ease-out), color var(--duration-feedback) var(--ease-out), transform var(--duration-feedback) var(--ease-out); }

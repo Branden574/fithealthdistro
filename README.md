@@ -1,6 +1,6 @@
-# Fit Health Distribution
+# Fit Health Distributing
 
-Website and admin for Fit Health Distribution: vending machines first, with fitness supplements and drinks alongside them.
+Website and admin for Fit Health Distributing: vending machines first, with fitness supplements and drinks alongside them.
 
 This repository starts with the design system. The storefront and the admin get built on top of it.
 
@@ -71,7 +71,7 @@ To add an icon, add its Phosphor name to `scripts/icons.mjs` and run `npm run ic
 
 ## The design system in Claude
 
-The same system is kept as a design system in Claude, named Fit Health Distribution, where every component has a live preview in light and dark. This folder is its code copy. After changing files here, sync that design system from this repository so the two stay in step.
+The same system is kept as a design system in Claude, named Fit Health Distributing, where every component has a live preview in light and dark. This folder is its code copy. After changing files here, sync that design system from this repository so the two stay in step.
 
 ## Licenses
 

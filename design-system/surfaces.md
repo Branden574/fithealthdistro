@@ -1,6 +1,6 @@
 # Storefront and admin
 
-How the components go together on the two surfaces Fit Health Distribution needs.
+How the components go together on the two surfaces Fit Health Distributing needs.
 
 ## Storefront
 
@@ -32,7 +32,7 @@ The owner keeps the catalog current, rewrites the site's text, answers clients a
 
 - Four StatCards: Active clients, Client retention, New inquiries, Products live. Highlight retention.
 - Retention is the share of the previous period's clients who are still active in this one. Write that definition in the Panel's description wherever the number appears, and always name the period.
-- One Panel holds the retention BarChart by month, with the latest month in volt.
+- One Panel holds the retention BarChart by month, with the latest month in orange.
 
 ### Site content
 

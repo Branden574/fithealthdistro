@@ -1,4 +1,4 @@
-/* Fit Health Distribution — generated from tokens.json */
+/* Fit Health Distributing — generated from tokens.json */
 :root, [data-theme="light"] {
   --bg: #ffffff;
   --bg-subtle: #f4f5f1;
@@ -8,18 +8,18 @@
   --ink-faint: #676a61;
   --line: #e1e3db;
   --line-strong: #85887e;
-  --accent: #c5f82a;
-  --accent-hover: #b2e516;
+  --accent: #e7511e;
+  --accent-hover: #f0622f;
   --on-accent: #0b0c0a;
   --accent-ink: #0b0c0a;
-  --accent-soft: #effbd0;
+  --accent-soft: #fdebe3;
   --focus: var(--accent-ink);
   --success: #0a7566;
   --success-soft: #dcf5ef;
   --warning: #855300;
   --warning-soft: #fdf0cf;
-  --danger: #c22a0e;
-  --danger-soft: #fde5de;
+  --danger: #c8102e;
+  --danger-soft: #fce4e8;
   --on-danger: #ffffff;
   --info: #1f55d1;
   --info-soft: #e3ebfd;
@@ -37,18 +37,18 @@
   --ink-faint: #8f9388;
   --line: #2a2c27;
   --line-strong: #73776c;
-  --accent: #c5f82a;
-  --accent-hover: #d6ff57;
+  --accent: #e7511e;
+  --accent-hover: #ff6b36;
   --on-accent: #0b0c0a;
-  --accent-ink: #c5f82a;
-  --accent-soft: #222b08;
+  --accent-ink: #e7511e;
+  --accent-soft: #2e1409;
   --focus: var(--accent-ink);
   --success: #4fd8c4;
   --success-soft: #0d2925;
   --warning: #f5b83d;
   --warning-soft: #2e2208;
-  --danger: #ff8f73;
-  --danger-soft: #35140c;
+  --danger: #ff8597;
+  --danger-soft: #3a0f18;
   --on-danger: #0b0c0a;
   --info: #8fb4ff;
   --info-soft: #111e3b;

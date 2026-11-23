@@ -9,7 +9,7 @@ It shows who wrote, how to reach them, what they wrote and which products they a
 - `name`, `receivedAt` (already formatted) and `message`.
 - Whatever the client gave: `company`, `email`, `phone`, `location`.
 - `interestedIn`: the names of the products they picked in the catalog.
-- `status`: `new` (an `ink` outline and a volt New badge), `read`, or `replied` (a `success` badge).
+- `status`: `new` (an `ink` outline and an orange New badge), `read`, or `replied` (a `success` badge).
 - `onReply` and `onMarkRead`. Without `onReply`, Reply opens a mail to `email`. Mark as read shows only while the status is `new`.
 - `replyHref` to choose where Reply goes, such as a `mailto:` with a subject. Reply stays a link, and `onReply` runs as the mail opens (to mark the inquiry read, say).
 - `onMarkReplied` for Mark as replied, shown until the status is `replied`.

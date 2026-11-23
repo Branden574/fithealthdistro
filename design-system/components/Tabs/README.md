@@ -2,7 +2,7 @@
 
 Switches between views of one list. The selected tab carries the heavy rule.
 
-Labels are uppercase Big Shoulders in `ink-muted`; the selected one is `ink` over a `border-heavy` rule in `accent-ink`, which is ink on light and volt on dark. A count sits in a pill after the label and turns volt on the selected tab.
+Labels are uppercase Big Shoulders in `ink-muted`; the selected one is `ink` over a `border-heavy` rule in `accent-ink`, which is ink on light and orange on dark. A count sits in a pill after the label and turns orange on the selected tab.
 
 ## You provide
 

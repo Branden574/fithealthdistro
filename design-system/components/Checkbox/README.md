@@ -2,7 +2,7 @@
 
 A yes or no inside a form, and the row selector in a DataTable.
 
-Checked is a volt fill (`accent`) with an ink tick (`on-accent`) and an `accent-ink` edge. Unchecked is a `line-strong` box that turns `ink` on hover.
+Checked is an orange fill (`accent`) with an ink tick (`on-accent`) and an `accent-ink` edge. Unchecked is a `line-strong` box that turns `ink` on hover.
 
 ## You provide
 

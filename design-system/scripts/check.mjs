@@ -35,8 +35,8 @@ for (const g of GROUNDS) {
   for (const t of ['ink', 'ink-muted', 'ink-faint', 'accent-ink', 'success', 'warning', 'danger', 'info']) add(t, g, 4.5, 'text');
   for (const t of ['line-strong', 'focus', 'accent-ink']) add(t, g, 3, 'edge or mark');
 }
-add('on-accent', 'accent', 4.5, 'label on volt');
-add('on-accent', 'accent-hover', 4.5, 'label on volt, hover');
+add('on-accent', 'accent', 4.5, 'label on orange');
+add('on-accent', 'accent-hover', 4.5, 'label on orange, hover');
 add('accent', 'on-accent', 4.5, 'count on the current sidebar item');
 add('bg', 'ink', 4.5, 'label on a solid fill');
 add('bg', 'ink-muted', 4.5, 'label on a solid fill, hover');

@@ -1,3 +1,5 @@
+import { readSource, SOURCE_RAW_MAX, type InquirySource } from './source';
+
 /**
  * The contact form's contract, shared by the form (client) and the action that receives it (server).
  * Limits match the inquiries table, so anything that passes here also passes the database's own checks.
@@ -76,6 +78,8 @@ export interface ContactInput {
   terms: boolean;
   marketing: boolean;
   submissionId?: string;
+  /** How the visitor found the site, as their browser noted it. Empty parts when it did not. */
+  source: InquirySource;
   trap: string;
   /** Typed fields that arrived far past their limit and were cut short before reading. */
   oversize: TextField[];
@@ -131,6 +135,7 @@ export function readContactForm(form: FormData): ContactInput {
     terms: raw('terms', 10) === 'yes',
     marketing: raw('marketing', 10) === 'yes',
     submissionId: UUID.test(submissionId) ? submissionId.toLowerCase() : undefined,
+    source: readSource((key) => raw(key, SOURCE_RAW_MAX)),
     trap: raw(TRAP_FIELD, 200).trim(),
     oversize,
   };

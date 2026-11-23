@@ -6,6 +6,9 @@ import { announce } from '@/lib/a11y/announce';
 import { t, type Copy } from '@/lib/copy/text';
 import { CONTACT_FIELDS, CONTACT_LIMITS, INITIAL_CONTACT_STATE, TRAP_FIELD, type ContactField, type TextField as TextFieldName } from '@/lib/inquiry/form';
 import { sendRequest } from '@/lib/inquiry/send';
+import { SOURCE_FIELDS } from '@/lib/inquiry/source';
+import { visitSource } from '@/lib/inquiry/visit';
+import { onAskAbout } from '@/lib/request/ask';
 import { requestStore } from '@/lib/request/store';
 
 /** One category under "I am interested in", with the products that can be picked under it. */
@@ -68,6 +71,22 @@ export function ContactForm({ copy, groups, preview = false, linkBase = '' }: Co
   // One id per request, reused if it has to be sent again, so a resend after a lost reply is recorded once.
   const submissionId = useRef('');
 
+  // "Ask about it" in the catalog: start the message with what the search did not find, or add it to what is there.
+  useEffect(
+    () =>
+      onAskAbout((text) => {
+        const field = formRef.current?.elements.namedItem('message');
+        if (!(field instanceof HTMLTextAreaElement)) return;
+        const now = field.value.trim();
+        if (!now.includes(text)) field.value = (now ? `${now}\n${text}` : text).slice(0, CONTACT_LIMITS.message);
+        submissionId.current = '';
+        field.scrollIntoView({ block: 'center' });
+        field.focus({ preventScroll: true });
+        field.setSelectionRange(field.value.length, field.value.length);
+      }),
+    [],
+  );
+
   useEffect(() => {
     if (state.status === 'sent') {
       requestStore.clear();
@@ -105,6 +124,11 @@ export function ContactForm({ copy, groups, preview = false, linkBase = '' }: Co
     const data = new FormData(event.currentTarget);
     submissionId.current ||= globalThis.crypto?.randomUUID?.() ?? '';
     if (submissionId.current) data.set('submission_id', submissionId.current);
+    // How the visitor found the site, if their browser noted it (see the privacy page). Sent with the request only.
+    const source = visitSource();
+    for (const [part, field] of Object.entries(SOURCE_FIELDS) as Array<[keyof typeof source, string]>) {
+      if (source[part]) data.set(field, source[part]);
+    }
     startTransition(() => send(data));
   }
 

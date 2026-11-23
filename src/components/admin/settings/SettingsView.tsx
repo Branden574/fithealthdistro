@@ -3,6 +3,7 @@
 import { Alert, Badge, Button, DataTable, Dialog, Panel, TextField, type DataTableColumn } from '@ds';
 import { useCallback, useRef, useState, useTransition, type FormEvent } from 'react';
 import { AdminPageHead } from '@/components/admin/AdminPageHead';
+import { exportPath } from '@/lib/admin/paths';
 import { NoticeBar, problemNotice, type Notice } from '@/components/admin/Notice';
 import type { AdminListRow } from '@/lib/admin/settings';
 import { changePassword, removeAdmin, saveContactDetails, saveMyName } from '@/lib/admin/settings-actions';
@@ -182,6 +183,26 @@ export function SettingsView({ contact, admins, me }: SettingsViewProps) {
         </div>
 
         <div className="admin-detail__side">
+          <Panel title="Download your data" description="Spreadsheet files (CSV) of everything recorded so far, with times in your time zone.">
+            <div className="admin-downloads">
+              <Button size="sm" iconLeft="download-simple" href={exportPath('inquiries')}>
+                Inquiries
+              </Button>
+              <Button size="sm" iconLeft="download-simple" href={exportPath('clients')}>
+                Clients
+              </Button>
+              <Button size="sm" iconLeft="download-simple" href={exportPath('orders')}>
+                Orders
+              </Button>
+              <Button size="sm" iconLeft="download-simple" href={exportPath('marketing')}>
+                Marketing list
+              </Button>
+            </div>
+            <p className="admin-muted admin-note">
+              The marketing list holds only clients who asked for marketing email and have not said no since. Keep these files private: they hold
+              clients&apos; contact details.
+            </p>
+          </Panel>
           <Panel title="Your name" description={`Signed in as ${me.email}.`}>
             <form onSubmit={saveName} className="admin-form" noValidate aria-busy={namePending || undefined}>
               <TextField name="name" label="Name" autoComplete="name" defaultValue={me.name} maxLength={SETTINGS_LIMITS.name} error={nameState.errors?.name} />

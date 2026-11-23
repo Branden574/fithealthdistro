@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Icon } from './Icon';
-import { Wordmark } from './Wordmark';
+import { Logo } from './Logo';
 import { cx } from './util';
 
 export interface NavLink {
@@ -13,7 +13,7 @@ export interface NavBarProps extends React.HTMLAttributes<HTMLElement> {
   links: NavLink[];
   /** The `id` of the link for the page being shown. */
   current?: string;
-  /** Replaces the wordmark: a logo image once there is one. */
+  /** Replaces the logo. */
   brand?: React.ReactNode;
   brandHref?: string;
   /** Buttons at the far right. At most one of them `primary`. */
@@ -64,7 +64,7 @@ export function NavBar(props: NavBarProps) {
       onKeyDown={onKeyDown}
     >
       <a className="fhd-nav__brand" href={brandHref}>
-        {brand ?? <Wordmark />}
+        {brand ?? <Logo />}
       </a>
       <button
         ref={toggle}

@@ -1,6 +1,6 @@
 # Sidebar
 
-The admin's navigation rail. The current page is a volt block.
+The admin's navigation rail. The current page is an orange block.
 
 It is dark by default against the light `bg-subtle` admin canvas, and `sidebar` (256px) wide. Items are Archivo 600 with a Phosphor glyph; the current one fills with `accent` and reads in `on-accent`.
 

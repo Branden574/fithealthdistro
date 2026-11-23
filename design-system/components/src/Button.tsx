@@ -4,7 +4,7 @@ import { type IconName } from './icons';
 import { cx } from './util';
 
 export interface ButtonProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'type'> {
-  /** `primary` is the volt fill: the one call to action in a view. `solid` is ink. `outline` (default) and `ghost` are for everything else. `danger` deletes. */
+  /** `primary` is the orange fill: the one call to action in a view. `solid` is ink. `outline` (default) and `ghost` are for everything else. `danger` deletes. */
   variant?: 'primary' | 'solid' | 'outline' | 'ghost' | 'danger';
   /** `sm` 32px for table rows and filters, `md` 40px, `lg` 48px for the storefront. */
   size?: 'sm' | 'md' | 'lg';

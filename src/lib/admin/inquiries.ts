@@ -1,4 +1,5 @@
 import 'server-only';
+import type { InquirySource } from '@/lib/inquiry/source';
 import { createSessionClient } from '@/lib/supabase/server';
 import { formatWhen } from './format';
 import { adminTimeZone } from './time';
@@ -28,10 +29,12 @@ export interface AdminInquiry {
   termsAcceptedAt: string | null;
   marketingOptIn: boolean;
   consentText: string;
+  /** How they found the site, as their browser noted it. Empty parts when it did not. */
+  source: InquirySource;
 }
 
 const COLUMNS =
-  'id, client_id, name, company, email, phone, message, interest, status, created_at, read_at, replied_at, terms_accepted_at, marketing_opt_in, consent_text, inquiry_products(product_name, position)';
+  'id, client_id, name, company, email, phone, message, interest, status, created_at, read_at, replied_at, terms_accepted_at, marketing_opt_in, consent_text, referrer_host, utm_source, utm_medium, utm_campaign, landing_path, inquiry_products(product_name, position)';
 
 type Row = {
   id: string;
@@ -49,6 +52,11 @@ type Row = {
   terms_accepted_at: string | null;
   marketing_opt_in: boolean;
   consent_text: string;
+  referrer_host: string;
+  utm_source: string;
+  utm_medium: string;
+  utm_campaign: string;
+  landing_path: string;
   inquiry_products: Array<{ product_name: string; position: number }> | null;
 };
 
@@ -75,6 +83,13 @@ function toInquiry(row: Row, zone: string, now: Date): AdminInquiry {
     termsAcceptedAt: when(row.terms_accepted_at),
     marketingOptIn: row.marketing_opt_in,
     consentText: row.consent_text,
+    source: {
+      referrerHost: row.referrer_host,
+      utmSource: row.utm_source,
+      utmMedium: row.utm_medium,
+      utmCampaign: row.utm_campaign,
+      landingPath: row.landing_path,
+    },
   };
 }
 
