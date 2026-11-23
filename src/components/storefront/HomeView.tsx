@@ -8,6 +8,7 @@ import { CatalogBrowser } from './CatalogBrowser';
 import { CategoryIndex } from './CategoryIndex';
 import { ContactForm, type InterestGroup } from './ContactForm';
 import { Hero } from './Hero';
+import { HowItWorks } from './HowItWorks';
 import { RequestSummary } from './RequestSummary';
 
 export interface HomeViewProps {
@@ -21,8 +22,8 @@ export interface HomeViewProps {
 }
 
 /**
- * The home page: hero, catalog, FAQ and contact. Everything comes in as props, so the admin's draft preview can render
- * the same page from draft copy and FAQs.
+ * The home page: hero, how it works, catalog, FAQ and contact. Everything comes in as props, so the admin's draft
+ * preview can render the same page from draft copy and FAQs.
  */
 export function HomeView({ copy, faqs, catalog, preview = false, linkBase = '' }: HomeViewProps) {
   const { categories, products } = catalog;
@@ -38,6 +39,8 @@ export function HomeView({ copy, faqs, catalog, preview = false, linkBase = '' }
   return (
     <>
       <Hero copy={copy} aside={<CategoryIndex categories={index} />} />
+
+      <HowItWorks copy={copy} />
 
       <section className="section" id={CATALOG_ID} aria-labelledby="catalog-title" tabIndex={-1} data-reveal>
         <div className="wrap">

@@ -281,6 +281,85 @@ export interface PhotoFieldProps {
 /** Choose, replace or remove one photo, with a 4:3 preview in the same frame the catalog uses. */
 export declare function PhotoField(props: PhotoFieldProps): React.JSX.Element;
 
+export interface PhotosFieldPhoto {
+    /** Stays the same while the photo moves: its storage path. */
+    key: string;
+    src: string;
+}
+export interface PhotosFieldProps {
+    /** Names the photos: "Photos". */
+    label: React.ReactNode;
+    /** What to pick: "JPEG, PNG or WebP, up to 5 MB each. Cropped to 4:3." */
+    hint?: React.ReactNode;
+    /** What went wrong and how to fix it. Turns the add button's edge to `danger`. */
+    error?: React.ReactNode;
+    /** In order; the first is the cover. */
+    photos: PhotosFieldPhoto[];
+    /** How many it takes. The add button goes once there are this many. */
+    max: number;
+    /** Called with the files the admin picked, in the picker's order, at most as many as there is room for. */
+    onSelect: (files: File[]) => void;
+    /** Moves the photo at `from` to `to`. */
+    onMove: (from: number, to: number) => void;
+    onRemove: (index: number) => void;
+    /** While photos upload: the add button waits and says `busyLabel`. Moving and removing still work. */
+    busy?: boolean;
+    /** File types the picker offers. */
+    accept?: string;
+    addLabel?: string;
+    busyLabel?: string;
+    /** On the first photo. */
+    coverLabel?: string;
+    /** "3 of 8 photos". */
+    countLabel?: (count: number, max: number) => string;
+    /** Names a photo for its buttons: "Photo 2". */
+    photoLabel?: (number: number) => string;
+    earlierLabel?: string;
+    laterLabel?: string;
+    removeLabel?: string;
+    /** Said after a move: "Photo moved to 1 of 4". */
+    movedLabel?: (position: number, count: number) => string;
+    /** Said after a removal. */
+    removedLabel?: string;
+    disabled?: boolean;
+    id?: string;
+    className?: string;
+}
+/**
+ * Several photos in the order clients see them. The first is the cover. Each can move earlier or later or be removed,
+ * and the add button takes several files at once. Moving keeps the focus on the photo that moved.
+ */
+export declare function PhotosField(props: PhotosFieldProps): React.JSX.Element;
+
+export interface GalleryPhoto {
+    src: string;
+    /** Describes the photo. Leave empty when the page's heading already says what it shows. */
+    alt?: string;
+}
+export interface GalleryProps {
+    /** In order; the first shows first. None shows `placeholder`. */
+    photos: GalleryPhoto[];
+    /** Names the carousel for screen readers: "Photos of Combo vending machine". */
+    label: string;
+    /** Shown in the frame when there are no photos: the category's glyph. */
+    placeholder?: React.ReactNode;
+    previousLabel?: string;
+    nextLabel?: string;
+    /**
+     * Names one photo, for its slide, its thumbnail and the announcement when it comes into view. `{number}` and `{total}`
+     * are filled in. A string, not a function, so a server component can pass it.
+     */
+    photoLabel?: string;
+    /** Greys the photos, for a product that is out of stock. */
+    dimmed?: boolean;
+    className?: string;
+}
+/**
+ * A product's photos, one at a time in a 4:3 frame, with thumbnails under it. Swipe, scroll, the arrow buttons or the
+ * arrow keys move between them; it never moves by itself. Under reduced motion the frame jumps instead of gliding.
+ */
+export declare function Gallery(props: GalleryProps): React.JSX.Element;
+
 export interface StatCardDelta {
     /** The change, written out: "+4 pts", "-12", "No change". */
     label: string;
@@ -650,4 +729,4 @@ export interface LogoProps extends Omit<React.SVGAttributes<SVGSVGElement>, 'hei
  */
 export declare function Logo(props: LogoProps): React.JSX.Element;
 
-declare global { interface Window { FHD: { Button: typeof Button; Chip: typeof Chip; TextField: typeof TextField; Select: typeof Select; Checkbox: typeof Checkbox; CheckboxGroup: typeof CheckboxGroup; Switch: typeof Switch; Badge: typeof Badge; Alert: typeof Alert; EmptyState: typeof EmptyState; ProductCard: typeof ProductCard; RequestList: typeof RequestList; SpecList: typeof SpecList; PhotoField: typeof PhotoField; StatCard: typeof StatCard; BarChart: typeof BarChart; CountUp: typeof CountUp; DataTable: typeof DataTable; InquiryCard: typeof InquiryCard; ContentField: typeof ContentField; Tabs: typeof Tabs; NavBar: typeof NavBar; Sidebar: typeof Sidebar; Panel: typeof Panel; Dialog: typeof Dialog; Accordion: typeof Accordion; Icon: typeof Icon; Logo: typeof Logo } } }
+declare global { interface Window { FHD: { Button: typeof Button; Chip: typeof Chip; TextField: typeof TextField; Select: typeof Select; Checkbox: typeof Checkbox; CheckboxGroup: typeof CheckboxGroup; Switch: typeof Switch; Badge: typeof Badge; Alert: typeof Alert; EmptyState: typeof EmptyState; ProductCard: typeof ProductCard; RequestList: typeof RequestList; SpecList: typeof SpecList; PhotoField: typeof PhotoField; PhotosField: typeof PhotosField; Gallery: typeof Gallery; StatCard: typeof StatCard; BarChart: typeof BarChart; CountUp: typeof CountUp; DataTable: typeof DataTable; InquiryCard: typeof InquiryCard; ContentField: typeof ContentField; Tabs: typeof Tabs; NavBar: typeof NavBar; Sidebar: typeof Sidebar; Panel: typeof Panel; Dialog: typeof Dialog; Accordion: typeof Accordion; Icon: typeof Icon; Logo: typeof Logo } } }

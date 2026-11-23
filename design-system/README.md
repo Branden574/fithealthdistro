@@ -64,6 +64,7 @@ Three families, shipped in `fonts/`.
 
 - Product photos are 4:3, shot straight on against a plain ground and cropped to fill. No lifestyle stock photos, no gradients, no illustrations.
 - Until a product has a photo, show its category glyph on `bg-subtle`, as ProductCard does.
+- A product can have up to eight photos. Its page shows them in the Gallery; the first is the cover on its catalog card and in link previews.
 
 ## Icons
 

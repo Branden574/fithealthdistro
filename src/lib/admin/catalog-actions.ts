@@ -44,23 +44,24 @@ export async function saveProduct(previous: ProductFormState, form: FormData): P
       description: input.description,
       stock_status: input.stock,
       visible: input.visible,
-      image_path: input.imagePath,
+      // The cover (image_path) follows the first photo in the database.
+      photos: input.photos,
       details: input.details,
       specs: input.specs.map((spec) => ({ label: spec.label, value: spec.value })),
       // Saved from the form, it has been looked over: it is no longer a sample.
       is_sample: false,
     };
 
-    let oldImage: string | null = null;
+    let oldPhotos: string[] = [];
     let error: DbError = null;
     if (input.isNew) {
       // An empty address is filled from the name by the database.
       ({ error } = await supabase.from('products').insert({ id: input.id, ...row, slug: input.slug }));
     } else {
-      const { data: before, error: readError } = await supabase.from('products').select('image_path').eq('id', input.id).maybeSingle();
+      const { data: before, error: readError } = await supabase.from('products').select('photos').eq('id', input.id).maybeSingle();
       if (readError) throw readError;
       if (!before) return { status: 'missing', attempt };
-      oldImage = before.image_path;
+      oldPhotos = before.photos;
       const result = await supabase.from('products').update({ ...row, slug: input.slug }).eq('id', input.id).select('id');
       error = result.error;
       if (!error && !result.data?.length) return { status: 'missing', attempt };
@@ -76,11 +77,15 @@ export async function saveProduct(previous: ProductFormState, form: FormData): P
       throw error;
     }
 
-    // The photo it replaced is no longer used anywhere.
-    if (oldImage && oldImage !== input.imagePath) await removePhotos(supabase, [oldImage]);
+    // Photos taken off the product are no longer used anywhere.
+    const kept = new Set(input.photos);
+    await removePhotos(
+      supabase,
+      oldPhotos.filter((path) => !kept.has(path)),
+    );
 
     catalogChanged();
-    return { status: 'saved', name: input.name, visible: input.visible, isNew: input.isNew, imagePath: input.imagePath, attempt };
+    return { status: 'saved', name: input.name, visible: input.visible, isNew: input.isNew, photos: input.photos, attempt };
   } catch (error) {
     log('saveProduct', error);
     return { status: 'error', attempt };
@@ -157,9 +162,9 @@ export async function discardPhotos(productId: string, paths: string[]): Promise
   try {
     const context = await adminClient();
     if (!context) return;
-    const { data, error } = await context.supabase.from('products').select('image_path').in('image_path', own);
+    const { data, error } = await context.supabase.from('products').select('photos').overlaps('photos', own);
     if (error) throw error;
-    const used = new Set(data.map((row) => row.image_path));
+    const used = new Set(data.flatMap((row) => row.photos));
     await removePhotos(
       context.supabase,
       own.filter((path) => !used.has(path)),

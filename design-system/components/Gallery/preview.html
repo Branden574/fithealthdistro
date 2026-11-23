@@ -1,0 +1,32 @@
+<!-- @dsCard group="Storefront" height=520 -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Gallery preview</title>
+<style>
+  .demo { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-8); padding: var(--space-6); align-items: start; }
+  .demo > * { min-width: 0; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+  var F = window.FHD, h = React.createElement;
+  // Flat placeholder photos drawn here, so the preview needs no files. Real photos are 4:3 product shots.
+  function shot(shade, text) {
+    var svg = '<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600"><rect width="800" height="600" fill="' + shade + '"/>' +
+      '<text x="400" y="320" font-family="sans-serif" font-size="48" text-anchor="middle" fill="#ffffff">' + text + '</text></svg>';
+    return 'data:image/svg+xml,' + encodeURIComponent(svg);
+  }
+  function App() {
+    return h('div', { className: 'demo' },
+      h(F.Gallery, { label: 'Photos of Combo vending machine', photos: [
+        { src: shot('#2a2e34', 'Front') }, { src: shot('#3d434b', 'Side') }, { src: shot('#50565f', 'Keypad') }, { src: shot('#636a74', 'Inside') }] }),
+      h(F.Gallery, { label: 'Photos of Sparkling water', photos: [{ src: shot('#2a2e34', 'One photo') }] }),
+      h(F.Gallery, { label: 'Photos of Pre-workout', photos: [], placeholder: h(F.Icon, { name: 'jar-label', size: 96 }) }));
+  }
+  ReactDOM.createRoot(document.getElementById('root')).render(h(App));
+</script>
+</body>
+</html>

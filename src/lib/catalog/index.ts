@@ -28,6 +28,7 @@ export interface CatalogProduct {
   price: number | null;
   priceNote: string;
   stock: StockStatus;
+  /** The cover: the first of the product's photos. */
   imageUrl: string | null;
   isSample: boolean;
   /** What the catalog search looks through, prepared on the server: name, description, category, price note, specs and details. */
@@ -66,7 +67,7 @@ export async function getCatalog(): Promise<Catalog> {
     db.from('categories').select('id, slug, name, icon, position').order('position').order('name'),
     db
       .from('products')
-      .select('id, slug, category_id, name, description, price_cents, price_note, stock_status, image_path, is_sample, specs, details')
+      .select('id, slug, category_id, name, description, price_cents, price_note, stock_status, photos, is_sample, specs, details')
       .order('name'),
   ]);
   if (categories.error) throw new Error(`Could not load categories: ${categories.error.message}`);
@@ -85,7 +86,7 @@ export async function getCatalog(): Promise<Catalog> {
       price: row.price_cents == null ? null : row.price_cents / 100,
       priceNote: row.price_note,
       stock: row.stock_status,
-      imageUrl: row.image_path ? productImageUrl(row.image_path) : null,
+      imageUrl: row.photos[0] ? productImageUrl(row.photos[0]) : null,
       isSample: row.is_sample,
       search: searchable(
         [
@@ -124,6 +125,8 @@ export interface ProductDetail extends CatalogProduct {
   /** The longer description for the product's page. Plain text; blank lines separate paragraphs. */
   details: string;
   specs: ProductSpec[];
+  /** Every photo's URL, in order; the first is the cover. */
+  photos: string[];
   category: CatalogCategory;
 }
 
@@ -151,10 +154,10 @@ export async function getProduct(slug: string): Promise<ProductDetail | null> {
   const product = catalog.products.find((item) => item.slug === slug);
   const category = product ? catalog.categories.find((item) => item.id === product.categoryId) : undefined;
   if (!product || !category) return null;
-  const { data, error } = await createPublicClient().from('products').select('details, specs').eq('id', product.id).maybeSingle();
+  const { data, error } = await createPublicClient().from('products').select('details, specs, photos').eq('id', product.id).maybeSingle();
   if (error) throw new Error(`Could not load the product: ${error.message}`);
   if (!data) return null;
-  return { ...product, details: data.details, specs: toSpecs(data.specs), category };
+  return { ...product, details: data.details, specs: toSpecs(data.specs), photos: data.photos.map(productImageUrl), category };
 }
 
 /** The business contact details visitors may see. Empty strings when not set yet. */

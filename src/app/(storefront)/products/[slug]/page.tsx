@@ -61,7 +61,7 @@ function productData(product: ProductDetail) {
     url,
     category: product.category.name,
     ...(product.description ? { description: product.description } : {}),
-    ...(product.imageUrl ? { image: [product.imageUrl] } : {}),
+    ...(product.photos.length ? { image: product.photos } : {}),
     ...(product.price != null && product.price > 0
       ? {
           offers: {

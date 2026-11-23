@@ -105,6 +105,19 @@ textarea.fhd-field__input { height: auto; min-height: 96px; padding: var(--space
 .fhd-photo__actions { display: flex; flex-wrap: wrap; gap: var(--space-2); }
 .fhd-photo--error .fhd-photo__frame { border-color: var(--danger); box-shadow: inset 0 0 0 var(--border-thin) var(--danger); }
 
+/* ---------- PhotosField ---------- */
+/* Takes the focus only when the photo it was on is gone and the add button is waiting. */
+.fhd-photos:focus { outline: none; }
+.fhd-photos__list { display: grid; grid-template-columns: repeat(auto-fill, minmax(128px, 1fr)); gap: var(--space-3); margin: 0; padding: 0; list-style: none; }
+.fhd-photos__item { min-width: 0; display: flex; flex-direction: column; gap: var(--space-1); }
+.fhd-photos__frame { position: relative; aspect-ratio: 4 / 3; overflow: hidden; background: var(--bg-subtle); border: var(--border-thin) solid var(--line-strong); border-radius: var(--radius-sm); }
+.fhd-photos__frame img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.fhd-photos__cover { position: absolute; top: var(--space-1); left: var(--space-1); }
+.fhd-photos__tools { display: flex; justify-content: space-between; gap: var(--space-1); }
+.fhd-photos__add { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); }
+.fhd-photos__count { color: var(--ink-muted); }
+.fhd-photos--error .fhd-photos__add .fhd-btn { border-color: var(--danger); box-shadow: inset 0 0 0 var(--border-thin) var(--danger); }
+
 /* ---------- Checkbox ---------- */
 .fhd-check { position: relative; display: inline-flex; align-items: flex-start; gap: var(--space-2); font-size: 14px; line-height: 20px; color: var(--ink); cursor: pointer; }
 .fhd-check__input { position: absolute; top: 0; left: 0; width: 20px; height: 20px; margin: 0; opacity: 0; cursor: inherit; }
@@ -200,6 +213,33 @@ textarea.fhd-field__input { height: auto; min-height: 96px; padding: var(--space
 .fhd-specs__value { margin: 0; font-size: 16px; line-height: 20px; color: var(--ink); overflow-wrap: anywhere; }
 @media (max-width: 400px) {
   .fhd-specs__row { grid-template-columns: minmax(0, 1fr); gap: var(--space-1); }
+}
+
+/* ---------- Gallery ---------- */
+/* A product's photos in the product page's 4:3 frame. The track scroll-snaps, so a swipe or a scroll lands on one photo. */
+.fhd-gallery { display: grid; gap: var(--space-3); min-width: 0; }
+.fhd-gallery__stage { position: relative; aspect-ratio: 4 / 3; overflow: hidden; background: var(--bg-subtle); color: var(--line-strong); border: var(--border-thin) solid var(--line); border-radius: var(--radius-lg); }
+.fhd-gallery__stage--empty { display: flex; align-items: center; justify-content: center; }
+.fhd-gallery__stage:has(.fhd-gallery__track:focus-visible) { box-shadow: var(--focus-ring); }
+.fhd-gallery__track { display: flex; width: 100%; height: 100%; overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory; overscroll-behavior-x: contain; scrollbar-width: none; outline: none; }
+.fhd-gallery__track::-webkit-scrollbar { display: none; }
+.fhd-gallery__slide { position: relative; flex: 0 0 100%; scroll-snap-align: start; scroll-snap-stop: always; }
+.fhd-gallery__slide img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; user-select: none; }
+.fhd-gallery--dimmed img { filter: grayscale(1); opacity: 0.55; }
+/* Centred without a transform, so the button's own press effect still works. */
+.fhd-gallery__nav { position: absolute; top: calc(50% - var(--control-md) / 2); z-index: 1; }
+.fhd-gallery__nav--previous { left: var(--space-3); }
+.fhd-gallery__nav--next { right: var(--space-3); }
+.fhd-gallery__count { position: absolute; top: var(--space-3); right: var(--space-3); z-index: 1; padding: 2px var(--space-2); font-family: var(--font-mono); font-size: 12px; line-height: 16px; font-weight: 600; color: var(--bg); background: var(--ink); border-radius: var(--radius-sm); }
+.fhd-gallery__thumbs { display: flex; flex-wrap: wrap; gap: var(--space-2); margin: 0; padding: 0; list-style: none; }
+.fhd-gallery__thumb { display: block; width: 72px; aspect-ratio: 4 / 3; padding: 0; overflow: hidden; background: var(--bg-subtle); border: var(--border-thick) solid var(--line); border-radius: var(--radius-sm); cursor: pointer; opacity: 0.7; transition: opacity var(--duration-feedback) var(--ease-out); }
+.fhd-gallery__thumb:hover { opacity: 1; }
+.fhd-gallery__thumb[aria-current="true"] { opacity: 1; border-color: var(--accent); }
+.fhd-gallery__thumb:focus-visible { outline: none; box-shadow: var(--focus-ring); opacity: 1; }
+.fhd-gallery__thumb img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.fhd-gallery--dimmed .fhd-gallery__thumb img { filter: grayscale(1); }
+@media (prefers-reduced-motion: no-preference) {
+  .fhd-gallery__track { scroll-behavior: smooth; }
 }
 
 /* ---------- StatCard ---------- */
@@ -476,7 +516,7 @@ textarea.fhd-field__input { height: auto; min-height: 96px; padding: var(--space
 /* Movement, scale and stagger stop; state changes (color, open and closed, selected) still show at once. */
 @media (prefers-reduced-motion: reduce) {
   :root { --motion-shift: 0px; --motion-shift-sm: 0px; --motion-scale-media: 1; --stagger-step: 0ms; --stagger-max: 0ms; }
-  .fhd-btn, .fhd-chip, .fhd-tab, .fhd-field__control, .fhd-check__box, .fhd-switch__track, .fhd-switch__thumb, .fhd-product, .fhd-nav__link, .fhd-side__item, .fhd-accordion__mark, .fhd-accordion__mark .fhd-icon, .fhd-product__media img, .fhd-nav__menu, .fhd-side__panel { transition: none; }
+  .fhd-gallery__thumb, .fhd-btn, .fhd-chip, .fhd-tab, .fhd-field__control, .fhd-check__box, .fhd-switch__track, .fhd-switch__thumb, .fhd-product, .fhd-nav__link, .fhd-side__item, .fhd-accordion__mark, .fhd-accordion__mark .fhd-icon, .fhd-product__media img, .fhd-nav__menu, .fhd-side__panel { transition: none; }
   .fhd-accordion[data-animate] .fhd-accordion__panel, .fhd-accordion[data-animate] .fhd-accordion__item[data-state="closed"] .fhd-accordion__panel { transition: none; }
   .fhd-btn:active { transform: none; }
   .fhd-chart__bar, .fhd-chart__lift, .fhd-chart__val { animation: none; transition: none; }

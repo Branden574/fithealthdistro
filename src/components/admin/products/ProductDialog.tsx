@@ -1,6 +1,6 @@
 'use client';
 
-import { Alert, Button, Checkbox, Dialog, PhotoField, Select, TextField } from '@ds';
+import { Alert, Button, Checkbox, Dialog, PhotosField, Select, TextField } from '@ds';
 import { useEffect, useRef, useState, useTransition, type FormEvent } from 'react';
 import type { AdminCategory, AdminProduct } from '@/lib/admin/catalog';
 import { discardPhotos, saveProduct, startPhotoUpload } from '@/lib/admin/catalog-actions';
@@ -36,7 +36,7 @@ const FOCUS: Array<[ProductField, string]> = [
   ['sku', '[name="sku"]'],
   ['stock', '[name="stock"]'],
   ['description', '[name="description"]'],
-  ['photo', '.fhd-photo button'],
+  ['photo', '.fhd-photos__add button, .fhd-photos button'],
   ['details', '[name="details"]'],
   ['specs', '.spec-rows [aria-invalid="true"], .spec-rows button'],
   ['slug', '[name="slug"]'],
@@ -48,7 +48,10 @@ const PROBLEM: Partial<Record<ProductFormState['status'], { title: string; body:
   error: { title: 'That did not save', body: 'Nothing was changed. Try again in a moment.' },
 };
 
-const PHOTO_PROBLEM = 'Pick a JPEG, PNG or WebP photo up to 5 MB.';
+const PHOTO_PROBLEM = 'Pick JPEG, PNG or WebP photos up to 5 MB each.';
+const UPLOAD_PROBLEM = 'A photo did not upload. Add it again.';
+
+type Photo = { path: string; url: string };
 
 /** Adds or edits a product. Photos upload as soon as they are picked, so Save is quick. */
 export function ProductDialog({ open, product, categories, defaultCategoryId, onClose, onSaved }: ProductDialogProps) {
@@ -59,9 +62,11 @@ export function ProductDialog({ open, product, categories, defaultCategoryId, on
   const [pending, startTransition] = useTransition();
   const [description, setDescription] = useState(product?.description ?? '');
   const [details, setDetails] = useState(product?.details ?? '');
-  const [photo, setPhoto] = useState<{ path: string | null; url: string | null }>({ path: product?.imagePath ?? null, url: product?.imageUrl ?? null });
+  const [photos, setPhotos] = useState<Photo[]>(product?.photos ?? []);
   const [uploading, setUploading] = useState(false);
   const [photoError, setPhotoError] = useState<string>();
+  // Set while photos upload, so a second pick can never start a second run of uploads beside it.
+  const busy = useRef(false);
   // Photos uploaded while this form was open. Any the product does not end up using are tidied away.
   const uploaded = useRef<string[]>([]);
   const formRef = useRef<HTMLFormElement>(null);
@@ -79,53 +84,75 @@ export function ProductDialog({ open, product, categories, defaultCategoryId, on
     }
   }, [state]);
 
-  function tidy(keep: string | null) {
-    const spare = uploaded.current.filter((path) => path !== keep && path !== product?.imagePath);
+  function tidy(keep: readonly string[]) {
+    // The product's own photos stay until a save takes them off; the server removes them then.
+    const spare = uploaded.current.filter((path) => !keep.includes(path) && !product?.photos.some((photo) => photo.path === path));
     uploaded.current = [];
     if (spare.length) void discardPhotos(id, spare);
   }
 
   function close() {
     if (pending || uploading) return;
-    tidy(null);
+    tidy([]);
     onClose();
   }
 
-  async function choose(file: File) {
-    if (!photoEnding(file.type) || file.size > PHOTO_MAX_BYTES) {
-      setPhotoError(PHOTO_PROBLEM);
-      return;
-    }
-    setPhotoError(undefined);
+  /** Uploads the picked files one after another, adding each to the end of the list as it lands. */
+  async function choose(files: File[]) {
+    if (busy.current) return;
+    const usable = files.filter((file) => photoEnding(file.type) && file.size <= PHOTO_MAX_BYTES);
+    let problem: string | undefined = usable.length < files.length ? PHOTO_PROBLEM : undefined;
+    setPhotoError(problem);
+    if (!usable.length) return;
+    busy.current = true;
     setUploading(true);
     try {
-      const ticket = await startPhotoUpload(id, file.type, file.size);
-      if (!ticket.ok) {
-        setPhotoError(ticket.reason === 'type' ? PHOTO_PROBLEM : ticket.reason === 'signed-out' ? 'Your session ended. Sign in again, then pick the photo.' : 'The photo did not upload. Try again.');
-        return;
+      for (const file of usable) {
+        const ticket = await startPhotoUpload(id, file.type, file.size);
+        if (!ticket.ok) {
+          if (ticket.reason === 'signed-out') {
+            problem = 'Your session ended. Sign in again, then add the photos.';
+            break;
+          }
+          problem = ticket.reason === 'type' ? PHOTO_PROBLEM : UPLOAD_PROBLEM;
+          continue;
+        }
+        const response = await fetch(ticket.url, {
+          method: 'PUT',
+          body: file,
+          headers: {
+            'content-type': file.type,
+            'x-upsert': 'false',
+            // Each upload has a new name, so a browser may keep it for a year.
+            'cache-control': 'max-age=31536000',
+            apikey: process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ?? '',
+          },
+        });
+        if (!response.ok) {
+          problem = response.status === 413 || response.status === 415 || response.status === 400 ? PHOTO_PROBLEM : UPLOAD_PROBLEM;
+          continue;
+        }
+        uploaded.current.push(ticket.path);
+        const added = { path: ticket.path, url: ticket.publicUrl };
+        // A full list (photos removed and re-added meanwhile) leaves the upload spare; closing or saving tidies it.
+        setPhotos((current) => (current.length < PRODUCT_LIMITS.photos ? [...current, added] : current));
       }
-      const response = await fetch(ticket.url, {
-        method: 'PUT',
-        body: file,
-        headers: {
-          'content-type': file.type,
-          'x-upsert': 'false',
-          // Each upload has a new name, so a browser may keep it for a year.
-          'cache-control': 'max-age=31536000',
-          apikey: process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ?? '',
-        },
-      });
-      if (!response.ok) {
-        setPhotoError(response.status === 413 || response.status === 415 || response.status === 400 ? PHOTO_PROBLEM : 'The photo did not upload. Try again.');
-        return;
-      }
-      uploaded.current.push(ticket.path);
-      setPhoto({ path: ticket.path, url: ticket.publicUrl });
     } catch {
-      setPhotoError('The photo did not upload. Check your connection and try again.');
+      problem = 'A photo did not upload. Check your connection and add it again.';
     } finally {
+      busy.current = false;
       setUploading(false);
+      setPhotoError(problem);
     }
+  }
+
+  function movePhoto(from: number, to: number) {
+    setPhotos((current) => {
+      const next = [...current];
+      const [moved] = next.splice(from, 1);
+      if (moved) next.splice(to, 0, moved);
+      return next;
+    });
   }
 
   function submit(event: FormEvent<HTMLFormElement>) {
@@ -135,7 +162,7 @@ export function ProductDialog({ open, product, categories, defaultCategoryId, on
     startTransition(async () => {
       const result = await saveProduct(state, data);
       if (result.status === 'saved') {
-        tidy(result.imagePath ?? null);
+        tidy(result.photos ?? []);
         onSaved(result);
       } else {
         setState(result);
@@ -183,7 +210,9 @@ export function ProductDialog({ open, product, categories, defaultCategoryId, on
 
         <input type="hidden" name="id" value={id} />
         {isNew ? <input type="hidden" name="is_new" value="yes" /> : null}
-        <input type="hidden" name="image_path" value={photo.path ?? ''} />
+        {photos.map((photo) => (
+          <input key={photo.path} type="hidden" name="photos" value={photo.path} />
+        ))}
 
         <TextField name="name" label="Name" required maxLength={PRODUCT_LIMITS.name} defaultValue={product?.name} error={errors.name} />
         <Select
@@ -239,14 +268,16 @@ export function ProductDialog({ open, product, categories, defaultCategoryId, on
           hint={`On the product card. ${description.length} of ${PRODUCT_LIMITS.description} characters.`}
           error={errors.description}
         />
-        <PhotoField
-          label="Photo"
-          hint="JPEG, PNG or WebP, up to 5 MB. Cropped to 4:3, as on the storefront."
-          src={photo.url}
+        <PhotosField
+          label="Photos"
+          hint="JPEG, PNG or WebP, up to 5 MB each. The first is the cover on the product card. Cropped to 4:3, as on the storefront."
+          max={PRODUCT_LIMITS.photos}
+          photos={photos.map((photo) => ({ key: photo.path, src: photo.url }))}
           busy={uploading}
           error={photoError ?? errors.photo}
-          onSelect={choose}
-          onRemove={() => setPhoto({ path: null, url: null })}
+          onSelect={(files) => void choose(files)}
+          onMove={movePhoto}
+          onRemove={(index) => setPhotos((current) => current.filter((_, at) => at !== index))}
         />
         <Checkbox
           name="visible"

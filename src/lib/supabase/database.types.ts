@@ -435,6 +435,7 @@ export type Database = {
           image_path: string | null
           is_sample: boolean
           name: string
+          photos: string[]
           price_cents: number | null
           price_note: string
           sku: string
@@ -453,6 +454,7 @@ export type Database = {
           image_path?: string | null
           is_sample?: boolean
           name: string
+          photos?: string[]
           price_cents?: number | null
           price_note?: string
           sku: string
@@ -471,6 +473,7 @@ export type Database = {
           image_path?: string | null
           is_sample?: boolean
           name?: string
+          photos?: string[]
           price_cents?: number | null
           price_note?: string
           sku?: string

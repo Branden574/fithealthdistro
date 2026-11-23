@@ -1,0 +1,44 @@
+<!-- @dsCard group="Admin" height=520 -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>PhotosField preview</title>
+<style>
+  .demo { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: var(--space-8); padding: var(--space-6); }
+  .demo > * { min-width: 0; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+  var F = window.FHD, h = React.createElement;
+  var HINT = 'JPEG, PNG or WebP, up to 5 MB each. Cropped to 4:3, as on the storefront.';
+  function sample(fill) {
+    return 'data:image/svg+xml;utf8,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"><rect width="400" height="300" fill="#1c1c1a"/><rect x="140" y="40" width="120" height="220" rx="8" fill="' + fill + '"/><rect x="156" y="60" width="88" height="120" fill="#1c1c1a"/></svg>');
+  }
+  var START = [
+    { key: 'a', src: sample('#e7511e') },
+    { key: 'b', src: sample('#f2f0e9') },
+    { key: 'c', src: sample('#8a8d84') },
+  ];
+  function App() {
+    var a = React.useState(START), photos = a[0], setPhotos = a[1];
+    function move(from, to) {
+      var next = photos.slice(); var item = next.splice(from, 1)[0]; next.splice(to, 0, item); setPhotos(next);
+    }
+    return h('div', { className: 'demo' },
+      h(F.PhotosField, {
+        label: 'Photos', hint: HINT, max: 8, photos: photos,
+        onSelect: function (files) { setPhotos(photos.concat(files.map(function (file, i) { return { key: file.name + Date.now() + i, src: URL.createObjectURL(file) }; }))); },
+        onMove: move,
+        onRemove: function (index) { setPhotos(photos.filter(function (_, i) { return i !== index; })); },
+      }),
+      h(F.PhotosField, { label: 'Photos', hint: HINT, max: 8, photos: [], onSelect: function () {}, onMove: function () {}, onRemove: function () {} }),
+      h(F.PhotosField, { label: 'Photos', hint: HINT, max: 8, photos: START.slice(0, 1), busy: true, onSelect: function () {}, onMove: function () {}, onRemove: function () {} }),
+      h(F.PhotosField, { label: 'Photos', hint: HINT, max: 8, photos: START.slice(0, 2), error: 'Pick JPEG, PNG or WebP photos up to 5 MB each.', onSelect: function () {}, onMove: function () {}, onRemove: function () {} }));
+  }
+  ReactDOM.createRoot(document.getElementById('root')).render(h(App));
+</script>
+</body>
+</html>

@@ -1,4 +1,4 @@
-import { Badge, Icon, SpecList } from '@ds';
+import { Badge, Gallery, Icon, SpecList } from '@ds';
 import type { ProductDetail } from '@/lib/catalog';
 import { CATALOG_ID, homeHref } from '@/lib/catalog/links';
 import { pick, t, type Copy } from '@/lib/copy';
@@ -11,7 +11,7 @@ function dollars(amount: number): string {
   return '$' + amount.toLocaleString('en-US', { minimumFractionDigits: cents ? 2 : 0, maximumFractionDigits: 2 });
 }
 
-/** A product's own page: photo, name, price, description, the request button, and its specs. */
+/** A product's own page: photos, name, price, description, the request button, and its specs. */
 export function ProductView({ copy, product, linkBase = '' }: { copy: Copy; product: ProductDetail; linkBase?: string }) {
   const unavailable = product.stock === 'out_of_stock';
   const hasPrice = product.price != null && product.price > 0;
@@ -28,15 +28,17 @@ export function ProductView({ copy, product, linkBase = '' }: { copy: Copy; prod
           {t(copy, 'product.back')}
         </a>
         <div className="product-page__grid">
-          <div className={unavailable ? 'product-page__media product-page__media--unavailable fhd-enter' : 'product-page__media fhd-enter'}>
-            {product.imageUrl ? (
-              // The design system's photo frame: 4:3, cropped to fill. The name beside it says what it shows.
-              // eslint-disable-next-line @next/next/no-img-element
-              <img src={product.imageUrl} alt="" />
-            ) : (
-              <Icon name={product.category.icon} size={96} />
-            )}
-          </div>
+          {/* The name beside it says what the photos show, so each has empty alt text. */}
+          <Gallery
+            className="fhd-enter"
+            photos={product.photos.map((src) => ({ src }))}
+            label={t(copy, 'product.gallery.label', { name: product.name })}
+            previousLabel={t(copy, 'product.gallery.previous')}
+            nextLabel={t(copy, 'product.gallery.next')}
+            photoLabel={t(copy, 'product.gallery.photo')}
+            placeholder={<Icon name={product.category.icon} size={96} />}
+            dimmed={unavailable}
+          />
           <div className="product-page__info fhd-enter fhd-enter-1">
             <p className="eyebrow product-page__category">{product.category.name}</p>
             <h1 className="headline product-page__name" id="product-title">

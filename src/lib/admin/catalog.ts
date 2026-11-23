@@ -26,7 +26,9 @@ export interface AdminProduct {
   priceNote: string;
   stock: StockStatus;
   visible: boolean;
-  imagePath: string | null;
+  /** In display order; the first is the cover. */
+  photos: Array<{ path: string; url: string }>;
+  /** The cover, for the product list. */
   imageUrl: string | null;
   isSample: boolean;
   details: string;
@@ -52,7 +54,7 @@ export async function getAdminCatalog(): Promise<{ categories: AdminCategory[]; 
     supabase.from('categories').select('id, slug, name, icon, position').order('position').order('name'),
     supabase
       .from('products')
-      .select('id, slug, category_id, name, sku, description, price_cents, price_note, stock_status, visible, image_path, is_sample, details, specs')
+      .select('id, slug, category_id, name, sku, description, price_cents, price_note, stock_status, visible, photos, is_sample, details, specs')
       .order('name'),
   ]);
   if (categories.error) throw new Error(`Could not read categories: ${categories.error.message}`);
@@ -71,8 +73,8 @@ export async function getAdminCatalog(): Promise<{ categories: AdminCategory[]; 
     priceNote: row.price_note,
     stock: row.stock_status,
     visible: row.visible,
-    imagePath: row.image_path,
-    imageUrl: row.image_path ? productImageUrl(row.image_path) : null,
+    photos: row.photos.map((path) => ({ path, url: productImageUrl(path) })),
+    imageUrl: row.photos[0] ? productImageUrl(row.photos[0]) : null,
     isSample: row.is_sample,
     details: row.details,
     specs: specRows(row.specs),

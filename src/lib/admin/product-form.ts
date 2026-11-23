@@ -13,6 +13,8 @@ export const PRODUCT_LIMITS = {
   specLabel: 40,
   specValue: 200,
   specRows: 30,
+  /** Photos a product can have; the first is the cover. */
+  photos: 8,
 } as const;
 
 /** Largest price the catalog takes, in cents: $1,000,000. */
@@ -43,7 +45,18 @@ export interface SpecRow {
   value: string;
 }
 
-export type ProductField = 'name' | 'categoryId' | 'price' | 'priceNote' | 'sku' | 'description' | 'stock' | 'photo' | 'details' | 'specs' | 'slug';
+export type ProductField =
+  | 'name'
+  | 'categoryId'
+  | 'price'
+  | 'priceNote'
+  | 'sku'
+  | 'description'
+  | 'stock'
+  | 'photo'
+  | 'details'
+  | 'specs'
+  | 'slug';
 
 export interface ProductInput {
   id: string;
@@ -56,7 +69,8 @@ export interface ProductInput {
   description: string;
   stock: StockStatus;
   visible: boolean;
-  imagePath: string | null;
+  /** Paths in the product's own photo folder, in display order. The first is the cover. */
+  photos: string[];
   details: string;
   specs: SpecRow[];
   /** Empty on a new product: the database makes one from the name. */
@@ -72,8 +86,8 @@ export interface ProductFormState {
   name?: string;
   visible?: boolean;
   isNew?: boolean;
-  /** The photo the saved product kept, so the dialog can tidy away others it uploaded. */
-  imagePath?: string | null;
+  /** The photos the saved product kept, so the dialog can tidy away others it uploaded. */
+  photos?: string[];
   attempt: number;
 }
 
@@ -152,8 +166,13 @@ export function readProductForm(form: FormData): ReadResult {
   const stock = STOCK_OPTIONS.find((option) => option.value === stockRaw)?.value;
   if (!stock) errors.stock = 'Choose how much is in stock.';
 
-  const imagePath = text(form, 'image_path', 120).value || null;
-  if (imagePath && !(UUID.test(id) && isPhotoPathFor(id, imagePath))) errors.photo = 'Choose the photo again.';
+  // Photo paths arrive in display order, one field each. Only paths in this product's own folder, once each.
+  const photoValues = form.getAll('photos').slice(0, PRODUCT_LIMITS.photos + 1);
+  const photos = [...new Set(photoValues.map((value) => (typeof value === 'string' ? value.slice(0, 130) : '')))];
+  if (photoValues.length > PRODUCT_LIMITS.photos) errors.photo = `Keep it to ${PRODUCT_LIMITS.photos} photos.`;
+  else if (photos.length !== photoValues.length || photos.some((path) => !(UUID.test(id) && isPhotoPathFor(id, path))))
+    errors.photo = 'Choose the photos again.';
+
 
   const details = multiLine(text(form, 'details', PRODUCT_LIMITS.details).value);
   if (details.length > PRODUCT_LIMITS.details) errors.details = `Keep the page text to ${PRODUCT_LIMITS.details.toLocaleString('en-US')} characters.`;
@@ -204,7 +223,7 @@ export function readProductForm(form: FormData): ReadResult {
       description,
       stock,
       visible: form.get('visible') === 'yes',
-      imagePath,
+      photos,
       details,
       specs,
       slug,

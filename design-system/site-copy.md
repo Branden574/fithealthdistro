@@ -26,6 +26,14 @@ The text the storefront ships with, slot by slot. The admin’s Site content pag
 | `home.hero.lead` | Home · Hero · Intro paragraph | Vending machines, fitness supplements and drinks. Tell us what you need and we will send you a quote. | 160 |
 | `home.hero.primary` | Home · Hero · Main button | Request a quote | 22 |
 | `home.hero.secondary` | Home · Hero · Second button | Browse the catalog | 22 |
+| `home.how.eyebrow` | Home · How it works · Eyebrow | How it works | 40 |
+| `home.how.heading` | Home · How it works · Heading | From catalog to quote | 40 |
+| `home.how.1.title` | Home · How it works · Step 1 title | Pick what you need | 32 |
+| `home.how.1.body` | Home · How it works · Step 1 text | Browse the catalog and press I'm interested on anything you want. | 120 |
+| `home.how.2.title` | Home · How it works · Step 2 title | Send your request | 32 |
+| `home.how.2.body` | Home · How it works · Step 2 text | Tell us how many, where they are going and when you need them. | 120 |
+| `home.how.3.title` | Home · How it works · Step 3 title | Get your quote | 32 |
+| `home.how.3.body` | Home · How it works · Step 3 text | We send you a quote for what you asked about. | 120 |
 | `catalog.eyebrow` | Catalog · Heading · Eyebrow | Catalog | 24 |
 | `catalog.heading` | Catalog · Heading · Heading | In the catalog | 28 |
 | `catalog.filter.all` | Catalog · Filters · All filter | All | 12 |
@@ -102,6 +110,10 @@ The text the storefront ships with, slot by slot. The admin’s Site content pag
 | `footer.terms` | All pages · Footer · Terms link | Terms of Use | 24 |
 | `footer.privacy` | All pages · Footer · Privacy link | Privacy Policy | 24 |
 | `product.back` | Product · Navigation · Back to the catalog | All products | 24 |
+| `product.gallery.label` | Product · Photos · Photos, for screen readers | Photos of {name} | 60 |
+| `product.gallery.previous` | Product · Photos · Previous photo, for screen readers | Previous photo | 28 |
+| `product.gallery.next` | Product · Photos · Next photo, for screen readers | Next photo | 28 |
+| `product.gallery.photo` | Product · Photos · One photo, for screen readers | Photo {number} of {total} | 40 |
 | `product.specs.heading` | Product · Details · Specs heading | Specifications | 28 |
 | `product.request.view` | Product · Details · Link to the request | See your request | 24 |
 | `product.missing.title` | Product · Not found · Title | Not in the catalog | 28 |
