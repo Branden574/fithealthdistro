@@ -15,7 +15,11 @@ export function queryWords(query: string): string[] {
   return searchable(query).split(' ').filter(Boolean);
 }
 
-/** True when every word appears somewhere in the product's text, in any order and inside longer words ("drink" finds "drinks"). */
+/**
+ * True when every word starts a word in the product's text, in any order: "drink" finds "drinks" and "vend" finds
+ * "vending", but "ice" does not find "price", so a search for something not in the catalog offers "Ask about it".
+ */
 export function matchesAll(text: string, words: readonly string[]): boolean {
-  return words.every((word) => text.includes(word));
+  const padded = ` ${text}`;
+  return words.every((word) => padded.includes(` ${word}`));
 }
