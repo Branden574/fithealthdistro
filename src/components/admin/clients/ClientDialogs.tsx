@@ -4,7 +4,7 @@ import { Alert, Button, Dialog, TextField } from '@ds';
 import { useEffect, useRef, useState, useTransition, type FormEvent } from 'react';
 import type { AdminClient } from '@/lib/admin/clients';
 import { recordActivity, saveClient } from '@/lib/admin/client-actions';
-import { CLIENT_LIMITS, INITIAL_CLIENT_STATE, type ClientFormState } from '@/lib/admin/client-form';
+import { CLIENT_LIMITS, INITIAL_CLIENT_STATE, type ClientFormState, type RecordedKind } from '@/lib/admin/client-form';
 
 const PROBLEM: Partial<Record<ClientFormState['status'], { title: string; body: string }>> = {
   'signed-out': { title: 'Your session ended', body: 'Sign in again in another tab, then save.' },
@@ -51,7 +51,7 @@ function useClientForm(action: Action, onSaved: () => void, fieldOrder: Readonly
 }
 
 const CLIENT_FIELDS = ['name', 'company', 'phone'] as const;
-const ACTIVITY_FIELDS = ['day', 'note'] as const;
+const ACTIVITY_FIELDS = ['day', 'amount', 'note'] as const;
 
 interface EditClientDialogProps {
   open: boolean;
@@ -98,30 +98,46 @@ export function EditClientDialog({ open, client, onClose, onSaved }: EditClientD
 interface RecordActivityDialogProps {
   open: boolean;
   client: AdminClient;
+  /** A call or a visit, or an order with its total. */
+  kind: RecordedKind;
   /** The admin's calendar day: the latest day the form takes. */
   today: string;
   onClose: () => void;
   onSaved: () => void;
 }
 
-/** Records something a client did away from the website. It counts toward retention like an inquiry does. */
-export function RecordActivityDialog({ open, client, today, onClose, onSaved }: RecordActivityDialogProps) {
+const RECORD_TEXT: Record<RecordedKind, { title: string; description: (name: string) => string; placeholder: string }> = {
+  manual: {
+    title: 'Record activity',
+    description: (name) => `A call or a visit with ${name}. It counts toward retention, the same as an inquiry.`,
+    placeholder: 'Called about a second machine',
+  },
+  order: {
+    title: 'Record order',
+    description: (name) => `An order ${name} placed by phone, email or in person. It counts toward sales, conversion and retention.`,
+    placeholder: 'Two combo machines for the lobby',
+  },
+};
+
+/** Records something a client did away from the website, or an order they placed, on the day it happened. */
+export function RecordActivityDialog({ open, client, kind, today, onClose, onSaved }: RecordActivityDialogProps) {
   const { state, pending, formRef, submit, alert } = useClientForm(recordActivity, onSaved, ACTIVITY_FIELDS);
-  const formId = `activity-form-${client.id}`;
+  const formId = `${kind}-form-${client.id}`;
+  const text = RECORD_TEXT[kind];
   return (
     <Dialog
       open={open}
       onClose={() => (pending ? undefined : onClose())}
       size="md"
-      title="Record activity"
-      description={`A call, a visit or an order by phone from ${client.name}. It counts toward retention, the same as an inquiry.`}
+      title={text.title}
+      description={text.description(client.name)}
       footer={
         <>
           <Button variant="outline" onClick={onClose} disabled={pending}>
             Cancel
           </Button>
           <Button type="submit" form={formId} variant="primary" loading={pending}>
-            Record activity
+            {text.title}
           </Button>
         </>
       }
@@ -129,13 +145,27 @@ export function RecordActivityDialog({ open, client, today, onClose, onSaved }: 
       <form ref={formRef} id={formId} className="admin-form" onSubmit={submit} noValidate aria-busy={pending || undefined}>
         {alert}
         <input type="hidden" name="client_id" value={client.id} />
+        <input type="hidden" name="kind" value={kind} />
         <TextField name="day" type="date" label="Day" required max={today} min="2000-01-01" defaultValue={today} error={state.errors?.day} />
+        {kind === 'order' ? (
+          <TextField
+            name="amount"
+            label="Order total"
+            required
+            inputMode="decimal"
+            autoComplete="off"
+            prefix="$"
+            placeholder="1250.00"
+            hint="In dollars. It counts toward sales on the dashboard."
+            error={state.errors?.amount}
+          />
+        ) : null}
         <TextField
           name="note"
           label="Note"
           autoComplete="off"
           maxLength={CLIENT_LIMITS.note}
-          placeholder="Called about a second machine"
+          placeholder={text.placeholder}
           hint="Optional. One line, for whoever reads this later."
           error={state.errors?.note}
         />

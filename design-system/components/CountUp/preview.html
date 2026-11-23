@@ -1,0 +1,33 @@
+<!-- @dsCard group="Dashboard" height=260 -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>CountUp preview</title>
+<style>
+  .demo { display: grid; gap: var(--space-5); padding: var(--space-6); }
+  .row { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: var(--space-4); }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+  var F = window.FHD, h = React.createElement;
+  var PERIODS = { 30: { sales: 12480, orders: 9 }, 60: { sales: 23150.5, orders: 17 }, 90: { sales: 31920, orders: 26 } };
+  function dollars(n) { return '$' + Math.round(n).toLocaleString('en-US'); }
+  function App() {
+    var s = React.useState(30), days = s[0], setDays = s[1];
+    var p = PERIODS[days];
+    return h('div', { className: 'demo' },
+      h('div', { className: 'row' }, [30, 60, 90].map(function (d) {
+        return h(F.Chip, { key: d, selected: d === days, onClick: function () { setDays(d); } }, d + ' days');
+      })),
+      h('div', { className: 'grid' },
+        h(F.StatCard, { label: 'Sales', value: h(F.CountUp, { value: p.sales, format: dollars }), helper: 'Last ' + days + ' days' }),
+        h(F.StatCard, { label: 'Orders', value: h(F.CountUp, { value: p.orders }), helper: 'Last ' + days + ' days' })));
+  }
+  ReactDOM.createRoot(document.getElementById('root')).render(h(App));
+</script>
+</body>
+</html>

@@ -3,7 +3,7 @@
 import { Sidebar, type SidebarSection } from '@ds';
 import { usePathname, useRouter } from 'next/navigation';
 import { useTransition, type MouseEvent } from 'react';
-import { CATEGORIES_PATH, CLIENTS_PATH, CONTENT_PATH, INQUIRIES_PATH, PRODUCTS_PATH, SETTINGS_PATH } from '@/lib/admin/paths';
+import { ADMIN_HOME, CATEGORIES_PATH, CLIENTS_PATH, CONTENT_PATH, INQUIRIES_PATH, PRODUCTS_PATH, RETENTION_PATH, SETTINGS_PATH } from '@/lib/admin/paths';
 import { signOut } from '@/lib/admin/session-actions';
 
 interface AdminSidebarProps {
@@ -21,6 +21,7 @@ export function AdminSidebar({ name, productCount, newInquiries }: AdminSidebarP
   const [, startTransition] = useTransition();
 
   const sections: SidebarSection[] = [
+    { items: [{ id: ADMIN_HOME, label: 'Dashboard', icon: 'squares-four', href: ADMIN_HOME }] },
     {
       title: 'Catalog',
       items: [
@@ -33,6 +34,7 @@ export function AdminSidebar({ name, productCount, newInquiries }: AdminSidebarP
       items: [
         { id: INQUIRIES_PATH, label: 'Inquiries', icon: 'tray', href: INQUIRIES_PATH, count: newInquiries ? newInquiries : undefined },
         { id: CLIENTS_PATH, label: 'Clients', icon: 'users-three', href: CLIENTS_PATH },
+        { id: RETENTION_PATH, label: 'Retention', icon: 'chart-bar', href: RETENTION_PATH },
       ],
     },
     { title: 'Website', items: [{ id: CONTENT_PATH, label: 'Site content', icon: 'text-aa', href: CONTENT_PATH }] },
@@ -40,7 +42,7 @@ export function AdminSidebar({ name, productCount, newInquiries }: AdminSidebarP
   ];
   const current = sections
     .flatMap((section) => section.items)
-    .find((item) => item.href && (pathname === item.href || pathname.startsWith(`${item.href}/`)))?.id;
+    .find((item) => item.href && (pathname === item.href || (item.href !== ADMIN_HOME && pathname.startsWith(`${item.href}/`))))?.id;
 
   function select(id: string, event: MouseEvent<HTMLElement>) {
     const mouse = event as MouseEvent<HTMLAnchorElement>;

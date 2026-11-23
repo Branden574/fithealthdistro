@@ -120,6 +120,15 @@ export async function getInquiry(id: string): Promise<AdminInquiry | null> {
   return data ? toInquiry(data as Row, zone, now) : null;
 }
 
+/** The newest inquiry, whatever its status, or null when there are none. Call `requireAdmin` first. */
+export async function getLatestInquiry(): Promise<AdminInquiry | null> {
+  const supabase = await createSessionClient();
+  const [zone, now] = [await adminTimeZone(), new Date()];
+  const { data, error } = await supabase.from('inquiries').select(COLUMNS).order('created_at', { ascending: false }).order('id').limit(1).maybeSingle();
+  if (error) throw new Error(`Could not read the latest inquiry: ${error.message}`);
+  return data ? toInquiry(data as Row, zone, now) : null;
+}
+
 /** A mail to the client with the subject filled in. Opening it does not mean it was sent. */
 export function replyHref(inquiry: Pick<AdminInquiry, 'email' | 'name'>): string {
   const first = inquiry.name.split(' ')[0] ?? '';

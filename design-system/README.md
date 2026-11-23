@@ -54,6 +54,7 @@ Three families, shipped in `fonts/`.
   - A section fades in the first time it scrolls into view (`data-reveal`). Fade only: it does not travel.
   - A list that is replaced in answer to the visitor, such as the catalog after a filter, appears item by item (`fhd-appear-list`), capped at `stagger-max`.
   - A product photo may lean in to `motion-scale-media` on hover, inside the card's edge, on pointer devices only.
+  - Charts: bars rise into place once (`duration-enter`, staggered) and slide to new values when the data changes. A figure that changes in place, such as a stat when the period changes, counts to its new value (`CountUp`). Both show the real value on first render; nothing counts up from zero.
 - Move only opacity and transform. The one exception is an accordion answer opening, which has to change the layout.
 - Content is visible without motion. An entrance must never be the only way something becomes visible, and a control never waits for an animation to finish.
 - Keyboard focus shows at once, with no transition on the ring.

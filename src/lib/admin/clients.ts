@@ -41,6 +41,8 @@ export interface ClientInquiry {
 export interface ClientActivityItem {
   id: string;
   kind: 'inquiry' | 'order' | 'manual';
+  /** An order's total in dollars; null for anything else. */
+  amount: number | null;
   note: string;
   when: string;
   /** The admin who recorded it, for activity recorded by hand. */
@@ -115,7 +117,7 @@ export async function getClient(
       .eq('id', id)
       .maybeSingle(),
     supabase.from('inquiries').select('id, created_at, status, interest').eq('client_id', id).order('created_at', { ascending: false }).limit(100),
-    supabase.from('client_activity').select('id, kind, note, occurred_at, created_by, inquiry_id').eq('client_id', id).order('occurred_at', { ascending: false }).limit(100),
+    supabase.from('client_activity').select('id, kind, amount, note, occurred_at, created_by, inquiry_id').eq('client_id', id).order('occurred_at', { ascending: false }).limit(100),
     supabase.from('admins').select('user_id, name, email'),
   ]);
   for (const result of [client, inquiries, activity, admins]) if (result.error) throw new Error(`Could not read the client: ${result.error.message}`);
@@ -146,6 +148,7 @@ export async function getClient(
     activity: (activity.data ?? []).map((item) => ({
       id: item.id,
       kind: item.kind,
+      amount: item.amount,
       note: item.note,
       when: formatDay(item.occurred_at, zone, now),
       by: item.created_by ? (names.get(item.created_by) ?? 'A former admin') : '',

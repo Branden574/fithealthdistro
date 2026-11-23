@@ -8,6 +8,7 @@ import { useAdminLinks } from '@/components/admin/links';
 import { leaveNotice, NoticeBar, problemNotice, type Notice } from '@/components/admin/Notice';
 import { removeActivity, removeClient, stopMarketing } from '@/lib/admin/client-actions';
 import type { AdminClient, ClientActivityItem, ClientInquiry } from '@/lib/admin/clients';
+import { formatDollars } from '@/lib/admin/money';
 import type { InquiryStatus } from '@/lib/admin/inquiries';
 import { CLIENTS_PATH, inquiryPath } from '@/lib/admin/paths';
 import { EditClientDialog, RecordActivityDialog } from './ClientDialogs';
@@ -21,7 +22,7 @@ interface ClientDetailProps {
 }
 
 type Confirm = { kind: 'marketing' } | { kind: 'client' } | { kind: 'activity'; item: ClientActivityItem };
-type Open = 'edit' | 'record' | null;
+type Open = 'edit' | 'record' | 'order' | null;
 
 const STATUS: Record<InquiryStatus, { label: string; tone: 'accent' | 'neutral' | 'success' }> = {
   new: { label: 'New', tone: 'accent' },
@@ -79,7 +80,9 @@ export function ClientDetail({ client, inquiries, activity, today }: ClientDetai
       say(
         what.kind === 'marketing'
           ? { tone: 'success', title: 'Stopped marketing email', body: `Send ${client.name} no more marketing. They can opt in again from the contact form.` }
-          : { tone: 'success', title: 'Removed the activity', body: 'Last active and retention now leave it out.' },
+          : what.kind === 'activity' && what.item.kind === 'order'
+            ? { tone: 'success', title: 'Removed the order', body: 'Sales, conversion, last active and retention now leave it out.' }
+            : { tone: 'success', title: 'Removed the activity', body: 'Last active and retention now leave it out.' },
       );
     });
   }
@@ -92,7 +95,8 @@ export function ClientDetail({ client, inquiries, activity, today }: ClientDetai
       minWidth: 220,
       render: (row) => (
         <span className="admin-cell-name">
-          <Badge tone={row.kind === 'manual' ? 'info' : 'neutral'}>{KIND[row.kind]}</Badge>
+          <Badge tone={row.kind === 'order' ? 'success' : row.kind === 'manual' ? 'info' : 'neutral'}>{KIND[row.kind]}</Badge>
+          {row.amount != null ? <span className="data">{formatDollars(row.amount)}</span> : null}
           {row.note ? <span>{row.note}</span> : null}
           {row.kind === 'inquiry' && row.inquiryId ? (
             <a className="admin-link" href={inquiryPath(row.inquiryId)}>
@@ -102,14 +106,20 @@ export function ClientDetail({ client, inquiries, activity, today }: ClientDetai
         </span>
       ),
     },
-    { key: 'by', header: 'By', nowrap: true, render: (row) => (row.kind === 'manual' ? row.by : <span className="admin-muted">Contact form</span>) },
+    { key: 'by', header: 'By', nowrap: true, render: (row) => (row.kind === 'inquiry' ? <span className="admin-muted">Contact form</span> : row.by) },
     {
       key: 'actions',
       header: <span className="fhd-sr">Actions</span>,
       align: 'right',
       render: (row) =>
-        row.kind === 'manual' ? (
-          <Button size="sm" variant="ghost" icon="trash" aria-label={`Remove the activity from ${row.when}`} onClick={() => ask({ kind: 'activity', item: row })} />
+        row.kind !== 'inquiry' ? (
+          <Button
+            size="sm"
+            variant="ghost"
+            icon="trash"
+            aria-label={row.kind === 'order' ? `Remove the order from ${row.when}` : `Remove the activity from ${row.when}`}
+            onClick={() => ask({ kind: 'activity', item: row })}
+          />
         ) : null,
     },
   ];
@@ -162,12 +172,19 @@ export function ClientDetail({ client, inquiries, activity, today }: ClientDetai
             action: 'Stop marketing email',
             cancel: 'Cancel',
           }
-        : {
-            title: 'Remove this activity?',
-            description: 'It no longer counts toward last active or retention. Inquiries are not affected.',
-            action: 'Remove activity',
-            cancel: 'Keep it',
-          };
+        : confirm?.kind === 'activity' && confirm.item.kind === 'order'
+          ? {
+              title: 'Remove this order?',
+              description: `The ${confirm.item.amount != null ? `${formatDollars(confirm.item.amount)} ` : ''}order from ${confirm.item.when} no longer counts toward sales, conversion, last active or retention.`,
+              action: 'Remove order',
+              cancel: 'Keep it',
+            }
+          : {
+              title: 'Remove this activity?',
+              description: 'It no longer counts toward last active or retention. Inquiries are not affected.',
+              action: 'Remove activity',
+              cancel: 'Keep it',
+            };
 
   return (
     <>
@@ -179,8 +196,11 @@ export function ClientDetail({ client, inquiries, activity, today }: ClientDetai
             <Button iconLeft="arrow-left" href={CLIENTS_PATH}>
               All clients
             </Button>
-            <Button variant="primary" iconLeft="plus" onClick={() => show('record')}>
+            <Button iconLeft="plus" onClick={() => show('record')}>
               Record activity
+            </Button>
+            <Button variant="primary" iconLeft="receipt" onClick={() => show('order')}>
+              Record order
             </Button>
           </>
         }
@@ -246,7 +266,7 @@ export function ClientDetail({ client, inquiries, activity, today }: ClientDetai
           <Panel
             flush
             title="Activity"
-            description="Each entry counts toward retention. Inquiries add one on their own; record calls, visits and phone orders."
+            description="Each entry counts toward retention. Inquiries add one on their own; record calls, visits and orders."
             footer={activity.length >= 100 ? 'Showing the latest 100' : undefined}
           >
             <DataTable
@@ -254,7 +274,7 @@ export function ClientDetail({ client, inquiries, activity, today }: ClientDetai
               columns={activityColumns}
               rows={activity}
               rowKey={(row) => row.id}
-              empty={<EmptyState compact icon="clock" title="No activity yet" description="Record a call, a visit or a phone order to start." />}
+              empty={<EmptyState compact icon="clock" title="No activity yet" description="Record a call, a visit or an order to start." />}
             />
           </Panel>
           <Panel flush title="Inquiries" description="What they sent through the contact form, newest first." footer={inquiries.length >= 100 ? 'Showing the latest 100' : undefined}>
@@ -289,12 +309,25 @@ export function ClientDetail({ client, inquiries, activity, today }: ClientDetai
           <RecordActivityDialog
             key={`record-${formKey}`}
             open={open === 'record'}
+            kind="manual"
             client={client}
             today={today}
             onClose={() => setOpen(null)}
             onSaved={() => {
               setOpen(null);
               say({ tone: 'success', title: 'Recorded the activity', body: 'It counts toward retention from now on.' });
+            }}
+          />
+          <RecordActivityDialog
+            key={`order-${formKey}`}
+            open={open === 'order'}
+            kind="order"
+            client={client}
+            today={today}
+            onClose={() => setOpen(null)}
+            onSaved={() => {
+              setOpen(null);
+              say({ tone: 'success', title: 'Recorded the order', body: 'It counts toward sales, conversion and retention from now on.' });
             }}
           />
         </>

@@ -1,10 +1,12 @@
 /** Admin addresses, shared by the proxy, the pages and the actions. */
+/** The dashboard. */
 export const ADMIN_HOME = '/admin';
 export const SIGN_IN_PATH = '/admin/sign-in';
 export const PRODUCTS_PATH = '/admin/products';
 export const CATEGORIES_PATH = '/admin/categories';
 export const INQUIRIES_PATH = '/admin/inquiries';
 export const CLIENTS_PATH = '/admin/clients';
+export const RETENTION_PATH = '/admin/retention';
 export const CONTENT_PATH = '/admin/content';
 export const SETTINGS_PATH = '/admin/settings';
 /** The storefront drawn from saved drafts. Admins only. */

@@ -50,7 +50,10 @@ export async function stopMarketing(id: string): Promise<QuickResult> {
   }
 }
 
-/** Records something the client did outside the website: a call, a visit, an order by phone. It counts toward retention. */
+/**
+ * Records something the client did outside the website: a call or a visit, or an order with its total. Both count toward
+ * retention; orders also count toward sales and conversion.
+ */
 export async function recordActivity(previous: ClientFormState, form: FormData): Promise<ClientFormState> {
   const attempt = (previous?.attempt ?? 0) + 1;
   try {
@@ -63,7 +66,8 @@ export async function recordActivity(previous: ClientFormState, form: FormData):
     if (!context) return { status: 'signed-out', attempt };
     const { error } = await context.supabase.from('client_activity').insert({
       client_id: read.clientId,
-      kind: 'manual',
+      kind: read.kind,
+      amount: read.kind === 'order' ? read.amount : null,
       note: read.note,
       // Today keeps the time it was recorded; an earlier day is filed at noon on that day, the admin's time.
       occurred_at: (read.day === today ? now : noonOn(read.day, zone)).toISOString(),
@@ -82,13 +86,13 @@ export async function recordActivity(previous: ClientFormState, form: FormData):
   }
 }
 
-/** Removes activity recorded by hand. Activity from an inquiry stays while the inquiry does. */
+/** Removes activity or an order recorded by hand. Activity from an inquiry stays while the inquiry does. */
 export async function removeActivity(id: string): Promise<QuickResult> {
   if (typeof id !== 'string' || !UUID.test(id)) return { ok: false, reason: 'error' };
   try {
     const context = await adminClient();
     if (!context) return { ok: false, reason: 'signed-out' };
-    const { data, error } = await context.supabase.from('client_activity').delete().eq('id', id).eq('kind', 'manual').select('id');
+    const { data, error } = await context.supabase.from('client_activity').delete().eq('id', id).in('kind', ['manual', 'order']).select('id');
     if (error) throw error;
     if (!data.length) return { ok: false, reason: 'missing' };
     refresh();

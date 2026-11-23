@@ -92,6 +92,7 @@ export type Database = {
       }
       client_activity: {
         Row: {
+          amount: number | null
           client_id: string
           created_at: string
           created_by: string | null
@@ -102,6 +103,7 @@ export type Database = {
           occurred_at: string
         }
         Insert: {
+          amount?: number | null
           client_id: string
           created_at?: string
           created_by?: string | null
@@ -112,6 +114,7 @@ export type Database = {
           occurred_at?: string
         }
         Update: {
+          amount?: number | null
           client_id?: string
           created_at?: string
           created_by?: string | null
@@ -592,6 +595,10 @@ export type Database = {
       }
     }
     Functions: {
+      dashboard_stats: {
+        Args: { p_now?: string; p_tz?: string }
+        Returns: Json
+      }
       find_user_id: { Args: { p_email: string }; Returns: string }
       get_draft_content: { Args: never; Returns: Json }
       get_storefront_content: { Args: never; Returns: Json }

@@ -315,7 +315,8 @@ export declare function StatCard(props: StatCardProps): React.JSX.Element;
 export interface BarChartDatum {
     /** Tick under the bar: "Jun". */
     label: string;
-    value: number;
+    /** The bar's value, or null when there is nothing to measure for that period. A null is drawn as a dash. */
+    value: number | null;
 }
 export interface BarChartProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'children'> {
     data: BarChartDatum[];
@@ -325,6 +326,10 @@ export interface BarChartProps extends Omit<React.HTMLAttributes<HTMLDivElement>
     max?: number;
     /** Appended to values and scale labels: "%". */
     unit?: string;
+    /** Writes a value as text, for values and scale labels alike: dollars, say. Overrides `unit` for the text. */
+    format?: (value: number) => string;
+    /** Read out for a null value. */
+    emptyLabel?: string;
     /** Index of the bar drawn in volt. Defaults to the last bar; pass -1 for none. */
     highlight?: number;
     /** Plot height in px. */
@@ -332,8 +337,26 @@ export interface BarChartProps extends Omit<React.HTMLAttributes<HTMLDivElement>
     /** Prints each value above its bar. */
     showValues?: boolean;
 }
-/** Vertical bars over time: retention by month, inquiries by week. Ink bars, one volt bar for the period that matters. */
+/**
+ * Vertical bars over time: retention by month, inquiries by week. Ink bars, one volt bar for the period that matters.
+ * Bars rise into place when the chart first shows and move to new heights when the data changes; under reduced motion
+ * they are simply there.
+ */
 export declare function BarChart(props: BarChartProps): React.JSX.Element;
+
+export interface CountUpProps {
+    /** The number to show. When it changes, the figure counts from what it showed to the new value. */
+    value: number;
+    /** Writes the number as text: "$12,480", "86". Defaults to whole numbers with thousands separators. */
+    format?: (value: number) => string;
+    className?: string;
+}
+/**
+ * A figure that counts to its new value when the value changes, so switching a period reads as movement. It shows the
+ * value as it is on first render, so the page is readable at once, and under reduced motion every change is instant.
+ * Screen readers get the final value only.
+ */
+export declare function CountUp({ value, format, className }: CountUpProps): React.JSX.Element;
 
 export interface DataTableColumn<Row = any> {
     /** Field name on the row; also the sort key. */
@@ -622,4 +645,4 @@ export interface WordmarkProps extends React.HTMLAttributes<HTMLSpanElement> {
 /** The company name set in Big Shoulders 900. Stands in for a logo until one exists. */
 export declare function Wordmark(props: WordmarkProps): React.JSX.Element;
 
-declare global { interface Window { FHD: { Button: typeof Button; Chip: typeof Chip; TextField: typeof TextField; Select: typeof Select; Checkbox: typeof Checkbox; CheckboxGroup: typeof CheckboxGroup; Switch: typeof Switch; Badge: typeof Badge; Alert: typeof Alert; EmptyState: typeof EmptyState; ProductCard: typeof ProductCard; RequestList: typeof RequestList; SpecList: typeof SpecList; PhotoField: typeof PhotoField; StatCard: typeof StatCard; BarChart: typeof BarChart; DataTable: typeof DataTable; InquiryCard: typeof InquiryCard; ContentField: typeof ContentField; Tabs: typeof Tabs; NavBar: typeof NavBar; Sidebar: typeof Sidebar; Panel: typeof Panel; Dialog: typeof Dialog; Accordion: typeof Accordion; Icon: typeof Icon; Wordmark: typeof Wordmark } } }
+declare global { interface Window { FHD: { Button: typeof Button; Chip: typeof Chip; TextField: typeof TextField; Select: typeof Select; Checkbox: typeof Checkbox; CheckboxGroup: typeof CheckboxGroup; Switch: typeof Switch; Badge: typeof Badge; Alert: typeof Alert; EmptyState: typeof EmptyState; ProductCard: typeof ProductCard; RequestList: typeof RequestList; SpecList: typeof SpecList; PhotoField: typeof PhotoField; StatCard: typeof StatCard; BarChart: typeof BarChart; CountUp: typeof CountUp; DataTable: typeof DataTable; InquiryCard: typeof InquiryCard; ContentField: typeof ContentField; Tabs: typeof Tabs; NavBar: typeof NavBar; Sidebar: typeof Sidebar; Panel: typeof Panel; Dialog: typeof Dialog; Accordion: typeof Accordion; Icon: typeof Icon; Wordmark: typeof Wordmark } } }
