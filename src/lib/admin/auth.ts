@@ -9,6 +9,8 @@ export interface Admin {
   email: string;
   /** Their name, or their email when no name was given. */
   name: string;
+  /** Signed in with the password another admin set for them, which they should replace. */
+  temporaryPassword: boolean;
 }
 
 /**
@@ -21,9 +23,11 @@ export const getAdmin = cache(async (): Promise<Admin | null> => {
   const { data } = await supabase.auth.getClaims();
   const id = data?.claims?.sub;
   if (!id) return null;
+  // Set by the server when another admin creates the account, and cleared once they choose their own password.
+  const temporaryPassword = data.claims.app_metadata?.temporary_password === true;
   const { data: row, error } = await supabase.from('admins').select('user_id, email, name').eq('user_id', id).maybeSingle();
   if (error) throw new Error(`Could not read the admin list: ${error.message}`);
-  return row ? { id: row.user_id, email: row.email, name: row.name.trim() || row.email } : null;
+  return row ? { id: row.user_id, email: row.email, name: row.name.trim() || row.email, temporaryPassword } : null;
 });
 
 /** For admin pages: the admin, or a trip to the sign-in page. */

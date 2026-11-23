@@ -3,7 +3,7 @@
 import { Sidebar, type SidebarSection } from '@ds';
 import { usePathname, useRouter } from 'next/navigation';
 import { useTransition, type MouseEvent } from 'react';
-import { CATEGORIES_PATH, CLIENTS_PATH, INQUIRIES_PATH, PRODUCTS_PATH } from '@/lib/admin/paths';
+import { CATEGORIES_PATH, CLIENTS_PATH, CONTENT_PATH, INQUIRIES_PATH, PRODUCTS_PATH, SETTINGS_PATH } from '@/lib/admin/paths';
 import { signOut } from '@/lib/admin/session-actions';
 
 interface AdminSidebarProps {
@@ -35,6 +35,8 @@ export function AdminSidebar({ name, productCount, newInquiries }: AdminSidebarP
         { id: CLIENTS_PATH, label: 'Clients', icon: 'users-three', href: CLIENTS_PATH },
       ],
     },
+    { title: 'Website', items: [{ id: CONTENT_PATH, label: 'Site content', icon: 'text-aa', href: CONTENT_PATH }] },
+    { title: 'Account', items: [{ id: SETTINGS_PATH, label: 'Settings', icon: 'gear', href: SETTINGS_PATH }] },
   ];
   const current = sections
     .flatMap((section) => section.items)

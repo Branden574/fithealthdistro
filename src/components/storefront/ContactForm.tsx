@@ -19,6 +19,8 @@ interface ContactFormProps {
   /** The contact.* slots, plus the stock badge, the request announcements and the new-tab note. */
   copy: Copy;
   groups: InterestGroup[];
+  /** In the admin's draft preview the form is shown but cannot send, so trying it never makes a real inquiry. */
+  preview?: boolean;
 }
 
 const FIELD_MESSAGE: Partial<Record<ContactField, string>> = {
@@ -45,7 +47,7 @@ const isNotScripted = () => false;
  * The quote request form. With the script it sends without reloading, keeps what was typed when something needs fixing,
  * and keeps the product boxes in step with the request the catalog builds. Without it, it still posts to the same action.
  */
-export function ContactForm({ copy, groups }: ContactFormProps) {
+export function ContactForm({ copy, groups, preview = false }: ContactFormProps) {
   const [state, send, pending] = useActionState(sendRequest, INITIAL_CONTACT_STATE);
   const values = state.values ?? {};
   const stored = useSyncExternalStore(requestStore.subscribe, requestStore.getSnapshot, requestStore.getServerSnapshot);
@@ -273,7 +275,7 @@ export function ContactForm({ copy, groups }: ContactFormProps) {
         </Alert>
       ) : null}
       <div className="contact-form__wide">
-        <Button variant="primary" size="lg" type="submit" iconRight="arrow-right" loading={pending}>
+        <Button variant="primary" size="lg" type="submit" iconRight="arrow-right" loading={pending} disabled={preview}>
           {pending ? t(copy, 'contact.form.submitting') : t(copy, 'contact.form.submit')}
         </Button>
       </div>

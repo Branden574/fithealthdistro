@@ -1,6 +1,6 @@
 import { Badge, Icon, SpecList } from '@ds';
 import type { ProductDetail } from '@/lib/catalog';
-import { CATALOG_ID } from '@/lib/catalog/links';
+import { CATALOG_ID, homeHref } from '@/lib/catalog/links';
 import { pick, t, type Copy } from '@/lib/copy';
 import { paragraphs } from '@/lib/text';
 import { InterestButton } from './InterestButton';
@@ -12,7 +12,7 @@ function dollars(amount: number): string {
 }
 
 /** A product's own page: photo, name, price, description, the request button, and its specs. */
-export function ProductView({ copy, product }: { copy: Copy; product: ProductDetail }) {
+export function ProductView({ copy, product, linkBase = '' }: { copy: Copy; product: ProductDetail; linkBase?: string }) {
   const unavailable = product.stock === 'out_of_stock';
   const hasPrice = product.price != null && product.price > 0;
   const badges: Array<{ label: string; tone: 'danger' | 'warning' | 'neutral' }> = [];
@@ -23,7 +23,7 @@ export function ProductView({ copy, product }: { copy: Copy; product: ProductDet
   return (
     <article className="section product-page" aria-labelledby="product-title">
       <div className="wrap">
-        <a className="product-page__back" href={`/#${CATALOG_ID}`}>
+        <a className="product-page__back" href={homeHref(linkBase, CATALOG_ID)}>
           <Icon name="arrow-left" size={16} />
           {t(copy, 'product.back')}
         </a>
@@ -67,6 +67,7 @@ export function ProductView({ copy, product }: { copy: Copy; product: ProductDet
               name={product.name}
               unavailable={unavailable}
               copy={pick(copy, ['catalog.card.', 'product.request.view', 'nav.cta'])}
+              contactHref={homeHref(linkBase, 'contact')}
             />
           </div>
         </div>

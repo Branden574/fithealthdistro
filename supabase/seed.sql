@@ -44,11 +44,15 @@ where p.sku = s.sku;
 
 -- STARTER FAQ DRAFTS. Questions only, with no answers: they cover business policies that have not been approved,
 -- so they cannot be published until the owner writes the answer. Publishing never includes an entry without one.
-insert into public.faqs (id, question, answer, position, visible, is_starter) values
-  ('9f2b6c1d-0001-4000-8000-000000000001', 'Which areas do you deliver to?', '', 1, true, true),
-  ('9f2b6c1d-0002-4000-8000-000000000002', 'Do you install the machines?', '', 2, true, true),
-  ('9f2b6c1d-0003-4000-8000-000000000003', 'What warranty comes with a machine?', '', 3, true, true),
-  ('9f2b6c1d-0004-4000-8000-000000000004', 'How long does delivery take?', '', 4, true, true),
-  ('9f2b6c1d-0005-4000-8000-000000000005', 'Can I return a product?', '', 5, true, true),
-  ('9f2b6c1d-0006-4000-8000-000000000006', 'Do you offer financing?', '', 6, true, true)
+-- Each records its wording as the original, which Restore original puts back.
+insert into public.faqs (id, question, answer, position, visible, is_starter, original_question, original_answer)
+select id::uuid, question, '', position, true, true, question, ''
+from (values
+  ('9f2b6c1d-0001-4000-8000-000000000001', 'Which areas do you deliver to?', 1),
+  ('9f2b6c1d-0002-4000-8000-000000000002', 'Do you install the machines?', 2),
+  ('9f2b6c1d-0003-4000-8000-000000000003', 'What warranty comes with a machine?', 3),
+  ('9f2b6c1d-0004-4000-8000-000000000004', 'How long does delivery take?', 4),
+  ('9f2b6c1d-0005-4000-8000-000000000005', 'Can I return a product?', 5),
+  ('9f2b6c1d-0006-4000-8000-000000000006', 'Do you offer financing?', 6)
+) as s (id, question, position)
 on conflict (id) do nothing;

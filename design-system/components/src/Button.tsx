@@ -20,6 +20,13 @@ export interface ButtonProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonE
   block?: boolean;
   /** Renders a link that looks like a button. */
   href?: string;
+  /**
+   * With `href`, opens the page in a new tab (`rel="noopener noreferrer"` is added). Give `newTabLabel` too, so screen
+   * readers hear where the link goes.
+   */
+  newTab?: boolean;
+  /** Read after the label on a `newTab` link: "(opens in a new tab)". Not shown. */
+  newTabLabel?: string;
   type?: 'button' | 'submit' | 'reset';
 }
 
@@ -34,6 +41,8 @@ export function Button(props: ButtonProps) {
     loading,
     block,
     href,
+    newTab,
+    newTabLabel,
     type = 'button',
     className,
     children,
@@ -61,6 +70,7 @@ export function Button(props: ButtonProps) {
       ) : null}
       {children != null && !icon ? <span className="fhd-btn__label">{children}</span> : null}
       {iconRight && !icon ? <Icon name={iconRight} size={iconSize} /> : null}
+      {href != null && newTab && newTabLabel ? <span className="fhd-sr"> {newTabLabel}</span> : null}
     </>
   );
   if (href != null) {
@@ -70,6 +80,8 @@ export function Button(props: ButtonProps) {
         className={classes}
         href={off ? undefined : href}
         aria-disabled={off ? true : undefined}
+        target={newTab ? '_blank' : undefined}
+        rel={newTab ? 'noopener noreferrer' : undefined}
         {...(rest as unknown as React.AnchorHTMLAttributes<HTMLAnchorElement>)}
       >
         {content}

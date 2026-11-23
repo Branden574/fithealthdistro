@@ -6,12 +6,22 @@ export const CATALOG_ID = 'catalog';
 /** A nav link whose id starts with this filters the catalog to the category slug that follows. */
 export const CATEGORY_LINK = 'category:';
 
+/**
+ * The links below take the site's root as `base`: empty for the live site, "/preview" for the admin's draft preview, so
+ * a walk through the preview never lands on the live site by accident.
+ */
+
 /** A product's own page. */
-export function productHref(slug: string): string {
-  return `/products/${encodeURIComponent(slug)}`;
+export function productHref(slug: string, base = ''): string {
+  return `${base}/products/${encodeURIComponent(slug)}`;
+}
+
+/** The home page, or a part of it: homeHref('', 'contact') is "/#contact". */
+export function homeHref(base: string, hash?: string): string {
+  return `${base || '/'}${hash ? `#${hash}` : ''}`;
 }
 
 /** Where a category link points: the home page's catalog, filtered. Works as a plain link without the script. */
-export function categoryHref(slug: string): string {
-  return `/?category=${encodeURIComponent(slug)}#${CATALOG_ID}`;
+export function categoryHref(slug: string, base = ''): string {
+  return `${base || '/'}?category=${encodeURIComponent(slug)}#${CATALOG_ID}`;
 }

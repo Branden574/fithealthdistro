@@ -8,7 +8,7 @@ function telHref(phone: string): string {
   return `tel:${phone.trim().startsWith('+') ? '+' : ''}${phone.replace(/\D/g, '')}`;
 }
 
-export async function SiteFooter({ copy, settings }: { copy: Copy; settings: PublicSettings }) {
+export async function SiteFooter({ copy, settings, linkBase = '' }: { copy: Copy; settings: PublicSettings; linkBase?: string }) {
   const year = await currentYear();
   const { email, phone } = settings;
   return (
@@ -43,10 +43,10 @@ export async function SiteFooter({ copy, settings }: { copy: Copy; settings: Pub
           <nav aria-label={t(copy, 'footer.legal.label')}>
             <ul className="site-footer__legal">
               <li>
-                <a className="body-sm" href="/terms">{t(copy, 'footer.terms')}</a>
+                <a className="body-sm" href={`${linkBase}/terms`}>{t(copy, 'footer.terms')}</a>
               </li>
               <li>
-                <a className="body-sm" href="/privacy">{t(copy, 'footer.privacy')}</a>
+                <a className="body-sm" href={`${linkBase}/privacy`}>{t(copy, 'footer.privacy')}</a>
               </li>
             </ul>
           </nav>

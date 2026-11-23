@@ -5,6 +5,10 @@ export const PRODUCTS_PATH = '/admin/products';
 export const CATEGORIES_PATH = '/admin/categories';
 export const INQUIRIES_PATH = '/admin/inquiries';
 export const CLIENTS_PATH = '/admin/clients';
+export const CONTENT_PATH = '/admin/content';
+export const SETTINGS_PATH = '/admin/settings';
+/** The storefront drawn from saved drafts. Admins only. */
+export const PREVIEW_PATH = '/preview';
 
 export const inquiryPath = (id: string) => `${INQUIRIES_PATH}/${id}`;
 
@@ -33,11 +37,11 @@ export function pageNumber(raw: unknown): number {
 }
 
 /**
- * Where to go after signing in: an admin page the visitor was sent away from, or the admin home. Anything else (another
+ * Where to go after signing in: an admin or preview page the visitor was sent away from, or the admin home. Anything else (another
  * site, a protocol-relative "//host", odd characters) falls back to the home, so the sign-in page cannot be used to
  * bounce people to another site.
  */
 export function afterSignIn(next: unknown): string {
   if (typeof next !== 'string' || next.length > 200) return ADMIN_HOME;
-  return /^\/admin(\/[a-z0-9-]+)*$/.test(next) && next !== SIGN_IN_PATH ? next : ADMIN_HOME;
+  return /^\/(admin|preview)(\/[a-z0-9-]+)*$/.test(next) && next !== SIGN_IN_PATH ? next : ADMIN_HOME;
 }

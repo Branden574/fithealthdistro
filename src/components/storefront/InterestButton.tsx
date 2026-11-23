@@ -12,13 +12,15 @@ interface InterestButtonProps {
   unavailable: boolean;
   /** catalog.card.*, product.request.view and nav.cta. */
   copy: Copy;
+  /** The contact form on the home page. */
+  contactHref: string;
 }
 
 /**
  * "I'm interested" on a product's own page, sharing the request with the catalog. Beside it, the way to the form; its
  * label changes once the product is in the request, and the two buttons never move.
  */
-export function InterestButton({ productId, name, unavailable, copy }: InterestButtonProps) {
+export function InterestButton({ productId, name, unavailable, copy, contactHref }: InterestButtonProps) {
   const picked = useSyncExternalStore(requestStore.subscribe, requestStore.getSnapshot, requestStore.getServerSnapshot);
   const selected = !unavailable && picked.includes(productId);
 
@@ -43,7 +45,7 @@ export function InterestButton({ productId, name, unavailable, copy }: InterestB
       >
         {unavailable ? t(copy, 'catalog.card.unavailable') : selected ? t(copy, 'catalog.card.added') : t(copy, 'catalog.card.cta')}
       </Button>
-      <Button size="lg" href="/#contact" iconRight="arrow-right">
+      <Button size="lg" href={contactHref} iconRight="arrow-right">
         {selected ? t(copy, 'product.request.view') : t(copy, 'nav.cta')}
       </Button>
     </div>

@@ -5,7 +5,7 @@ import { SESSION_COOKIE } from '@/lib/supabase/cookies';
 import { supabasePublishableKey, supabaseUrl } from '@/lib/supabase/env';
 
 /**
- * Runs before every admin request. It keeps the admin's session fresh (Server Components cannot write cookies) and sends
+ * Runs before every admin and draft-preview request. It keeps the admin's session fresh (Server Components cannot write cookies) and sends
  * anyone without a valid session to sign in. This is the first gate only: every admin page and action checks the
  * allowlist again on the server, so a missed path here never opens anything.
  */
@@ -51,5 +51,5 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/admin', '/admin/:path*'],
+  matcher: ['/admin', '/admin/:path*', '/preview', '/preview/:path*'],
 };

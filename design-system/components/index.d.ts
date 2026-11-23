@@ -24,6 +24,13 @@ export interface ButtonProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonE
     block?: boolean;
     /** Renders a link that looks like a button. */
     href?: string;
+    /**
+     * With `href`, opens the page in a new tab (`rel="noopener noreferrer"` is added). Give `newTabLabel` too, so screen
+     * readers hear where the link goes.
+     */
+    newTab?: boolean;
+    /** Read after the label on a `newTab` link: "(opens in a new tab)". Not shown. */
+    newTabLabel?: string;
     type?: 'button' | 'submit' | 'reset';
 }
 /** The action control. Label in uppercase Big Shoulders, 2px edge, 2px corners. */

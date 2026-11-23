@@ -592,6 +592,7 @@ export type Database = {
       }
     }
     Functions: {
+      find_user_id: { Args: { p_email: string }; Returns: string }
       get_draft_content: { Args: never; Returns: Json }
       get_storefront_content: { Args: never; Returns: Json }
       publish_site: {
@@ -611,6 +612,7 @@ export type Database = {
         }
       }
       reorder_faqs: { Args: { p_ids: string[] }; Returns: undefined }
+      save_copy_drafts: { Args: { p_drafts: Json }; Returns: number }
       submit_inquiry: { Args: { p: Json }; Returns: Json }
       sync_site_copy: { Args: { p_slots: Json }; Returns: number }
       take_rate_limit: {

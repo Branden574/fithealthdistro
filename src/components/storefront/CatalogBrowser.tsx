@@ -16,6 +16,8 @@ interface CatalogBrowserProps {
   copy: Copy;
   categories: CatalogCategory[];
   products: CatalogProduct[];
+  /** The site's root for product links: empty, or "/preview" in the admin's draft preview. */
+  linkBase?: string;
 }
 
 /** What a card shows for its price: dollars when there is one, otherwise the note as written ("Call for price"). $0 is never shown. */
@@ -33,7 +35,7 @@ function badgesOf(copy: Copy, product: CatalogProduct) {
 }
 
 /** Filter chips and the product grid. Every product is in the server's HTML; filtering and "I'm interested" run here. */
-export function CatalogBrowser({ heading, copy, categories, products }: CatalogBrowserProps) {
+export function CatalogBrowser({ heading, copy, categories, products, linkBase = '' }: CatalogBrowserProps) {
   const filter = useSyncExternalStore(categoryFilter.subscribe, categoryFilter.getSnapshot, categoryFilter.getServerSnapshot);
   const picked = useSyncExternalStore(requestStore.subscribe, requestStore.getSnapshot, requestStore.getServerSnapshot);
 
@@ -97,7 +99,7 @@ export function CatalogBrowser({ heading, copy, categories, products }: CatalogB
               <li key={product.id} style={{ '--fhd-i': index } as CSSProperties}>
                 <ProductCard
                   name={product.name}
-                  href={productHref(product.slug)}
+                  href={productHref(product.slug, linkBase)}
                   category={category?.name}
                   icon={category?.icon}
                   description={product.description || undefined}

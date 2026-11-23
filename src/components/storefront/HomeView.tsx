@@ -14,15 +14,19 @@ export interface HomeViewProps {
   copy: Copy;
   faqs: StorefrontFaq[];
   catalog: Catalog;
+  /** The admin's draft preview: everything shows, but the contact form cannot send. */
+  preview?: boolean;
+  /** The site's root for links to products and categories: empty, or "/preview" in the draft preview. */
+  linkBase?: string;
 }
 
 /**
  * The home page: hero, catalog, FAQ and contact. Everything comes in as props, so the admin's draft preview can render
  * the same page from draft copy and FAQs.
  */
-export function HomeView({ copy, faqs, catalog }: HomeViewProps) {
+export function HomeView({ copy, faqs, catalog, preview = false, linkBase = '' }: HomeViewProps) {
   const { categories, products } = catalog;
-  const index = categories.map((category) => ({ slug: category.slug, name: category.name, href: categoryHref(category.slug) }));
+  const index = categories.map((category) => ({ slug: category.slug, name: category.name, href: categoryHref(category.slug, linkBase) }));
   const groups: InterestGroup[] = categories.map((category) => ({
     slug: category.slug,
     name: category.name,
@@ -38,6 +42,7 @@ export function HomeView({ copy, faqs, catalog }: HomeViewProps) {
       <section className="section" id={CATALOG_ID} aria-labelledby="catalog-title" tabIndex={-1} data-reveal>
         <div className="wrap">
           <CatalogBrowser
+            linkBase={linkBase}
             heading={
               <div>
                 <p className="eyebrow">{t(copy, 'catalog.eyebrow')}</p>
@@ -96,6 +101,7 @@ export function HomeView({ copy, faqs, catalog }: HomeViewProps) {
           <ContactForm
             copy={pick(copy, ['contact.', 'catalog.stock.out', 'catalog.card.added.announce', 'catalog.card.removed.announce', 'a11y.newtab'])}
             groups={groups}
+            preview={preview}
           />
         </div>
       </section>

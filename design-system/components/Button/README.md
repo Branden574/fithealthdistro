@@ -18,6 +18,8 @@ The action control: an uppercase Big Shoulders label inside a 2px edge with 2px 
 
 The label, verb first, two or three words, typed in sentence case (the capitals are CSS). An `aria-label` for an `icon` button. `href` when the button goes to another page.
 
+Add `newTab` only when the page should stay open behind the link, such as "Preview site" beside an editor with unsaved work. Pair it with `newTabLabel` ("(opens in a new tab)") so screen readers say so, and an `arrow-up-right` icon so sighted users can tell.
+
 ## Don't
 
 - Don't put two `primary` buttons in one view.

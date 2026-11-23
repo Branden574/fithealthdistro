@@ -16,7 +16,7 @@ select is_empty($$
   select p.oid::regprocedure::text from pg_proc p join pg_namespace n on n.oid = p.pronamespace
   where n.nspname in ('public', 'private') and has_function_privilege('authenticated', p.oid, 'execute')
     and p.oid::regprocedure::text not in ('get_storefront_content()', 'get_draft_content()', 'reorder_faqs(uuid[])',
-      'publish_site()', 'private.is_admin()', 'private.publish_site()', 'private.slugify(text)', 'private.valid_specs(jsonb)')
+      'publish_site()', 'save_copy_drafts(jsonb)', 'private.is_admin()', 'private.publish_site()', 'private.slugify(text)', 'private.valid_specs(jsonb)')
 $$, 'signed-in users can execute only the admin allowlist');
 select lives_ok($$ delete from public.admins where user_id = '00000000-0000-4000-8000-000000000000' $$,
   'deleting nothing never trips the last-admin guard, even with an empty allowlist');

@@ -11,13 +11,16 @@ interface SiteNavProps {
   openMenuLabel: string;
   closeMenuLabel: string;
   cta: { label: string; href: string };
+  /** Where the wordmark leads: the home page, or the draft preview's. */
+  homeHref?: string;
 }
 
 /** The storefront's top bar. On the home page a category link filters the catalog in place instead of reloading it. */
-export function SiteNav({ links, label, openMenuLabel, closeMenuLabel, cta }: SiteNavProps) {
+export function SiteNav({ links, label, openMenuLabel, closeMenuLabel, cta, homeHref = '/' }: SiteNavProps) {
   return (
     <NavBar
       className="site-nav"
+      brandHref={homeHref}
       links={links}
       label={label}
       openMenuLabel={openMenuLabel}
