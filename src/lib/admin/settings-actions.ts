@@ -114,7 +114,11 @@ export async function addAdmin(previous: AddAdminState, form: FormData): Promise
     return { status: 'error', attempt };
   } finally {
     // An account made for an admin who could not be added is not left behind.
-    if (created) await service.auth.admin.deleteUser(created).catch((error) => logFailure('addAdmin cleanup', error));
+    if (created) {
+      // The client answers with an error rather than throwing, so both are checked.
+      const cleanup = await service.auth.admin.deleteUser(created).catch((error: unknown) => ({ error }));
+      if (cleanup.error) logFailure('addAdmin cleanup: an account was left without an admin row', cleanup.error);
+    }
   }
 }
 
@@ -194,10 +198,16 @@ export async function changePassword(previous: PasswordFormState, form: FormData
       throw error;
     }
     if (admin.temporaryPassword) {
-      const { error: flagError } = await service.auth.admin.updateUserById(admin.id, { app_metadata: { temporary_password: null } });
-      if (flagError) throw flagError;
-      // A fresh token, so the reminder goes away now rather than when the session next renews.
-      await supabase.auth.refreshSession();
+      // The password has changed by now. If clearing the reminder fails, it shows until the next change; the answer is
+      // still that the password changed, because it did.
+      try {
+        const { error: flagError } = await service.auth.admin.updateUserById(admin.id, { app_metadata: { temporary_password: null } });
+        if (flagError) throw flagError;
+        // A fresh token, so the reminder goes away now rather than when the session next renews.
+        await supabase.auth.refreshSession();
+      } catch (flagError) {
+        logFailure('changePassword: clearing the temporary-password reminder', flagError);
+      }
     }
     refresh();
     return { status: 'saved', attempt };

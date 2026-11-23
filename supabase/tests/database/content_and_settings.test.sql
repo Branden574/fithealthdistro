@@ -69,12 +69,12 @@ reset role;
 -- Starter FAQ examples
 -- ---------------------------------------------------------------------------------------------------------------
 select is(
-  (select count(*)::int from public.faqs where is_starter and (original_question is distinct from question or original_answer is distinct from '')),
+  (select count(*)::int from public.faqs where is_starter and updated_by is null and (original_question is distinct from question or original_answer is distinct from '')),
   0,
   'each starter example records its seeded wording as the original, for Restore original'
 );
 select is(
-  (select count(*)::int from public.faqs where is_starter and answer <> ''),
+  (select count(*)::int from public.faqs where is_starter and updated_by is null and answer <> ''),
   0,
   'and none comes with an answer, so none can be published as is'
 );

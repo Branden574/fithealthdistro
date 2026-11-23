@@ -21,6 +21,8 @@ interface ContactFormProps {
   groups: InterestGroup[];
   /** In the admin's draft preview the form is shown but cannot send, so trying it never makes a real inquiry. */
   preview?: boolean;
+  /** The site's root for the Terms and Privacy links: empty, or "/preview" in the draft preview. */
+  linkBase?: string;
 }
 
 const FIELD_MESSAGE: Partial<Record<ContactField, string>> = {
@@ -47,7 +49,7 @@ const isNotScripted = () => false;
  * The quote request form. With the script it sends without reloading, keeps what was typed when something needs fixing,
  * and keeps the product boxes in step with the request the catalog builds. Without it, it still posts to the same action.
  */
-export function ContactForm({ copy, groups, preview = false }: ContactFormProps) {
+export function ContactForm({ copy, groups, preview = false, linkBase = '' }: ContactFormProps) {
   const [state, send, pending] = useActionState(sendRequest, INITIAL_CONTACT_STATE);
   const values = state.values ?? {};
   const stored = useSyncExternalStore(requestStore.subscribe, requestStore.getSnapshot, requestStore.getServerSnapshot);
@@ -248,8 +250,8 @@ export function ContactForm({ copy, groups, preview = false }: ContactFormProps)
           defaultChecked={values.terms}
           error={errorFor('terms')}
           label={withNodes(t(copy, 'contact.form.terms'), {
-            terms: policyLink('/terms', t(copy, 'contact.form.terms.link')),
-            privacy: policyLink('/privacy', t(copy, 'contact.form.privacy.link')),
+            terms: policyLink(`${linkBase}/terms`, t(copy, 'contact.form.terms.link')),
+            privacy: policyLink(`${linkBase}/privacy`, t(copy, 'contact.form.privacy.link')),
           })}
         />
         <Checkbox

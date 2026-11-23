@@ -272,7 +272,9 @@ export function SiteContentView({ slots, faqs, lastPublish, initialTab }: SiteCo
         title={confirm === 'discard' ? 'Discard the text drafts?' : `Publish ${plural(total, 'change', 'changes')}?`}
         description={
           confirm === 'discard'
-            ? `${plural(copyLive, 'saved text draft goes', 'saved text drafts go')} back to what visitors see now. FAQ drafts are not touched.`
+            ? `${plural(copyLive, 'saved text draft goes', 'saved text drafts go')} back to what visitors see now.${
+                dirty ? ` Your ${plural(unsaved.length, 'unsaved edit is', 'unsaved edits are')} dropped too.` : ''
+              } FAQ drafts are not touched.`
             : `This publishes ${breakdown || 'nothing'}, page copy and FAQs together. Visitors see the new version right away.`
         }
         footer={

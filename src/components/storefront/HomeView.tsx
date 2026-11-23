@@ -102,6 +102,7 @@ export function HomeView({ copy, faqs, catalog, preview = false, linkBase = '' }
             copy={pick(copy, ['contact.', 'catalog.stock.out', 'catalog.card.added.announce', 'catalog.card.removed.announce', 'a11y.newtab'])}
             groups={groups}
             preview={preview}
+            linkBase={linkBase}
           />
         </div>
       </section>

@@ -153,7 +153,8 @@ export async function moveFaq(id: string, direction: 'up' | 'down'): Promise<Qui
   try {
     const context = await adminClient();
     if (!context) return { ok: false, reason: 'signed-out' };
-    // The order as it stands now, not as the page last saw it, so two admins moving questions cannot scramble the list.
+    // The order as it stands now, not as the page last saw it, so the list is never scrambled. Two admins moving at the
+    // same instant can lose one of the two moves; reorder_faqs always writes a complete, valid order.
     const { data, error } = await context.supabase.from('faqs').select('id').order('position').order('created_at').order('id');
     if (error) throw error;
     const ids = data.map((row) => row.id);
